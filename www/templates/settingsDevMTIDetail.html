@@ -1,0 +1,32 @@
+ <ion-view title="MTI: {{table.Name}}">
+  <ion-content padding="true">
+    <ion-list>
+      <label class="item item-input">
+        <i class="icon ion-search placeholder-icon"></i>
+        <input type="text" ng-model="query" />
+      </label>
+
+      <div class="item mti-item"
+        collection-repeat="tableRec in tableRecs | filter:query" type="item-text-wrap"
+        collection-item-width="'100%'"
+        collection-item-height="getItemHeight(tableRec, $index)"
+        ng-style="{height: getItemHeight(tableRec, $index)}"
+        >
+        <div class="list card">
+          <div class="item item-divider">Record {{$index + 1}} of {{tableRecs.length}}</div>
+        </div>
+        <span ng-repeat="field in tableRec" type="item-text-wrap">
+          <span ng-switch="field.ID_flag">
+            <ion-item ng-switch-when="true" href="#/tab/devtools/object/{{field.Value}}" title="Jump to object">
+              <strong>{{field.Name}}: </strong>{{field.Value}}
+            </ion-item>
+            <ion-item ng-switch-when="false">
+              <strong>{{field.Name}}: </strong>{{field.Value}}
+            </ion-item>
+          </span>
+        </span>
+      </div>
+    </ion-list>
+   	</div>
+  </ion-content>
+</ion-view>

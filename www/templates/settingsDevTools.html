@@ -1,0 +1,130 @@
+<ion-view title="Debug Tools">
+	<ion-content>
+  	<ion-list>
+    	<div class="list list-inset">
+    		<a class="item item-icon-left" href="#/tab/settings/mti">
+    	    	<i class="icon ion-android-storage"></i>
+    	    	Mobile Table Inspector
+    		</a>
+    		<!-- TODO
+            <a class="item item-icon-left" href="#/tab/settings/logs">
+    	    	<i class="icon ion-filing"></i>
+    	    	View Logs
+    		</a>	-->
+
+            <!-- TODO<a class="item item-icon-left"  ng-click="showConfirmReset()">
+    	    	<i class="icon ion-nuclear"></i>
+    	    	Reset Application
+    		</a>	-->
+    	</div>
+
+    	<div class="card">
+    		<div class="item item-divider">
+          <h4>Application Details</h4>
+        </div>
+        <div class="item item-text-wrap">
+
+          <div class="row">
+              <div class="col">
+              <p>Build</p>
+              </div>
+               <div class="col">
+               <p>{{ settingsRecs.buildName }}.B{{ settingsRecs.buildVersion }}.D{{ settingsRecs.dynVersionNumber }}</p>
+              </div>
+          </div>
+
+          <div class="row">
+              <div class="col">
+              <p>User</p>
+              </div>
+               <div class="col">
+               <p>TBC</p>
+              </div>
+          </div>
+
+          <div class="row">
+              <div class="col">
+              <p>Platform</p>
+              </div>
+               <div class="col">
+               <p>{{ settingsRecs.buildOS }}</p>
+              </div>
+          </div>
+
+          <div class="row">
+              <div class="col">
+              <p>sysDataVersion</p>
+              </div>
+               <div class="col">
+               <p>{{ settingsRecs.sysDataVersion }}</p>
+              </div>
+          </div>
+
+          <div class="row">
+              <div class="col">
+              <p>sysDataPlatSupVersion</p>
+              </div>
+               <div class="col">
+               <p>{{ settingsRecs.sysDataPlatSupVersion }}</p>
+              </div>
+          </div>
+
+          <div class="row">
+              <div class="col">
+              <p>versionUtilsVersion</p>
+              </div>
+               <div class="col">
+               <p>{{ settingsRecs.versionUtilsVersion }}</p>
+              </div>
+          </div>
+
+          <div class="row">
+              <div class="col">
+              <p>dynVersionNumber</p>
+              </div>
+               <div class="col">
+               <p>{{ settingsRecs.dynVersionNumber }}</p>
+              </div>
+          </div>
+
+          <div class="row">
+              <div class="col">
+              <p>syncRefreshVersion</p>
+              </div>
+               <div class="col">
+               <p>{{ settingsRecs.syncRefreshVersion }}</p>
+              </div>
+          </div>
+
+          <div class="row">
+              <div class="col col-75">
+              <p>Sync Pending</p>
+              </div>
+               <div class="col">
+               <p>0</p>
+              </div>
+          </div>
+
+          <div class="row">
+              <div class="col col-75">
+              <p>Record Issues</p>
+              </div>
+               <div class="col">
+               <p>0</p>
+              </div>
+          </div>
+
+          <div class="row">
+              <div class="col col-75">
+              <p>Session Queue</p>
+              </div>
+               <div class="col">
+               <p>0</p>
+              </div>
+          </div>
+
+        </div>
+      </div>
+  	</ion-list>
+  </ion-content>
+</ion-view>

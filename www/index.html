@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<!--
+  This is the index for our MobileCaddy Salesforce app
+  It's only used when running on a desktop during development, there's a
+  similar one on the Salesforce platform for use in production.
+
+  You should not need to change this file really, unless you want to chnage the "The application is being built..." screen to match your brand etc
+-->
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <title>Ionic Shell App</title>
+
+    <link href="css/app.css" rel="stylesheet">
+
+    <!-- ionic/angularjs/promise polyfill scripts -->
+    <script src="lib/js/ionic.bundle.min.js"></script>
+    <script src="lib/js/underscore-min.js"></script>
+    <script src="lib/js/promise-1.0.0.min.js"></script>
+
+    <!-- cordova script (this will be a 404 during development) -->
+    <script src="lib/js/MockCordova.js"></script>
+
+    <!-- mock handler for VFremoting -->
+    <script src="lib/js/mockVFRemote.js"></script>
+
+    <!-- your app's script -->
+    <script src="js/app.js"></script>
+    <script src="js/services.js"></script>
+    <script src="js/controllers.js"></script>
+    <script src="lib/js/jquery.min.js" type="text/javascript"></script>
+
+    <!-- MobileCaddy lib for initialisation and Sync/Read/Update etc -->
+    <script src="lib/js/mobilecaddy-utils.min.js"></script>
+
+    <!--
+      Special entries for offline testing
+    -->
+    <script src="lib/js/MockSupportMc.min.js"></script>
+
+    <!--  Mobile Caddy support routines -->
+    <script src="lib/js/mcOfflineDevSetup.min.js"></script>
+    <script src="lib/js/force.js"></script>
+    <!--
+      End Special entries for offline testing
+    -->
+
+
+    <!-- GLOBAL VARS - USED FOR LOCAL DEV -->
+    <script>
+      window.RESOURCE_ROOT = "";
+      // true - means the MobileCaddy libs know that we're running as Codeflow Emulator,
+      // not on a mobile device or Platform Emulator
+      window.LOCAL_DEV = true;
+      // true - use ForceJS lib to authenticate with SF and use platform data
+      // false - bypass auth and use mockVFRemote for platform data (see docs)
+      window.USE_FORCETK = false;
+      // set the login url to be used by ForceJS (optinal) - only needed if
+      // USE_FORCETK set to true
+      window.SF_LOGIN_URL = 'https://mobilecaddy--fulldev.cs20.my.salesforce.com';
+      // The URL that your CORS proxy is running on
+      window.CORS_PROXY_URL = 'http://localhost:3000';
+      // Your connected app ID
+      window.CONNECTED_APP_ID = '3MVG9Iu66FKeHhIPmJf1_kBhpwXOXapQcwxnkLIv2V3vDqIuO_zdyX2.7TEwDLzxaoAH5hVj2Gx7doH176sY6';
+    </script>
+
+    <script type="text/javascript">
+      // Values that would have come device and platform if running
+      // in production
+      mobileCaddy.START_PAGE_CONTROLLER     = 'MobileCaddyDemoController001';
+      mobileCaddy.START_PAGE_CONTROLLER_VSN = '001';
+      mobileCaddy.buildVersion              = '001';
+      mobileCaddy.buildOS                   = 'Android';
+      mobileCaddy.buildName                 = 'BIZ001';
+      mobileCaddy.buildStatus               = 'Initial';
+      mobileCaddy.deviceUuid                = 'c86d3e94574debug';
+      mobileCaddy.userOverride              = '005200000013F2vAAE';
+      mobileCaddy.audId                     = 'a2eR0000000Jv6xIAC';
+      mobileCaddy.startPageURL              = 'http://dummy.mobileCaddy.net';
+      mobileCaddy.sysDataVersion            = '002';
+      mobileCaddy.sysDataPlatSupVersion     = '001';
+      mobileCaddy.versionUtilsVersion       = '001';
+      mobileCaddy.dynVersionNumber          = '006';
+      mobileCaddy.syncRefreshVersion        = '001';
+
+      SupportMc.singleton.startUp(function() {
+        myapp_callback();
+      });
+    </script>
+  </head>
+
+  <!--
+    'starter' is the name of this angular module (js/app.js)
+  -->
+  <body animation="slide-left-right-ios7">
+
+    <!--
+      The nav bar that will be updated as we navigate between views
+      Additional attributes set its look, ion-nav-bar animation and icons
+      Icons provided by Ionicons: http://ionicons.com/
+    -->
+    <ion-nav-bar class="bar-positive">
+      <ion-nav-back-button class="button-icon button-clear ion-ios7-arrow-back">
+      </ion-nav-back-button>
+    </ion-nav-bar>
+
+    <!--
+      The views will be rendered in the <ion-nav-view> directive below
+      Templates are in the /templates folder (but you could also
+      have templates inline in this html file if you'd like).
+    -->
+    <ion-nav-view>
+      <div class="card">
+        <div class="item item-text-wrap">
+          <p id='app-progress-msg' class="item-icon-left"><i class="icon ion-loading-c"></i>The application is just being built... this may take a few moments.</p>
+        </div>
+      </div>
+    </ion-nav-view>
+  </body>
+</html>

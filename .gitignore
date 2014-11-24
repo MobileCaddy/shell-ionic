@@ -1,0 +1,23 @@
+# sublime files
+*.sublime-project
+*.sublime-workspace
+
+*.zip
+
+node_modules
+bower_components
+tmp
+dest
+www/js/*.log
+.sass-cache
+
+# ignore app.css as this is created by the sass
+www/css/app.*
+
+
+# Mock and bower stuff
+www/lib/js/*
+www/fonts/ionicons*
+scss/ionic
+oauthcallback.html
+

@@ -1,0 +1,26 @@
+// Import MobileCaddy SCSS
+@import 'mobilecaddy';
+
+// Ionic overrides
+
+$positive:							#2aa3fe;
+$item-divider-bg:				#caecd3;
+$list-header-color:			#caecd3;
+$button-light-border:		#7fd291;
+
+@import "ionic/ionic";
+
+// your slick app styles can go here...
+
+ion-nav-view { background-color: #fff; }
+
+a.item-content:hover{
+	background-color: $item-divider-bg;}
+
+.card {box-shadow: 0 1px 1px $button-light-border;}
+
+a.disabled {
+   pointer-events: none;
+   cursor: default;
+   color: grey;
+}

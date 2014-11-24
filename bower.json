@@ -1,0 +1,23 @@
+{
+  "name": "mobilecaddy-shell-ionic",
+  "version": "0.0.1",
+  "homepage": "https://github.com/MobileCaddy/shell-ionic",
+  "authors": [
+    "toddhalfpenny <todd@mobilecaddy.net>"
+  ],
+  "description": "MobileCaddy Shell app using Angular and Ionic",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "ionic": "1.0.0-beta.13",
+    "mobilecaddy-codeflow": "0.0.1-alpha.1",
+    "mobilecaddy-utils": "0.0.1-alpha.1"
+  }
+}

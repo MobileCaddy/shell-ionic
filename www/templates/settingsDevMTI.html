@@ -1,0 +1,11 @@
+<ion-view title="Mobile Table Inspector">
+	<ion-content> 
+   	<ion-list>
+	<div class="list list-inset">
+      	<ion-item ng-repeat="table in tables" type="item-text-wrap"  href="#/tab/settings/mti/{{table.Name}}">
+        <h3>{{table.Name}}</h3>
+      	</ion-item>
+    </div>
+    </ion-list>
+  </ion-content>
+</ion-view>
