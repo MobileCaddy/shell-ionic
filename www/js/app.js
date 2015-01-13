@@ -69,6 +69,16 @@ angular.module('starter', ['ionic', 'starter.services', 'starter.controllers'])
           controller: 'TestingCtrl'
         }
       }
+    })
+
+    .state('tab.settings-deploy', {
+      url: '/settings/deploy',
+      views: {
+        'settings-tab': {
+          templateUrl: RESOURCE_ROOT +  'templates/settingsDeploy.html',
+          controller: 'DeployCtrl'
+        }
+      }
     });
 
   // ! ! ! ! !  ! ! ! ! !  ! ! ! ! !  ! ! ! ! !  ! ! ! ! !  ! ! ! ! !

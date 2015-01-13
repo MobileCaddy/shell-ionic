@@ -42,6 +42,8 @@
     <!--  Mobile Caddy support routines -->
     <script src="lib/js/mcOfflineDevSetup.min.js"></script>
     <script src="lib/js/force.js"></script>
+    <script type="text/javascript" src='../bower_components/jszip/dist/jszip.js'></script>
+    <script type="text/javascript" src='../bower_components/jszip-utils/dist/jszip-utils.js'></script>
     <!--
       End Special entries for offline testing
     -->
@@ -55,14 +57,14 @@
       window.LOCAL_DEV = true;
       // true - use ForceJS lib to authenticate with SF and use platform data
       // false - bypass auth and use mockVFRemote for platform data (see docs)
-      window.USE_FORCETK = false;
+      window.USE_FORCETK = true;
       // set the login url to be used by ForceJS (optinal) - only needed if
       // USE_FORCETK set to true
-      window.SF_LOGIN_URL = 'https://mobilecaddy--fulldev.cs20.my.salesforce.com';
+      window.SF_LOGIN_URL = 'https://login.salesforce.com';
       // The URL that your CORS proxy is running on
       window.CORS_PROXY_URL = 'http://localhost:3000';
       // Your connected app ID
-      window.CONNECTED_APP_ID = '3MVG9Iu66FKeHhIPmJf1_kBhpwXOXapQcwxnkLIv2V3vDqIuO_zdyX2.7TEwDLzxaoAH5hVj2Gx7doH176sY6';
+      window.CONNECTED_APP_ID = '3MVG9Rd3qC6oMalWEuQby1hkUef0N2L7kTPExDjRAs1GH35ueKyc3q_D5NY0LLoLHnfwIr_Y8PyeRotaClrtZ';
     </script>
 
     <script type="text/javascript">

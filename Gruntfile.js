@@ -22,6 +22,7 @@ module.exports = function(grunt) {
               '!www/lib/js/*',
               // add any libs that you do want included here.
               'www/lib/js/ionic.bundle.min.js',
+              '!www/index.html',
               '!www/**/*.log'],
         expand: true
       },
@@ -36,6 +37,7 @@ module.exports = function(grunt) {
               '!www/lib/js/*',
               // add any libs that you do want included here.
               'www/lib/js/ionic.bundle.min.js',
+              '!www/index.html',
               '!www/**/*.log'],
             expand: true
           },
@@ -91,7 +93,8 @@ module.exports = function(grunt) {
     watch: {
       set1: {
         files: ['*.js',
-                'www/js/*.js'],
+                'www/js/*.js',
+                'package.json'],
         tasks: ['dev']
       },
       set2: {
@@ -149,10 +152,22 @@ module.exports = function(grunt) {
           }
         ]
       }
+    },
+
+    replace: {
+      ioniconsVsnRm: {
+        src: ['scss/ionic/ionicons/_ionicons-font.scss'],
+        dest: 'scss/ionic/ionicons/_ionicons-font.scss',
+        replacements: [{
+          from: '?v=#{$ionicons-version}',
+          to: ''
+        }]
+      }
     }
+
   });
   // Each plugin must be loaded following this pattern
-  grunt.registerTask('devsetup', ['copy:devsetup', 'sass']);
+  grunt.registerTask('devsetup', ['copy:devsetup', 'sass', 'replace']);
   grunt.registerTask('dev', ['jshint:myFiles', 'compress:dev']);
   grunt.registerTask('prod', ['jshint:myFiles', 'uglify', 'compress:prod']);
 };

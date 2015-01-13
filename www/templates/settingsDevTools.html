@@ -6,17 +6,29 @@
     	    	<i class="icon ion-android-storage"></i>
     	    	Mobile Table Inspector
     		</a>
-    		<!-- TODO
-            <a class="item item-icon-left" href="#/tab/settings/logs">
-    	    	<i class="icon ion-filing"></i>
-    	    	View Logs
-    		</a>	-->
+        <div ng-if="codeflow == true">
+            <a class="item item-icon-left" href="#/tab/settings/deploy">
+            <i class="icon ion-upload"></i>
+            Deploy to Salesforce
+            </a>
+        </div>
+        <a class="item item-icon-left"  ng-click="showConfirmReset()">
+            <i class="icon ion-nuclear"></i>
+            Reset Application
+        </a>
+      </div>
 
-            <!-- TODO<a class="item item-icon-left"  ng-click="showConfirmReset()">
-    	    	<i class="icon ion-nuclear"></i>
-    	    	Reset Application
-    		</a>	-->
-    	</div>
+      <div class="list card" ng-controller="SettingsHBCtrl">
+          <div class="item item-divider" >
+              Heartbeat Setting
+          </div>
+          <ion-radio ng-change="hbUpdate()" ng-model="heartbeatStatus" ng-value="'100100'">Online (100100)</ion-radio>
+          <ion-radio ng-change="hbUpdate()" ng-model="heartbeatStatus" ng-value="'100101'">Exception (100101)</ion-radio>
+          <ion-radio ng-change="hbUpdate()" ng-model="heartbeatStatus" ng-value="'100102'">Failure (100102)</ion-radio>
+          <ion-radio ng-change="hbUpdate()" ng-model="heartbeatStatus" ng-value="'100103'">No Connection (100103)</ion-radio>
+          <ion-radio ng-change="hbUpdate()" ng-model="heartbeatStatus" ng-value="'100104'">Not Device (100104)</ion-radio>
+          <ion-radio ng-change="hbUpdate()" ng-model="heartbeatStatus" ng-value="'100105'">HB Refresh OK (100105)</ion-radio>
+      </div>
 
     	<div class="card">
     		<div class="item item-divider">

@@ -1,6 +1,6 @@
 {
   "name": "mobilecaddy-shell-ionic",
-  "version": "0.0.1",
+  "version": "0.0.1-alpha.3",
   "homepage": "https://github.com/MobileCaddy/shell-ionic",
   "authors": [
     "toddhalfpenny <todd@mobilecaddy.net>"
@@ -17,7 +17,9 @@
   ],
   "devDependencies": {
     "ionic": "1.0.0-beta.13",
-    "mobilecaddy-codeflow": "0.0.1-alpha.1",
-    "mobilecaddy-utils": "0.0.1-alpha.1"
+    "mobilecaddy-codeflow": "0.0.1-alpha.2",
+    "mobilecaddy-utils": "0.0.1-alpha.2",
+    "jszip": "Stuk/jszip#~2.4.0",
+    "jszip-utils": "Stuk/jszip-utils#~0.0.2"
   }
 }

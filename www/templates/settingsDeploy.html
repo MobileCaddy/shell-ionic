@@ -1,0 +1,12 @@
+<ion-view title="Deploy Package">
+	<ion-content>
+
+    <div class="row">
+        <div class="col console-message">
+        <p><strong>Progress:</strong></p>
+        <div ng-repeat="consoleItem in messages"><p class='{{consoleItem.type}}'><i class="{{consoleItem.icon}}"></i>{{consoleItem.message}}</p></div>
+        </div>
+    </div>
+
+  </ion-content>
+</ion-view>

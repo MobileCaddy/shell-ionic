@@ -2,7 +2,7 @@
 
 ## Overview
 
-This is the basic seed application built with [Angular JS](https://angularjs.org/) and the [Ionic Framework](http://ionicframework.com). . The idea of the MobileCaddy shell applications are to give developers a barebones starting block in getting building hybrid mobile applications with MobileCaddy.
+This is the basic shell application built with [Angular JS](https://angularjs.org/) and the [Ionic Framework](http://ionicframework.com). The idea of the MobileCaddy shell applications are to give developers a barebones starting block in getting building hybrid mobile applications with MobileCaddy.
 
 ## Getting Started
 
@@ -17,21 +17,24 @@ This is the basic seed application built with [Angular JS](https://angularjs.org
 * Download the [zip](https://github.com/MobileCaddy/shell-ionic/archive/master.zip) and unzip
 
 ```
+mv shell-ionic-master shell-ionic
 cd shell-ionic
 ```
 
 ## What you get (prior to running any installs/grunt tasks)
 
 ```
+├── apex-templates		## Templates for the platform's startpage and cache manifest
 ├── bower.json        ## Defines dependencies (MobileCaddy, Ionic)
 ├── Gruntfile.js      ## Defines our task automation
-├── package.json      ## The node package file
+├── package.json      ## The node package file and core app configuration
 ├── README.md         ## This file
+├── scss              ## Where you do your SCSS
 ├── test              ## Platform mock responses can go in here
 └── www               ## Where you do your coding
     ├── css
     ├── img
-    ├── index.html
+    ├── index.html    ## This is used locally only
     ├── js
     ├── lib
     └── templates

@@ -24,3 +24,22 @@ a.disabled {
    cursor: default;
    color: grey;
 }
+
+.console-message .ok {
+	color: green;
+}
+
+.console-message .info {
+  color: blue;
+}
+
+.console-message .final {
+  font-weight : bold;
+}
+.console-message .error {
+  color: red;
+  font-weight: bold;
+}
+.console-message .ion-checkmark-round, .console-message .ion-close-round, .console-message .ion-information-circled  {
+  margin-right: 0.5em;
+}
