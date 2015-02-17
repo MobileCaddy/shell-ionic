@@ -16,8 +16,7 @@ CACHE:
 /jslibrary/1416323438000/sfdc/VFRemote.js
 /static/111213/js/perf/stub.js
 {!URLFOR($Resource.MC_UTILS_RESOURCE, 'jquery.min.js')}
-{!URLFOR($Resource.mc_package_002__iosCordova220)}
-{!URLFOR($Resource.mc_package_002__androidCordova220)}
+{!URLFOR($Resource.mc_package_002__cordovaSF3v1)}
 {!URLFOR($Resource.MC_UTILS_RESOURCE, 'mobilecaddy-utils.min.js')}
 {!URLFOR($Resource.MC_UTILS_RESOURCE, 'promise-1.0.0.min.js')}
 {!URLFOR($Resource.MC_UTILS_RESOURCE, 'underscore-min.js')}

@@ -10,6 +10,22 @@ $button-light-border:		#7fd291;
 
 @import "ionic/ionic";
 
+//  A P P    S T A R T    P A G E
+#start-page {
+  // Could style your apps startpage here.
+  height: 100%;
+}
+
+#start-page .card {
+  box-shadow: none;
+  background-color : transparent;
+}
+
+#start-page .card .item {
+  border: 0;
+  background-color : transparent;
+}
+
 // your slick app styles can go here...
 
 ion-nav-view { background-color: #fff; }
