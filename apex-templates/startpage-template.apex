@@ -60,10 +60,14 @@
       </ion-nav-back-button>
     </ion-nav-bar>
 
-    <ion-nav-view>
-      <div class="card">
-        <div class="item item-text-wrap">
-          <p  id='app-progress-msg' class="item-icon-left"><i class="icon ion-loading-c"></i>The application is just being built... this may take a few moments.</p>
+     <ion-nav-view>
+      <div id='start-page'>
+        <div id='startlogo'>
+        </div>
+        <div class="card">
+          <div class="item item-text-wrap">
+            <p id='app-progress-msg' class="item-icon-left"><i class="icon ion-loading-c"></i>The application is just being built... this may take a few moments.</p>
+          </div>
         </div>
       </div>
     </ion-nav-view>
