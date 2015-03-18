@@ -25,7 +25,7 @@ cd shell-ionic
 
 ```
 ├── apex-templates		## Templates for the platform's startpage and cache manifest
-├── bower.json        ## Defines dependencies (MobileCaddy, Ionic)
+├── bower.json        ## Defines dependencies (MobileCaddy, Ionic, etc)
 ├── Gruntfile.js      ## Defines our task automation
 ├── package.json      ## The node package file and core app configuration
 ├── README.md         ## This file

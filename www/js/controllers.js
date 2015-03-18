@@ -166,15 +166,54 @@ angular.module('starter.controllers', ['ionic'])
   });
 
   $scope.showConfirmReset = function() {
-   var confirmPopup = $ionicPopup.confirm({
-     title: 'Reset App Data',
-     template: 'Are you sure you want to reset ALL application data?'
-   });
-   confirmPopup.then(function(res) {
-     if(res) {
-       // TODO : What does resetting app really do?
-     }
-   });
+    var confirmPopup = $ionicPopup.confirm({
+      title: 'Reset App Data',
+      template: 'Are you sure you want to reset ALL application data?'
+    });
+    confirmPopup.then(function(res) {
+      if(res) {
+        console.debug("Resetting app");
+        var i;
+        var name;
+        if ( window.location.host == "localhost:3030" ) {
+          // Codeflow emulator
+          for (i = 0; i < localStorage.length; i++) {
+            name = localStorage.key( i );
+            if ( name != 'forceOAuth' ) {
+              smartstore.removeSoup(name);
+            }
+          }
+          window.location.assign(window.location.protocol + "//" + window.location.host + "/www");
+        } else if ( typeof(mockStore) != "undefined" ) {
+          // Platform emulator
+          for (i = 0; i < localStorage.length; i++) {
+            name = localStorage.key( i );
+            if ( name != 'forceOAuth' ) {
+              smartstore.removeSoup(name);
+            }
+          }
+          var newUrl = window.location.href.substr(0, window.location.href.indexOf('#'));
+          window.location.assign(newUrl);
+        } else {
+          // Device
+          DevService.allTables().then(function(tables) {
+            smartstore = cordova.require('com.salesforce.plugin.smartstore');
+            tables.forEach(function(table){
+              console.debug("Calling smartstore.removeSoup for " + table.Name);
+              smartstore.removeSoup(table.Name);
+            });
+            aouth = cordova.require('salesforce/plugin/oauth');
+            aouth.getAppHomeUrl(function(homePage) {
+              window.history.go( -( history.length - 1 ) );
+            });
+            //SupportMc.singleton.startUp();
+          }, function(reason) {
+            console.error('Angular: promise returned reason -> ' + reason);
+          });
+
+        }
+      }
+    });
   };
 
 })

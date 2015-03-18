@@ -7,7 +7,7 @@
     <head>
         <meta charset="utf-8"/>
         <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width"/>
-        <title>Seed 001 - Time &amp; Expenses</title>
+        <title>My Shell App</title>
 
         <!-- ===================== -->
         <!-- Your App's Resources  -->
@@ -55,31 +55,32 @@
     <!-- ============================ -->
     <!-- App start page and structure -->
     <!-- ============================ -->
-    <ion-nav-bar class="bar-positive">
-      <ion-nav-back-button class="button-icon button-clear ion-ios7-arrow-back">
+    <ion-nav-bar class="bar-positive mc-hide" id="my-nav-bar">
+      <ion-nav-back-button>
       </ion-nav-back-button>
     </ion-nav-bar>
 
-     <ion-nav-view>
+     <ion-nav-view></ion-nav-view>
+     <ion-view>
       <div id='start-page'>
         <div id='startlogo'>
         </div>
         <div class="card">
           <div class="item item-text-wrap">
-            <p id='app-progress-msg' class="item-icon-left"><i class="icon ion-loading-c"></i>The application is just being built... this may take a few moments.</p>
+            <p id='app-progress-msg' class="item-icon-left"><i class="icon spin ion-load-c"></i>The application is just being built... this may take a few moments.</p>
           </div>
         </div>
       </div>
-    </ion-nav-view>
+    </ion-view>
     <script type="text/javascript">
         function thirdPartyProgressCallbackB(val, tabCnt, tabNum){
             var infoStr = '';
             if ( tabCnt !== 0 ) {
-                infoStr = '<i class="icon ion-loading-c"></i>' + 'Building data table ' + val + '. ' + tabNum + ' of ' + tabCnt + '</p>';
+                infoStr = '<i class="icon spin ion-load-c"></i>' + 'Building data table ' + val + '. ' + tabNum + ' of ' + tabCnt + '</p>';
             } else {
-                infoStr = '<i class="icon ion-loading-c"></i>' + 'Building app table ' + val + '.</p>';
+                infoStr = '<i class="icon spin ion-load-c"></i>' + 'Building app table ' + val + '.</p>';
             }
-            document.getElementById("app-progress-msg").innerHTML = '<i class="icon ion-loading-c"></i>' + 'Building table ' + val + '.</p>';
+            document.getElementById("app-progress-msg").innerHTML = '<i class="icon spin ion-load-c"></i>' + 'Building table ' + val + '.</p>';
         };
     </script>
 

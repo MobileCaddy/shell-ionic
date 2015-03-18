@@ -6,11 +6,9 @@
         <input type="text" ng-model="query" />
       </label>
 
-      <div class="item mti-item"
+      <div class="item"
         collection-repeat="tableRec in tableRecs | filter:query" type="item-text-wrap"
-        collection-item-width="'100%'"
-        collection-item-height="getItemHeight(tableRec, $index)"
-        ng-style="{height: getItemHeight(tableRec, $index)}"
+        item-height="getItemHeight(tableRec, $index)"
         >
         <div class="list card">
           <div class="item item-divider">Record {{$index + 1}} of {{tableRecs.length}}</div>
