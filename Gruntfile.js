@@ -74,7 +74,8 @@ module.exports = function(grunt) {
       server: {
         options: {
           port: 3030,
-          keepalive: true
+          livereload: true,
+          open: "http://localhost:3030/www"
         }
       }
     },
@@ -104,6 +105,13 @@ module.exports = function(grunt) {
       set3: {
         files: [ 'scss/*.scss'],
         tasks: ['sass', 'compress:dev']
+      },
+      set4: {
+        files: [ 'www/css/*.css'],
+        tasks: [],
+        options: {
+          livereload: true,
+        },
       }
     },
 
@@ -174,6 +182,7 @@ module.exports = function(grunt) {
   });
   // Each plugin must be loaded following this pattern
   grunt.registerTask('devsetup', ['copy:devsetup', 'sass', 'replace']);
+  grunt.registerTask('serve', ['connect', 'watch']);
   grunt.registerTask('dev', ['jshint:myFiles', 'compress:dev']);
   grunt.registerTask('unit-test', ['karma']);
   grunt.registerTask('prod', ['jshint:myFiles', 'uglify', 'compress:prod']);

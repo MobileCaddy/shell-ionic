@@ -55,8 +55,9 @@ grunt devsetup
 The Grunt config (out of the box) offers the following commands
 
 * **grunt devsetup** : This should be run once following _bower install_ command. It will copy dependency files over into the correct place in your app
+* **grunt serve** : This runs the **connect** and **watch** tasks below.
 * **grunt connect** : This will start a server up so you can run your app in the browser
-* **grunt watch** : This will watch your template files, JS and SCSS files for changes. And will run will depending on the type of file that changed, run JSHint, SASS compilation and will create a .zip file containing your app. You JS will be unminified in this archive to aid debugging.
-* **grunt dev** : This runs JSHint, SASS compilation and will create a .zip file containing your app. You JS will be unminified in this archive to aid debugging.
+* **grunt watch** : This will watch your template files, JS and SCSS files for changes. And will run will depending on the type of file that changed, run JSHint, SASS compilation and will create a .zip file containing your app. You JS will be unminified in this archive to aid debugging. Any SCSS changes will prompt new CSS and cause live reload of these into your browser.
 * **grunt unit-test** : run the karma unit tests
+* **grunt dev** : This runs JSHint, SASS compilation and will create a .zip file containing your app. You JS will be unminified in this archive to aid debugging.
 * **grunt prod** : This will do the same as **grunt dev** but your JS will be minified in the output archive.
