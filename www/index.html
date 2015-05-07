@@ -86,8 +86,8 @@
       mobileCaddy.dynVersionNumber          = '006';
       mobileCaddy.syncRefreshVersion        = '001';
 
-      SupportMc.singleton.startUp(function() {
-        myapp_callback();
+      SupportMc.singleton.startUp(function(runUpInfo) {
+        myapp_callback(runUpInfo);
       });
     </script>
   </head>
@@ -102,7 +102,7 @@
       Additional attributes set its look, ion-nav-bar animation and icons
       Icons provided by Ionicons: http://ionicons.com/
     -->
-    <ion-nav-bar class="bar-positive" id="my-nav-bar">
+    <ion-nav-bar class="bar-positive mc-hide" id="my-nav-bar">
       <ion-nav-back-button></ion-nav-back-button>
     </ion-nav-bar>
 

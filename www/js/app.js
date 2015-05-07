@@ -1,6 +1,32 @@
 
 angular.module('starter', ['ionic', 'starter.services', 'starter.controllers'])
 
+.run(function($ionicPlatform, NetworkService, AppRunStatusService) {
+  $ionicPlatform.ready(function() {
+    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
+    // for form inputs)
+    if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
+      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+    }
+    if (window.StatusBar) {
+      // org.apache.cordova.statusbar required
+      StatusBar.styleLightContent();
+    }
+
+    document.addEventListener("resume", function() {
+      AppRunStatusService.statusEvent('resume');
+    }, false);
+    // document.addEventListener("pause", function() {
+    //   AppRunStatusService.statusEvent('pause');
+    // }, false);
+    document.addEventListener("online", function() {
+      NetworkService.networkEvent('online');
+    }, false);
+    document.addEventListener("offline", function() {
+      NetworkService.networkEvent('offline');
+    }, false);
+  });
+})
 
 .config(function($stateProvider, $urlRouterProvider) {
   // Ionic uses AngularUI Router which uses the concept of states
@@ -97,6 +123,17 @@ angular.module('starter', ['ionic', 'starter.services', 'starter.controllers'])
 // This is the function that get's called once the MobileCaddy libs are done
 // checking the app install/health. Basically the point at which our client
 // app can kick off. It's here we boot angular into action.
-function myapp_callback() {
-  angular.bootstrap(document, ['starter']);
+// runUpInfo : see http://developer.mobilecaddy.net/docs/api for details on
+// object and codes.
+function myapp_callback(runUpInfo) {
+  if (typeof(runUpInfo) != "undefined" &&
+     (typeof(runUpInfo.newVsn) != "undefined" && runUpInfo.newVsn != runUpInfo.curVsn)) {
+    // Going to call a hardReset as an upgrade is available.
+    console.debug('runUpInfo', runUpInfo);
+    var vsnUtils= mobileCaddy.require('mobileCaddy/vsnUtils');
+    vsnUtils.hardReset();
+  } else {
+    // carry on, nothing to see here
+    angular.bootstrap(document, ['starter']);
+  }
 }

@@ -163,11 +163,18 @@ module.exports = function(grunt) {
           to: ''
         }]
       }
+    },
+
+    karma: {
+      unit: {
+        configFile: 'tests/my.conf.js'
+      }
     }
 
   });
   // Each plugin must be loaded following this pattern
   grunt.registerTask('devsetup', ['copy:devsetup', 'sass', 'replace']);
   grunt.registerTask('dev', ['jshint:myFiles', 'compress:dev']);
+  grunt.registerTask('unit-test', ['karma']);
   grunt.registerTask('prod', ['jshint:myFiles', 'uglify', 'compress:prod']);
 };

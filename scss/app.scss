@@ -13,7 +13,7 @@ $button-light-border:		#7fd291;
 //  A P P    S T A R T    P A G E
 #start-page {
   // Could style your apps startpage here.
-  height: 100%;
+  height: 4000px; // needed to display whilst Ionic is initialising
 }
 
 #start-page .card {
@@ -39,23 +39,4 @@ a.disabled {
    pointer-events: none;
    cursor: default;
    color: grey;
-}
-
-.console-message .ok {
-	color: green;
-}
-
-.console-message .info {
-  color: blue;
-}
-
-.console-message .final {
-  font-weight : bold;
-}
-.console-message .error {
-  color: red;
-  font-weight: bold;
-}
-.console-message .ion-checkmark-round, .console-message .ion-close-round, .console-message .ion-information-circled  {
-  margin-right: 0.5em;
 }

@@ -6,8 +6,7 @@ angular.module('starter.controllers', ['ionic'])
   ===========================================================================
   */
 
-
-  .controller('SettingsHBCtrl', function($scope, $rootScope, DevService) {
+  .controller('SettingsHBCtrl', function($scope, $rootScope, DevService, NetworkService) {
 
     if (localStorage.connection) {
       $scope.heartbeatStatus = localStorage.connection;
@@ -17,6 +16,8 @@ angular.module('starter.controllers', ['ionic'])
 
     $scope.hbUpdate = function() {
       localStorage.connection = $scope.heartbeatStatus;
+      if ($scope.heartbeatStatus == 100100) NetworkService.networkEvent('online');
+      if ($scope.heartbeatStatus == 100103) NetworkService.networkEvent('offline');
     };
 
   })
@@ -29,10 +30,24 @@ angular.module('starter.controllers', ['ionic'])
     Main settings page
   ---------------------------------------------------------------------------
   */
+
+  // This unhides the nav-bar. The navbar is hidden in the cases where we want a
+  // splash screen, such as in this app
+  // NOTE - you will want to add the following two lines to the controller that
+  // is first called by your app.
+  e = document.getElementById('my-nav-bar');
+  angular.element(e).removeClass( "mc-hide" );
+
   $scope.logoutAllowedClass = 'disabled';
   $scope.recsToSyncCount = 0;
 
   $scope.codeflow = LOCAL_DEV;
+
+  var vsnUtils = mobileCaddy.require('mobileCaddy/vsnUtils');
+  $scope.upgradeAvailable = false;
+  vsnUtils.upgradeAvailable().then(function(res){
+    if (res) $scope.upgradeAvailable = true;
+  });
 
   DevService.allRecords('recsToSync', false)
     .then(function(recsToSyncRecs) {
@@ -80,12 +95,9 @@ angular.module('starter.controllers', ['ionic'])
   ---------------------------------------------------------------------------
   */
   function validateAdminPassword(pword) {
-    if (pword == "123") {
-      return true;
-    } else {
-      return false;
-    }
+    return (pword == "123") ?  true : false;
   }
+
 
 
   /*
@@ -136,6 +148,43 @@ angular.module('starter.controllers', ['ionic'])
    });
   };
 
+  $scope.showConfirmReset = function() {
+    var confirmPopup = $ionicPopup.confirm({
+      title: 'Reset App Data',
+      template: 'Are you sure you want to reset ALL application data?'
+    });
+    confirmPopup.then(function(res) {
+      if(res) {
+        console.debug("Resetting app");
+        var vsnUtils = mobileCaddy.require('mobileCaddy/vsnUtils');
+        var i;
+        var name;
+        $ionicLoading.show({
+          duration: 30000,
+          delay : 400,
+          maxWidth: 600,
+          noBackdrop: true,
+          template: '<h1>Resetting app...</h1><p id="app-progress-msg" class="item-icon-left">Clearing data...<ion-spinner/></p>'
+        });
+        vsnUtils.hardReset().then(function(res){
+          //$ionicLoading.hide();
+        }).catch(function(e){
+          console.error(e);
+          $ionicLoading.hide();
+        });
+      }
+    });
+  };
+
+})
+
+
+.controller('TestingCtrl', function($scope,AppRunStatusService) {
+
+  $scope.resumeEvent = function() {
+    console.debug("resumeEvent");
+    AppRunStatusService.statusEvent('resume');
+  };
 
 })
 
@@ -165,57 +214,6 @@ angular.module('starter.controllers', ['ionic'])
     console.error('Angular: promise returned reason -> ' + reason);
   });
 
-  $scope.showConfirmReset = function() {
-    var confirmPopup = $ionicPopup.confirm({
-      title: 'Reset App Data',
-      template: 'Are you sure you want to reset ALL application data?'
-    });
-    confirmPopup.then(function(res) {
-      if(res) {
-        console.debug("Resetting app");
-        var i;
-        var name;
-        if ( window.location.host == "localhost:3030" ) {
-          // Codeflow emulator
-          for (i = 0; i < localStorage.length; i++) {
-            name = localStorage.key( i );
-            if ( name != 'forceOAuth' ) {
-              smartstore.removeSoup(name);
-            }
-          }
-          window.location.assign(window.location.protocol + "//" + window.location.host + "/www");
-        } else if ( typeof(mockStore) != "undefined" ) {
-          // Platform emulator
-          for (i = 0; i < localStorage.length; i++) {
-            name = localStorage.key( i );
-            if ( name != 'forceOAuth' ) {
-              smartstore.removeSoup(name);
-            }
-          }
-          var newUrl = window.location.href.substr(0, window.location.href.indexOf('#'));
-          window.location.assign(newUrl);
-        } else {
-          // Device
-          DevService.allTables().then(function(tables) {
-            smartstore = cordova.require('com.salesforce.plugin.smartstore');
-            tables.forEach(function(table){
-              console.debug("Calling smartstore.removeSoup for " + table.Name);
-              smartstore.removeSoup(table.Name);
-            });
-            aouth = cordova.require('salesforce/plugin/oauth');
-            aouth.getAppHomeUrl(function(homePage) {
-              window.history.go( -( history.length - 1 ) );
-            });
-            //SupportMc.singleton.startUp();
-          }, function(reason) {
-            console.error('Angular: promise returned reason -> ' + reason);
-          });
-
-        }
-      }
-    });
-  };
-
 })
 
 .controller('MTIDetailCtrl', function($scope, $rootScope,$stateParams, $ionicLoading, DevService) {
@@ -234,8 +232,7 @@ angular.module('starter.controllers', ['ionic'])
   });
 
   $scope.getItemHeight = function(item, index) {
-    // seems to be a good height
-    return 120 + item.length*55;
+    return (typeof(item) != "undefined")  ? 100 + item.length*55 : 0;
   };
 })
 

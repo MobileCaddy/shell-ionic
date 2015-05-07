@@ -5,6 +5,76 @@ var underscore = angular.module('underscore', []);
 
 angular.module('starter.services', ['underscore'])
 
+
+/*
+ * handles network events (online/offline) and kicks off tasks if needed
+ */
+.factory('NetworkService', function(){
+  return {
+    networkEvent: function(status){
+      var pastStatus = localStorage.getItem('networkStatus');
+      if (status == "online" && pastStatus != status) {
+        // You could put some actions in here that you want to take place when
+        // your app regains connectivity. For example see the Mobile Seed Apps
+        // If you don't need this then you can ignore this
+      }
+      localStorage.setItem('networkStatus', status);
+      return true;
+    }
+  };
+})
+
+
+/*
+ * Collects 'resume' event and checks if there's an upgrade available. If so
+ *  then ask the user if they want to upgrade. If not then refrain from
+ *  asking again for a period if time.
+ */
+.factory('AppRunStatusService', function($ionicPopup) {
+  return {
+    statusEvent: function(status){
+      // The commented out code can be used as a guide on how to handle
+      // prompting users to upgrade. The below checks if an upgrade is available
+      // and if so prompts the user.
+      // This function is called from with app.js where the "resume" event is
+      // caught
+
+    //   console.debug('appRunStatusCtrl', status);
+    //   var vsnUtils = mobileCaddy.require('mobileCaddy/vsnUtils');
+    //   vsnUtils.upgradeAvailable().then(function(res){
+    //     if (res) {
+    //       var notificationTimeout = (1000 * 60 * 5); // 5 minutes
+    //       var prevUpNotification = localStorage.getItem('prevUpNotification');
+    //       var timeNow = Date.now();
+    //       if (prevUpNotification === null) {
+    //         prevUpNotification = 0;
+    //       }
+    //       if (parseInt(prevUpNotification) < (timeNow - notificationTimeout)){
+    //         var confirmPopup = $ionicPopup.confirm({
+    //           title: 'Upgrade available',
+    //           template: 'Would you like to upgrade now?',
+    //           cancelText: 'Not just now',
+    //           okText: 'Yes'
+    //         });
+    //         confirmPopup.then(function(res) {
+    //           if(res) {
+    //             localStorage.removeItem('prevUpNotification');
+    //             vsnUtils.upgradeIfAvailable().then(function(res){
+    //               console.debug('upgradeIfAvailable', res);
+    //             });
+    //           } else {
+    //             localStorage.setItem('prevUpNotification', timeNow);
+    //           }
+    //         });
+    //       }
+    //     }
+    //   });
+    //   return true;
+    }
+  };
+})
+
+
   /*
   ===========================================================================
     M O B I L C A D D Y     S E T T I N G S

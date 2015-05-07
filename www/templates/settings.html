@@ -1,11 +1,11 @@
-<ion-view title="Settings">
+<ion-view cache-view="false" title="Settings">
 	<ion-content> <div class="card">
-        <div class="item item-divider"> 
+        <div class="item item-divider">
             <h4>Application Details</h4>
-    
+
         </div>
-        <div class="item item-text-wrap"> 
-            
+        <div class="item item-text-wrap">
+
             <div class="row">
                 <div class="col">
                 <p>Build</p>
@@ -14,7 +14,7 @@
                  <p>{{ settingsRecs.buildName }}.B{{ settingsRecs.buildVersion }}.D{{ settingsRecs.dynVersionNumber }}</p>
                 </div>
             </div>
-            
+
             <div class="row">
                 <div class="col">
                 <p>User</p>
@@ -32,7 +32,7 @@
                  <p>{{ recsToSyncCount }}</p>
                 </div>
             </div>
-    
+
             <div class="row">
                 <div class="col col-75">
                 <p>Record Issues</p>
@@ -41,7 +41,7 @@
                  <p>0</p>
                 </div>
             </div>
-    
+
             <div class="row">
                 <div class="col col-75">
                 <p>Session Queue</p>
@@ -50,19 +50,23 @@
                  <p>0</p>
                 </div>
             </div>
-    
+
         </div>
-        
+
     </div>
 	<div class="list card">
 		<a class="item item-icon-left" ng-click="showConfirmLogout()">
-	    	<i class="icon ion-log-out"></i>
+    	<i class="icon ion-log-out"></i>
 	    	Logout
-		</a>	
+		</a>
+    <a ng-if="upgradeAvailable" class="item item-icon-left" ng-click="upgradeIfAvailable()">
+      <i class="icon ion-android-download"></i>
+        Upgrade
+    </a>
 		<a class="item item-icon-left" ng-click="showAdminPasswordPopup()">
-	    	<i class="icon ion-settings"></i>
+    	<i class="icon ion-settings"></i>
 	    	Admin Functions
-		</a>	
+		</a>
 	</div>
   </ion-content>
 </ion-view>
