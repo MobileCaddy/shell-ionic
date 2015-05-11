@@ -83,7 +83,8 @@ module.exports = function(grunt) {
     sass: {
       dist: {
         options: {
-          style: 'compact'
+          style: 'compact',
+          sourcemap: 'none'
         },
         files: {
           'www/css/app.css': 'scss/app.scss'
