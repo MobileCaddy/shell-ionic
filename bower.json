@@ -16,9 +16,10 @@
     "tests"
   ],
   "devDependencies": {
-    "ionic": "1.0.0-rc.5",
-    "mobilecaddy-codeflow": "0.0.1-alpha.4",
-    "mobilecaddy-utils": "0.0.1-alpha.5",
+    "ionic": "1.0.1",
+    "mobilecaddy-codeflow": "https://github.com/MobileCaddy/codeflow/archive/unstable-0.0.1-alpha.5.zip",
+    "mobilecaddy-utils": "https://github.com/MobileCaddy/mobilecaddy-utils/archive/unstable-0.0.1-alpha.6.zip",
+    "ngCordova": "https://github.com/toddhalfpenny/ng-cordova.git#add-localNotification-mocks",
     "jszip": "Stuk/jszip#~2.4.0",
     "jszip-utils": "Stuk/jszip-utils#~0.0.2",
     "angular-mocks": "#1.3.13"

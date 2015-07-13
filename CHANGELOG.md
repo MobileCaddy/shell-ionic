@@ -13,7 +13,6 @@
 * Move mock data to _mock_ dir from _test_ dir
 * Added karma/jasmine to give example of how to unit test
 * Dep bump
-* Added CORS proxy for local dev
 
 #### Breaking Changes
 

@@ -16,32 +16,34 @@
 
     <!-- ionic/angularjs/promise polyfill scripts -->
     <script src="lib/js/ionic.bundle.min.js"></script>
-    <script src="lib/js/underscore-min.js"></script>
-    <script src="lib/js/promise-1.0.0.min.js"></script>
+    <script src="../bower_components/underscore/underscore-min.js"></script>
+    <script src="../bower_components/es6-promise/index.js"></script>
 
+    <script src="../tmp/ng-cordova-mocks.js"></script>
     <!-- cordova script (this will be a 404 during development) -->
-    <script src="lib/js/MockCordova.js"></script>
+    <script src="../bower_components/mobilecaddy-codeflow/js/MockCordova.js"></script>
 
     <!-- mock handler for VFremoting -->
-    <script src="lib/js/mockVFRemote.js"></script>
+    <script src="../bower_components/mobilecaddy-codeflow/js/mockVFRemote.js"></script>
 
     <!-- your app's script -->
     <script src="js/app.js"></script>
     <script src="js/services.js"></script>
     <script src="js/controllers.js"></script>
-    <script src="lib/js/jquery.min.js" type="text/javascript"></script>
+
+    <script src="../bower_components/jquery/dist/jquery.min.js" type="text/javascript"></script>
 
     <!-- MobileCaddy lib for initialisation and Sync/Read/Update etc -->
-    <script src="lib/js/mobilecaddy-utils.min.js"></script>
+    <script src="../bower_components/mobilecaddy-utils/js/mobilecaddy-utils.min.js"></script>
 
     <!--
-      Special entries for offline testing
+      Special entries for offline testing / dev
     -->
-    <script src="lib/js/MockSupportMc.min.js"></script>
+    <script src="../bower_components/mobilecaddy-codeflow/js/MockSupportMc.min.js"></script>
 
     <!--  Mobile Caddy support routines -->
-    <script src="lib/js/mcOfflineDevSetup.min.js"></script>
-    <script src="lib/js/force.js"></script>
+    <script src="../bower_components/mobilecaddy-codeflow/js/mcOfflineDevSetup.min.js"></script>
+    <script src="../bower_components/forcejs/force.js"></script>
     <script type="text/javascript" src='../bower_components/jszip/dist/jszip.js'></script>
     <script type="text/javascript" src='../bower_components/jszip-utils/dist/jszip-utils.js'></script>
     <!--
@@ -57,7 +59,16 @@
       window.LOCAL_DEV = true;
       // true - use ForceJS lib to authenticate with SF and use platform data
       // false - bypass auth and use mockVFRemote for platform data (see docs)
+      // This can be overwritten by grunt /  mobilecaddy command line arg (i.e. --local)
       window.USE_FORCETK = true;
+      var queryString= [];
+      var hash;
+      var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+      for(var i = 0; i < hashes.length; i++)
+      {
+          hash = hashes[i].split('=');
+          if (hash[0] == 'local') window.USE_FORCETK = false;
+      }
       // set the login url to be used by ForceJS (optinal) - only needed if
       // USE_FORCETK set to true
       window.SF_LOGIN_URL = 'https://login.salesforce.com';

@@ -1,6 +1,25 @@
 module.exports = function(grunt) {
   "use strict";
 
+  var qStr = "";
+  var scrub = "";
+  if (grunt.option('scrub')){
+    scrub = 'scrub=' + grunt.option('scrub');
+  }
+  var local = "";
+  if (grunt.option('local')){
+    local= 'local=true';
+  }
+
+  if (scrub !== "" || local !== ""){
+    qStr += "?" + scrub + "&" + local;
+  }
+
+  var expressArgs = [];
+  if (grunt.option('rec')){
+    expressArgs.push('rec');
+  }
+
   require('load-grunt-tasks')(grunt);
   // Project configuration.
   grunt.initConfig({
@@ -18,10 +37,8 @@ module.exports = function(grunt) {
       },
       dev: {
         src: ['www/**',
-              // don't include lib files that are needed only for local dev/test
-              '!www/lib/js/*',
-              // add any libs that you do want included here.
-              'www/lib/js/ionic.bundle.min.js',
+              'www/lib/js/ng-cordova.min.js',
+              // don't include  files that are needed only for local dev/test
               '!www/index.html',
               '!www/**/*.log'],
         expand: true
@@ -31,12 +48,10 @@ module.exports = function(grunt) {
           {
             src: [
               'www/**',
+              'www/lib/js/ng-cordova.min.js',
               // don't include js that we have minified
               '!www/js/*',
-              // don't include lib files that are needed only for local dev/test
-              '!www/lib/js/*',
               // add any libs that you do want included here.
-              'www/lib/js/ionic.bundle.min.js',
               '!www/index.html',
               '!www/**/*.log'],
             expand: true
@@ -75,7 +90,7 @@ module.exports = function(grunt) {
         options: {
           port: 3030,
           livereload: true,
-          open: "http://localhost:3030/www"
+          open: "http://localhost:3030/www" + qStr
         }
       }
     },
@@ -86,7 +101,7 @@ module.exports = function(grunt) {
       },
       dev: {
         options: {
-          script: 'cors/cors-server.js'
+          script: 'bower_components/mobilecaddy-codeflow/js/cors-server.js'
         }
       }
     },
@@ -137,19 +152,9 @@ module.exports = function(grunt) {
           {
             expand: true,
             flatten: true,
-            src: ['bower_components/mobilecaddy-codeflow/js/*',
-                  'bower_components/ionic/release/js/ionic.bundle.min.js',
-                  'bower_components/jquery/dist/jquery.min.js',
-                  'bower_components/underscore/underscore-min.js',
-                  'bower_components/signature_pad/signature_pad.min.js',
-                  'bower_components/mobilecaddy-utils/js/mobilecaddy-utils.min.js'],
+            src: ['bower_components/ionic/release/js/ionic.bundle.min.js'],
             dest: 'www/lib/js',
             filter: 'isFile'
-          },
-          // Promises polyfill
-          {
-            src: ['bower_components/es6-promise/index.js'],
-            dest: 'www/lib/js/promise-1.0.0.min.js'
           },
           // Ionic scss
           {
@@ -164,11 +169,6 @@ module.exports = function(grunt) {
             cwd: 'bower_components/ionic/release/fonts/',
             src: ['**'],
             dest: 'www/fonts'
-          },
-          // forcejs
-           {
-            src: ['bower_components/forcejs/force.js'],
-            dest: 'www/lib/js/force.js'
           },
           {
             src: ['bower_components/forcejs/oauthcallback.html'],
@@ -185,6 +185,14 @@ module.exports = function(grunt) {
         replacements: [{
           from: '?v=#{$ionicons-version}',
           to: ''
+        }]
+      },
+      ngCordovaMocks: {
+        src: ['bower_components/ngCordova/dist/ng-cordova-mocks.js'],
+        dest: 'tmp/ng-cordova-mocks.js',
+        replacements: [{
+          from: 'ngCordovaMocks',
+          to: 'ngCordova'
         }]
       }
     },
