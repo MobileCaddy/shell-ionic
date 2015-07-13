@@ -144,6 +144,7 @@ angular.module('starter.controllers', ['ionic'])
    confirmPopup.then(function(res) {
      if(res) {
        $rootScope.adminLoggedIn = null;
+       cordova.require("com.salesforce.plugin.sfaccountmanager").logout();
      }
    });
   };
