@@ -6,7 +6,7 @@ angular.module('starter.controllers', ['ionic'])
   ===========================================================================
   */
 
-  .controller('SettingsHBCtrl', function($scope, $rootScope, DevService, NetworkService) {
+.controller('SettingsHBCtrl', ['$scope', '$rootScope', 'DevService', 'NetworkService', function($scope, $rootScope, DevService, NetworkService) {
 
     if (localStorage.connection) {
       $scope.heartbeatStatus = localStorage.connection;
@@ -20,10 +20,9 @@ angular.module('starter.controllers', ['ionic'])
       if ($scope.heartbeatStatus == 100103) NetworkService.networkEvent('offline');
     };
 
-  })
+}])
 
-  .controller('SettingsCtrl', function($scope, $rootScope, $ionicPopup, $location, DevService) {
-
+.controller('SettingsCtrl', ['$scope', '$rootScope', '$ionicPopup', '$ionicLoading', '$location', 'devUtils', 'vsnUtils', 'DevService', function($scope, $rootScope, $ionicPopup, $ionicLoading, $location, devUtils, vsnUtils, DevService) {
 
   /*
   ---------------------------------------------------------------------------
@@ -43,7 +42,6 @@ angular.module('starter.controllers', ['ionic'])
 
   $scope.codeflow = LOCAL_DEV;
 
-  var vsnUtils = mobileCaddy.require('mobileCaddy/vsnUtils');
   $scope.upgradeAvailable = false;
   vsnUtils.upgradeAvailable().then(function(res){
     if (res) $scope.upgradeAvailable = true;
@@ -125,7 +123,6 @@ angular.module('starter.controllers', ['ionic'])
             if (validateAdminPassword($scope.data.admin)) {
                 $location.path('tab/settings/devtools');
                 $rootScope.adminLoggedIn = Date.now();
-                $scope.$apply();
               } else {
                 console.log("Password incorrect");
               }
@@ -157,7 +154,6 @@ angular.module('starter.controllers', ['ionic'])
     confirmPopup.then(function(res) {
       if(res) {
         console.debug("Resetting app");
-        var vsnUtils = mobileCaddy.require('mobileCaddy/vsnUtils');
         var i;
         var name;
         $ionicLoading.show({
@@ -177,24 +173,24 @@ angular.module('starter.controllers', ['ionic'])
     });
   };
 
-})
+}])
 
 
-.controller('TestingCtrl', function($scope,AppRunStatusService) {
+.controller('TestingCtrl', ['$scope', 'AppRunStatusService', function($scope, AppRunStatusService) {
 
   $scope.resumeEvent = function() {
     console.debug("resumeEvent");
     AppRunStatusService.statusEvent('resume');
   };
 
-})
+}])
 
 /*
 ---------------------------------------------------------------------------
   MTI (Mobile Table Inspector)
 ---------------------------------------------------------------------------
 */
-.controller('MTICtrl', function($scope, $rootScope, $location, $ionicPopup, DevService) {
+.controller('MTICtrl', ['$scope', '$rootScope', '$location', '$ionicPopup', 'DevService', function($scope, $rootScope, $location, $ionicPopup, DevService) {
 
   var adminTimeout = (1000 * 60 *5 ); // 5 minutes
   if ( $rootScope.adminLoggedIn > Date.now() - adminTimeout) {
@@ -215,9 +211,9 @@ angular.module('starter.controllers', ['ionic'])
     console.error('Angular: promise returned reason -> ' + reason);
   });
 
-})
+}])
 
-.controller('MTIDetailCtrl', function($scope, $rootScope,$stateParams, $ionicLoading, DevService) {
+.controller('MTIDetailCtrl', ['$scope', '$rootScope', '$stateParams', '$ionicLoading', 'DevService', function($scope, $rootScope,$stateParams, $ionicLoading, DevService) {
   $ionicLoading.show({
       duration: 30000,
       noBackdrop: true,
@@ -235,14 +231,14 @@ angular.module('starter.controllers', ['ionic'])
   $scope.getItemHeight = function(item, index) {
     return (typeof(item) != "undefined")  ? 100 + item.length*55 : 0;
   };
-})
+}])
 
 /*
 ---------------------------------------------------------------------------
   Deploy Control
 ---------------------------------------------------------------------------
 */
-.controller('DeployCtrl', function($scope, $rootScope, DeployService) {
+.controller('DeployCtrl', ['$scope', '$rootScope', 'DeployService', function($scope, $rootScope, DeployService) {
 
   function iconForErr(errType) {
     switch(errType) {
@@ -299,4 +295,4 @@ angular.module('starter.controllers', ['ionic'])
     });
     console.debug(err);
   });
-});
+}]);

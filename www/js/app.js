@@ -1,7 +1,7 @@
 
 angular.module('starter', ['ionic', 'starter.services', 'starter.controllers'])
 
-.run(function($ionicPlatform, NetworkService, AppRunStatusService) {
+.run(['$ionicPlatform', 'NetworkService', 'AppRunStatusService', function($ionicPlatform, NetworkService, AppRunStatusService) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -26,9 +26,9 @@ angular.module('starter', ['ionic', 'starter.services', 'starter.controllers'])
       NetworkService.networkEvent('offline');
     }, false);
   });
-})
+}])
 
-.config(function($stateProvider, $urlRouterProvider) {
+.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
   // Ionic uses AngularUI Router which uses the concept of states
   // Learn more here: https://github.com/angular-ui/ui-router
   // Set up the various states which the app can be in.
@@ -118,7 +118,7 @@ angular.module('starter', ['ionic', 'starter.services', 'starter.controllers'])
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/tab/settings');
 
-});
+}]);
 
 // This is the function that get's called once the MobileCaddy libs are done
 // checking the app install/health. Basically the point at which our client

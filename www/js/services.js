@@ -1,28 +1,152 @@
-var underscore = angular.module('underscore', []);
-  underscore.factory('_', function() {
+angular.module('underscore', [])
+  .factory('_', function() {
     return window._; // assumes underscore has already been loaded on the page
-  });
+});
 
-angular.module('starter.services', ['underscore'])
+angular.module('devUtils', [])
+  .factory('devUtils', function() {
+    return mobileCaddy.require('mobileCaddy/devUtils');
+});
+
+angular.module('vsnUtils', [])
+  .factory('vsnUtils', function() {
+    return mobileCaddy.require('mobileCaddy/vsnUtils');
+});
+
+angular.module('smartStoreUtils', [])
+  .factory('smartStoreUtils', function() {
+    return mobileCaddy.require('mobileCaddy/smartStoreUtils');
+});
+
+angular.module('starter.services', ['underscore', 'devUtils', 'vsnUtils', 'smartStoreUtils'])
 
 
 /*
  * handles network events (online/offline) and kicks off tasks if needed
  */
-.factory('NetworkService', function(){
+.factory('NetworkService', ['SyncService', function(SyncService){
   return {
     networkEvent: function(status){
       var pastStatus = localStorage.getItem('networkStatus');
       if (status == "online" && pastStatus != status) {
         // You could put some actions in here that you want to take place when
         // your app regains connectivity. For example see the Mobile Seed Apps
-        // If you don't need this then you can ignore this
+        // If you don't need this then you can ignore this. e.g.
+        // SyncService.syncTables(['Table_x__ap', 'Table_y__ap'], true);
       }
       localStorage.setItem('networkStatus', status);
       return true;
     }
   };
-})
+}])
+
+  /*
+  ===========================================================================
+    S Y N C    S E R V I C E
+  ===========================================================================
+  */
+
+.factory('SyncService', ['$rootScope', 'devUtils', function($rootScope, devUtils){
+
+  function  syncTables(tablesToSync, syncWithoutLocalUpdates, maxTableAge) {
+    if (typeof(maxTableAge) == "undefined") {
+      maxTableAge = (1000 * 60 * 3); // 3 minutes
+    }
+    //console.log('syncTables syncWithoutLocalUpdates, maxTableAge',syncWithoutLocalUpdates,maxTableAge);
+    $rootScope.$broadcast('syncTables', {result : "Sync"});
+
+    var stopSyncing = false;
+    var firstSync = true;
+    var syncCount = 0;
+    var sequence = Promise.resolve();
+    var maxRecsPerCall = 50;
+
+    tablesToSync.forEach(function(table){
+      sequence = sequence.then(function() {
+        syncCount ++;
+        //console.log("syncTables",table,syncCount,maxRecsPerCall);
+        if (stopSyncing) {
+          return {status: "100999"};  // "100999" is not an official code (used to indicate stopping of sync)
+        } else {
+          //console.log("syncTables call syncMobileTable",table,syncWithoutLocalUpdates,maxTableAge,maxRecsPerCall);
+          return devUtils.syncMobileTable(table, syncWithoutLocalUpdates, maxTableAge, maxRecsPerCall);
+        }
+      }).then(function(resObject) {
+        //console.log('syncTables syncMobileTable result',angular.toJson(resObject),firstSync,syncCount);
+        if (typeof(resObject.status) != "undefined" && resObject.status != "100400") {
+          if (resObject.status != "100999") {
+            // We haven't stopped the sync
+            if (resObject.status == "100497" ||
+                resObject.status == "100498" ||
+                resObject.status == "100402" ||
+                (typeof(resObject.mc_add_status) != "undefined" && resObject.mc_add_status == "sync-too-soon")) {
+              // "100497" => table is too young (synced recently) -> break out of any further syncing attempts
+              // "100498" => sync already in progress
+              // "100402" => error (e.g. offline, timeout)
+              // We stop syncing if the first sync has a problem
+              if (firstSync) {
+                stopSyncing = true;
+                $rootScope.$broadcast('syncTables', {result : resObject.status});
+              }
+            }
+            // Unable to sync -> set a local notification?
+          }
+        } else {
+          // Successful sync -> cancel any local notifications?
+        }
+        if (syncCount == tablesToSync.length && !stopSyncing) {
+          // All syncs complete
+          $rootScope.$broadcast('syncTables', {result : "Complete"});
+        }
+        firstSync = false;
+      }).catch(function(res){
+        if (typeof(res.status) != "undefined" &&
+             (res.status == "100497" ||
+              res.status == "100498" ||
+              res.status == "100402")) {
+          //console.log(res);
+          $rootScope.$broadcast('syncTables', {result : "Complete"});
+        } else {
+          console.error(res);
+          $rootScope.$broadcast('syncTables', {result : "Error"});
+        }
+        // Unable to sync -> set a local notification?
+      });
+    });
+  }
+
+  return {
+    getSyncLock: function(syncLockName){
+      var syncLock = localStorage.getItem(syncLockName);
+      if (syncLock === null) {
+        syncLock = "false";
+        localStorage.setItem(syncLockName, syncLock);
+      }
+      //console.log("mc getSyncLock syncLock", syncLock);
+      return syncLock;
+    },
+    setSyncLock: function(syncLockName, status){
+      localStorage.setItem(syncLockName, status);
+      //console.log("mc setSyncLock", syncLockName, status);
+    },
+    getSyncState: function(){
+      var syncState = localStorage.getItem("syncState");
+      if (syncState === null) {
+        syncState = "Complete";
+        localStorage.setItem("syncState", syncState);
+      }
+      //console.log("mc getSyncState syncState", syncState);
+      return syncState;
+    },
+    setSyncState: function(status){
+      localStorage.setItem("syncState", status);
+      //console.log("mc setSyncState", "syncState", status);
+    },
+    syncTables: function(tabs2Sync, syncWithoutLocalUpdates, maxTableAge) {
+      syncTables(tabs2Sync, syncWithoutLocalUpdates, maxTableAge);
+    }
+  };
+}])
 
 
 /*
@@ -30,50 +154,72 @@ angular.module('starter.services', ['underscore'])
  *  then ask the user if they want to upgrade. If not then refrain from
  *  asking again for a period if time.
  */
-.factory('AppRunStatusService', function($ionicPopup) {
+.factory('AppRunStatusService', ['$ionicPopup', '$ionicLoading', 'devUtils', 'vsnUtils', 'SyncService', function($ionicPopup, $ionicLoading, devUtils, vsnUtils, SyncService) {
+  // The commented out code can be used as a guide on how to handle
+  // prompting users to upgrade. The below checks if an upgrade is available
+  // and if so prompts the user.
+  // This function is called from with app.js where the "resume" event is
+  // caught.
+
+  // function resume() {
+  //   devUtils.dirtyTables().then(function(tables){
+  //     //console.log('AppRunStatusService resume tables',tables);
+  //     if (tables && tables.length === 0) {
+  //       vsnUtils.upgradeAvailable().then(function(res){
+  //         //console.log('AppRunStatusService upgradeAvailable?',res);
+  //         if (res) {
+  //           var notificationTimeout = (1000 * 60 * 5); // 5 minutes
+  //           var prevUpNotification = localStorage.getItem('prevUpNotification');
+  //           var timeNow = Date.now();
+  //           if (prevUpNotification === null) {
+  //             prevUpNotification = 0;
+  //           }
+  //           if (parseInt(prevUpNotification) < (timeNow - notificationTimeout)){
+  //             var confirmPopup = $ionicPopup.confirm({
+  //               title: 'Upgrade available',
+  //               template: 'Would you like to upgrade now?',
+  //               cancelText: 'Not just now',
+  //               okText: 'Yes'
+  //             });
+  //             confirmPopup.then(function(res) {
+  //               if(res) {
+  //                 $ionicLoading.show({
+  //                   duration: 30000,
+  //                   delay : 400,
+  //                   maxWidth: 600,
+  //                   noBackdrop: true,
+  //                   template: '<h1>Upgrade app...</h1><p id="app-upgrade-msg" class="item-icon-left">Upgrading...<ion-spinner/></p>'
+  //                 });
+  //                 localStorage.removeItem('prevUpNotification');
+  //                 vsnUtils.upgradeIfAvailable().then(function(res){
+  //                   //console.log('upgradeIfAvailable', res);
+  //                 }).catch(function(e){
+  //                   console.error(e);
+  //                   $ionicLoading.hide();
+  //                 });
+  //               } else {
+  //                 localStorage.setItem('prevUpNotification', timeNow);
+  //               }
+  //             });
+  //           }
+  //         }
+  //       });
+  //     } else {
+  //       SyncService.syncTables(['Table_x__ap'], true);
+  //     }
+  //   });
+  //   return true;
+  // }
+
   return {
     statusEvent: function(status){
-      // The commented out code can be used as a guide on how to handle
-      // prompting users to upgrade. The below checks if an upgrade is available
-      // and if so prompts the user.
-      // This function is called from with app.js where the "resume" event is
-      // caught
-
-    //   console.debug('appRunStatusCtrl', status);
-    //   var vsnUtils = mobileCaddy.require('mobileCaddy/vsnUtils');
-    //   vsnUtils.upgradeAvailable().then(function(res){
-    //     if (res) {
-    //       var notificationTimeout = (1000 * 60 * 5); // 5 minutes
-    //       var prevUpNotification = localStorage.getItem('prevUpNotification');
-    //       var timeNow = Date.now();
-    //       if (prevUpNotification === null) {
-    //         prevUpNotification = 0;
-    //       }
-    //       if (parseInt(prevUpNotification) < (timeNow - notificationTimeout)){
-    //         var confirmPopup = $ionicPopup.confirm({
-    //           title: 'Upgrade available',
-    //           template: 'Would you like to upgrade now?',
-    //           cancelText: 'Not just now',
-    //           okText: 'Yes'
-    //         });
-    //         confirmPopup.then(function(res) {
-    //           if(res) {
-    //             localStorage.removeItem('prevUpNotification');
-    //             vsnUtils.upgradeIfAvailable().then(function(res){
-    //               console.debug('upgradeIfAvailable', res);
-    //             });
-    //           } else {
-    //             localStorage.setItem('prevUpNotification', timeNow);
-    //           }
-    //         });
-    //       }
-    //     }
-    //   });
-    //   return true;
+      //console.log('AppRunStatusService statusEvent', status);
+      if (status == "resume") {
+        // resume();
+      }
     }
   };
-})
-
+}])
 
   /*
   ===========================================================================
@@ -81,9 +227,7 @@ angular.module('starter.services', ['underscore'])
   ===========================================================================
   */
 
-.factory('DevService', function($rootScope, $q, _) {
-  var smartStoreUtils = mobileCaddy.require('mobileCaddy/smartStoreUtils');
-  var devUtils        = mobileCaddy.require('mobileCaddy/devUtils');
+.factory('DevService', ['$rootScope', '$q', '_', 'devUtils', 'smartStoreUtils', function($rootScope, $q, _, devUtils, smartStoreUtils) {
 
   function getTables() {
     var deferred = $q.defer();
@@ -194,9 +338,9 @@ angular.module('starter.services', ['underscore'])
     }
   };
 
-})
+}])
 
-.factory('DeployService', function($rootScope, $q, $timeout, $http) {
+.factory('DeployService', ['$rootScope', '$q', '$timeout', '$http', function($rootScope, $q, $timeout, $http) {
 
   var apiVersion = "v32.0";
 
@@ -461,5 +605,4 @@ angular.module('starter.services', ['underscore'])
       });
     }
   };
-});
-
+}]);
