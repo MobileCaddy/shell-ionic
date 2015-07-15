@@ -96,7 +96,7 @@
         var mobileCaddyStartup = mobileCaddy.require('mobileCaddy/startup');
         // Startup the app.  Parameter is custom callback function
         // or null if there is nothing custom to call on startup
-        mobileCaddyStartup.startUp(function(runUpInfo) {
+        mobileCaddyStartup.startup(function(runUpInfo) {
           myapp_callback(runUpInfo);
         });
     </script>
