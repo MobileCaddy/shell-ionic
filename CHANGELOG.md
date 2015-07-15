@@ -1,3 +1,21 @@
+### 0.0.1-alpha.7 (2015-07-15)
+
+
+#### Bug Fixes
+
+* Added missing 'logout' call.
+
+#### Features
+
+* CORS server removed (now in mobilecaddy-codeflow dep)
+* MobileCaddy libs now injected in controllers and service
+* Dep bump
+
+#### Breaking Changes
+
+* none
+
+
 ### 0.0.1-alpha.6 (2015-05-07)
 
 

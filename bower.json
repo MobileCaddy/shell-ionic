@@ -1,6 +1,6 @@
 {
   "name": "mobilecaddy-shell-ionic",
-  "version": "0.0.1-alpha.6",
+  "version": "0.0.1-alpha.7",
   "homepage": "https://github.com/MobileCaddy/shell-ionic",
   "authors": [
     "toddhalfpenny <todd@mobilecaddy.net>"
@@ -17,8 +17,8 @@
   ],
   "devDependencies": {
     "ionic": "1.0.1",
-    "mobilecaddy-codeflow": "https://github.com/MobileCaddy/codeflow/archive/unstable-0.0.1-alpha.5.zip",
-    "mobilecaddy-utils": "https://github.com/MobileCaddy/mobilecaddy-utils/archive/unstable-0.0.1-alpha.6.zip",
+    "mobilecaddy-codeflow": "0.0.1-alpha.5",
+    "mobilecaddy-utils": "0.0.1-alpha.6",
     "ngCordova": "https://github.com/toddhalfpenny/ng-cordova.git#add-localNotification-mocks",
     "jszip": "Stuk/jszip#~2.4.0",
     "jszip-utils": "Stuk/jszip-utils#~0.0.2",
