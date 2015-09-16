@@ -37,7 +37,6 @@ module.exports = function(grunt) {
       },
       dev: {
         src: ['www/**',
-              'www/lib/js/ng-cordova.min.js',
               // don't include  files that are needed only for local dev/test
               '!www/index.html',
               '!www/**/*.log'],
@@ -152,7 +151,8 @@ module.exports = function(grunt) {
           {
             expand: true,
             flatten: true,
-            src: ['bower_components/ionic/release/js/ionic.bundle.min.js'],
+            src: ['bower_components/ionic/release/js/ionic.bundle.min.js',
+                  'bower_components/ngCordova/dist/ng-cordova.min.js'],
             dest: 'www/lib/js',
             filter: 'isFile'
           },

@@ -18,13 +18,18 @@ angular.module('smartStoreUtils', [])
     return mobileCaddy.require('mobileCaddy/smartStoreUtils');
 });
 
-angular.module('starter.services', ['underscore', 'devUtils', 'vsnUtils', 'smartStoreUtils'])
+angular.module('logger', [])
+  .factory('logger', function() {
+    return mobileCaddy.require('mobileCaddy/logger');
+});
+
+angular.module('starter.services', ['underscore', 'devUtils', 'vsnUtils', 'smartStoreUtils', 'logger'])
 
 
 /*
  * handles network events (online/offline) and kicks off tasks if needed
  */
-.factory('NetworkService', ['SyncService', function(SyncService){
+.factory('NetworkService', ['SyncService', 'logger', function(SyncService, logger){
   return {
     networkEvent: function(status){
       var pastStatus = localStorage.getItem('networkStatus');
@@ -35,6 +40,7 @@ angular.module('starter.services', ['underscore', 'devUtils', 'vsnUtils', 'smart
         // SyncService.syncTables(['Table_x__ap', 'Table_y__ap'], true);
       }
       localStorage.setItem('networkStatus', status);
+      logger.log("NetworkService " + status);
       return true;
     }
   };

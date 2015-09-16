@@ -1,3 +1,19 @@
+### 0.0.2 (2015-09-16)
+
+
+#### Bug Fixes
+
+*
+
+#### Features
+
+* Dep bounce
+
+#### Breaking Changes
+
+* none
+
+
 ### 0.0.1-alpha.7 (2015-07-15)
 
 

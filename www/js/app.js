@@ -1,5 +1,5 @@
 
-angular.module('starter', ['ionic', 'starter.services', 'starter.controllers'])
+angular.module('starter', ['ionic', 'ngIOS9UIWebViewPatch', 'starter.services', 'starter.controllers'])
 
 .run(['$ionicPlatform', 'NetworkService', 'AppRunStatusService', function($ionicPlatform, NetworkService, AppRunStatusService) {
   $ionicPlatform.ready(function() {
@@ -25,6 +25,12 @@ angular.module('starter', ['ionic', 'starter.services', 'starter.controllers'])
     document.addEventListener("offline", function() {
       NetworkService.networkEvent('offline');
     }, false);
+
+    // Example of locking the screen orientation to landscape
+    // if (screen && screen.lockOrientation) {
+    //   screen.lockOrientation('landscape');
+    // }
+
   });
 }])
 

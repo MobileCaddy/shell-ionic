@@ -2,7 +2,7 @@
   "name": "mobilecaddy-shell-ionic",
   "version": "0.0.1",
   "sf_app_name" : "ShellApp",
-  "mc_utils_resource" : "mc_package_002__MC_Resource_004",
+  "mc_utils_resource" : "mc_package_002__MC_Resource_008",
   "devDependencies": {
     "grunt": ">=0.4.5",
     "grunt-contrib-jshint": ">=0.10.0",

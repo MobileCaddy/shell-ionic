@@ -16,7 +16,8 @@ www/css/app.*
 
 
 # Mock and bower stuff
-www/lib/js/*
+www/lib/js/ionic.bundle.min.js
+www/lib/js/ng-cordova.min.js
 www/fonts/ionicons*
 scss/ionic
 oauthcallback.html
