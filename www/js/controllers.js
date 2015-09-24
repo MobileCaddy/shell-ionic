@@ -22,7 +22,7 @@ angular.module('starter.controllers', ['ionic'])
 
 }])
 
-.controller('SettingsCtrl', ['$scope', '$rootScope', '$ionicPopup', '$ionicLoading', '$location', 'devUtils', 'vsnUtils', 'DevService', function($scope, $rootScope, $ionicPopup, $ionicLoading, $location, devUtils, vsnUtils, DevService) {
+.controller('SettingsCtrl', ['$scope', '$rootScope', '$ionicPopup', '$ionicLoading', '$location', 'devUtils', 'vsnUtils', 'DevService', 'logger', function($scope, $rootScope, $ionicPopup, $ionicLoading, $location, devUtils, vsnUtils, DevService, logger) {
 
   /*
   ---------------------------------------------------------------------------
@@ -44,7 +44,12 @@ angular.module('starter.controllers', ['ionic'])
 
   $scope.upgradeAvailable = false;
   vsnUtils.upgradeAvailable().then(function(res){
-    if (res) $scope.upgradeAvailable = true;
+    if (res)  return devUtils.dirtyTables();
+  }).then(function(tables){
+    if (tables && tables.length === 0) {
+      $scope.upgradeAvailable = true;
+      $scope.$apply();
+    }
   });
 
   DevService.allRecords('recsToSync', false)
@@ -96,7 +101,71 @@ angular.module('starter.controllers', ['ionic'])
     return (pword == "123") ?  true : false;
   }
 
-
+  $scope.upgradeIfAvailable = function() {
+    devUtils.dirtyTables().then(function(tables){
+      logger.log('upgrade: dirtyTables check');
+      if (tables && tables.length === 0) {
+        logger.log('upgrade: no dirtyTables');
+        var confirmPopup = $ionicPopup.confirm({
+          title: 'Upgrade',
+          template: 'Are you sure you want to upgrade now?'
+        });
+        confirmPopup.then(function(res) {
+          if(res) {
+            $ionicLoading.show({
+              duration: 30000,
+              delay : 400,
+              maxWidth: 600,
+              noBackdrop: true,
+              template: '<h1>Upgrade app...</h1><p id="app-upgrade-msg" class="item-icon-left">Upgrading...<ion-spinner/></p>'
+            });
+            logger.log('upgrade: calling upgradeIfAvailable');
+            vsnUtils.upgradeIfAvailable().then(function(res){
+              logger.log('upgrade: upgradeIfAvailable? ' + res);
+              if (!res) {
+                $ionicLoading.hide();
+                $scope.data = {};
+                $ionicPopup.show({
+                  title: 'Upgrade',
+                  subTitle: 'The upgrade could not take place due to sync in progress. Please try again later.',
+                  scope: $scope,
+                  buttons: [
+                    {
+                      text: 'OK',
+                      type: 'button-positive',
+                      onTap: function(e) {
+                        return true;
+                      }
+                    }
+                  ]
+                });
+              }
+            }).catch(function(e){
+              logger.error('upgrade: ' + JSON.stringify(e));
+              $ionicLoading.hide();
+            });
+          }
+        });
+      } else {
+        logger.log('upgrade: dirtyTables found');
+        $scope.data = {};
+        $ionicPopup.show({
+          title: 'Upgrade',
+          subTitle: 'Unable to upgrade. A sync is required - please try later.',
+          scope: $scope,
+          buttons: [
+            {
+              text: 'OK',
+              type: 'button-positive',
+              onTap: function(e) {
+                return true;
+              }
+            }
+          ]
+        });
+      }
+    });
+  };
 
   /*
   ---------------------------------------------------------------------------
@@ -173,6 +242,31 @@ angular.module('starter.controllers', ['ionic'])
     });
   };
 
+  $scope.setLogLevel = function() {
+    if ($scope.log.level == "Off") {
+      localStorage.removeItem('logLevel');
+    } else {
+      localStorage.setItem('logLevel', $scope.log.level);
+    }
+    $scope.log.levelChange = false;
+  };
+
+  $scope.getLogLevel = function() {
+    var logLevel = localStorage.getItem("logLevel");
+    if (logLevel === null) {
+      logLevel = "Off";
+    }
+    return logLevel;
+  };
+
+  $scope.log = {};
+  $scope.log.level = $scope.getLogLevel();
+  $scope.log.levelChange = false;
+
+  $scope.logLevelChange = function() {
+    $scope.log.levelChange = true;
+  };
+
 }])
 
 
@@ -190,7 +284,7 @@ angular.module('starter.controllers', ['ionic'])
   MTI (Mobile Table Inspector)
 ---------------------------------------------------------------------------
 */
-.controller('MTICtrl', ['$scope', '$rootScope', '$location', '$ionicPopup', 'DevService', function($scope, $rootScope, $location, $ionicPopup, DevService) {
+.controller('MTICtrl', ['$scope', '$rootScope', '$location', '$ionicPopup', '$ionicLoading', 'DevService', 'devUtils', 'logger', function($scope, $rootScope, $location, $ionicPopup, $ionicLoading, DevService, devUtils, logger) {
 
   var adminTimeout = (1000 * 60 *5 ); // 5 minutes
   if ( $rootScope.adminLoggedIn > Date.now() - adminTimeout) {
@@ -211,9 +305,73 @@ angular.module('starter.controllers', ['ionic'])
     console.error('Angular: promise returned reason -> ' + reason);
   });
 
+  $scope.showTable = function(tableName) {
+    $location.path(decodeURIComponent("/tab/settings/mti/" + tableName));
+  };
+
+  $scope.syncTable = function(tableName) {
+    var confirmPopup = $ionicPopup.confirm({
+      title: 'Sync Table',
+      template: "<div style='text-align:center;'>Are you sure you want to sync " + tableName + "?</div>",
+      cancelText: 'No',
+      okText: 'Yes',
+    });
+    confirmPopup.then(function(res) {
+      if (res) {
+        $ionicLoading.show({
+          duration: 10000,
+          template: 'Syncing ' + tableName + " ..."
+        });
+        devUtils.syncMobileTable(tableName).then(function(resObject){
+          $ionicLoading.hide();
+        }).catch(function(e){
+          logger.error('syncTable from settings ' + tableName + " " + JSON.stringify(e));
+          $ionicLoading.hide();
+          var alertPopup = $ionicPopup.alert({
+            title: 'Operation failed!',
+            template: '<p>Sorry, something went wrong.</p><p class="error_details">Error: ' + e.status + ' - ' + e.mc_add_status + '</p>'
+          });
+        });
+      }
+    });
+  };
+
+  $scope.saveTableToML = function(tableName) {
+    var confirmPopup = $ionicPopup.confirm({
+      title: 'Save Table To Mobile Log',
+      template: "<div style='text-align:center;'>Are you sure you want to save " + tableName + "?</div>",
+      cancelText: 'No',
+      okText: 'Yes',
+    });
+    confirmPopup.then(function(res) {
+      if (res) {
+        $ionicLoading.show({
+          duration: 10000,
+          template: 'Saving ' + tableName + " ..."
+        });
+        // Read the table records
+        DevService.allRecords(tableName, false).then(function(tableRecs) {
+          // console.log("tableRecs",angular.toJson(tableRecs));
+          return DevService.insertMobileLog(tableRecs);
+        }).then(function(resObject) {
+          // console.log("mc resObject",resObject);
+          $ionicLoading.hide();
+        }).catch(function(e){
+          logger.error('saveTableToML ' + tableName + " " + JSON.stringify(e));
+          $ionicLoading.hide();
+          var alertPopup = $ionicPopup.alert({
+            title: 'Operation failed!',
+            template: '<p>Sorry, something went wrong.</p><p class="error_details">Error: ' + e.status + ' - ' + e.mc_add_status + '</p>'
+          });
+        });
+      }
+    });
+  };
+
 }])
 
-.controller('MTIDetailCtrl', ['$scope', '$rootScope', '$stateParams', '$ionicLoading', 'DevService', function($scope, $rootScope,$stateParams, $ionicLoading, DevService) {
+.controller('MTIDetailCtrl', ['$scope', '$rootScope', '$stateParams', '$ionicLoading', '$ionicModal', 'DevService', function($scope, $rootScope,$stateParams, $ionicLoading, $ionicModal, DevService) {
+
   $ionicLoading.show({
       duration: 30000,
       noBackdrop: true,
@@ -231,6 +389,55 @@ angular.module('starter.controllers', ['ionic'])
   $scope.getItemHeight = function(item, index) {
     return (typeof(item) != "undefined")  ? 100 + item.length*55 : 0;
   };
+
+  $scope.search = {};
+
+  $scope.clearSearch = function() {
+    $scope.search.query = "";
+  };
+
+  $scope.showRecord = function(tableRec, soupRecordId) {
+    $ionicLoading.show({
+      duration: 10000,
+      template: 'Loading...'
+    });
+    var tableName;
+    for (i = 0, len = tableRec.length; i < len; i++) {
+      if (tableRec[i].Name == "Mobile_Table_Name") {
+        tableName = tableRec[i].Value;
+      }
+    }
+    console.log("tableName",tableName, soupRecordId);
+    DevService.getRecordForSoupEntryId(tableName, soupRecordId).then(function(record) {
+      console.log("record",record);
+      $scope.showTableRecord(tableName, record, soupRecordId);
+      $ionicLoading.hide();
+    }, function(reason) {
+      $ionicLoading.hide();
+      console.error('getRecordForSoupEntryId ' + reason);
+    });
+  };
+
+  $scope.showTableRecord = function(tableName, record, soupRecordId) {
+    $ionicModal.fromTemplateUrl('settingDevMTITableRecord.html', function(modal) {
+      $scope.tableRecordModal = modal;
+      $scope.tableRecordModal.tableName = tableName;
+      $scope.tableRecordModal.record = record;
+      $scope.tableRecordModal.soupRecordId = soupRecordId;
+      $scope.tableRecordModal.show();
+    }, {
+      scope: $scope,
+      animation: 'slide-in-up',
+      backdropClickToClose : false
+    });
+  };
+
+  $scope.closeShowTableRecord = function() {
+    $scope.tableRecordModal.hide();
+    $scope.tableRecordModal.remove();
+    delete $scope.tableRecordModal;
+  };
+
 }])
 
 /*

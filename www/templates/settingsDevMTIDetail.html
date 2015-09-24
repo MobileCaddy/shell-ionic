@@ -1,17 +1,26 @@
  <ion-view title="MTI: {{table.Name}}">
+  <ion-header-bar class="bar bar-subheader">
+   <div class="item-input search-input">
+     <i class="icon ion-search placeholder-icon"></i>
+     <input type="search" ng-model="search.query" />
+     <button ng-if="search.query.length"
+       class="button button-icon ion-android-close search-clear-button"
+       ng-click="clearSearch()">
+     </button>
+   </div>
+  </ion-header-bar>
   <ion-content padding="true">
     <ion-list>
-      <label class="item item-input">
-        <i class="icon ion-search placeholder-icon"></i>
-        <input type="text" ng-model="query" />
-      </label>
-
-      <div class="item"
-        collection-repeat="tableRec in tableRecs | filter:query" type="item-text-wrap"
-        item-height="getItemHeight(tableRec, $index)"
+      <div class="item mti-item"
+        collection-repeat="tableRec in results = (tableRecs | filter:search.query)" type="item-text-wrap"
+        collection-item-width="'100%'"
+        collection-item-height="getItemHeight(tableRec, $index)"
+        ng-style="{height: getItemHeight(tableRec, $index)}"
         >
         <div class="list card">
-          <div class="item item-divider">Record {{$index + 1}} of {{tableRecs.length}}</div>
+          <div class="item item-divider">Record {{$index + 1}} of {{results.length}}
+            <span style="color:red;" ng-show="results.length!==tableRecs.length"> *filtered</span>
+          </div>
         </div>
         <span ng-repeat="field in tableRec" type="item-text-wrap">
           <span ng-switch="field.ID_flag">
@@ -20,11 +29,34 @@
             </ion-item>
             <ion-item ng-switch-when="false">
               <strong>{{field.Name}}: </strong>{{field.Value}}
+              <button ng-click="showRecord(tableRec, field.Value);" class="button button-positive button-small" ng-show="field.Name==='SOUP_Record_Id'">
+                <i class="icon ion-ios-color-wand-outline"></i>
+              </button>
             </ion-item>
           </span>
         </span>
       </div>
     </ion-list>
-   	</div>
   </ion-content>
 </ion-view>
+
+<script id="settingDevMTITableRecord.html" type="text/ng-template">
+  <div class="modal show-record-modal" >
+    <ion-header-bar class="bar-positive">
+      <h1 class="title">Soup Record {{tableRecordModal.soupRecordId}} for {{tableRecordModal.tableName}}</h1>
+      <button class="button button-icon icon ion-close-round" ng-click="closeShowTableRecord()"></button>
+    </ion-header-bar>
+    <ion-content>
+      <div class="card" ng-show="!tableRecordModal.record">
+        <h4>No Record Found</h4>
+      </div>
+      <div class="card" ng-show="tableRecordModal.record">
+        <span ng-repeat="(key, val) in tableRecordModal.record">
+          <ion-item class="item-text-wrap">
+            <strong>{{key}}: </strong>{{val}}
+          </ion-item>
+        </span>
+      </div>
+    </ion-content>
+  </div>
+</script>

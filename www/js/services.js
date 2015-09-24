@@ -160,66 +160,87 @@ angular.module('starter.services', ['underscore', 'devUtils', 'vsnUtils', 'smart
  *  then ask the user if they want to upgrade. If not then refrain from
  *  asking again for a period if time.
  */
-.factory('AppRunStatusService', ['$ionicPopup', '$ionicLoading', 'devUtils', 'vsnUtils', 'SyncService', function($ionicPopup, $ionicLoading, devUtils, vsnUtils, SyncService) {
-  // The commented out code can be used as a guide on how to handle
+ .factory('AppRunStatusService', ['$ionicPopup', '$ionicLoading', 'devUtils', 'vsnUtils', 'SyncService', 'logger', function($ionicPopup, $ionicLoading, devUtils, vsnUtils, SyncService, logger) {
+  // The code below can be used as a guide on how to handle
   // prompting users to upgrade. The below checks if an upgrade is available
   // and if so prompts the user.
   // This function is called from with app.js where the "resume" event is
   // caught.
 
-  // function resume() {
-  //   devUtils.dirtyTables().then(function(tables){
-  //     //console.log('AppRunStatusService resume tables',tables);
-  //     if (tables && tables.length === 0) {
-  //       vsnUtils.upgradeAvailable().then(function(res){
-  //         //console.log('AppRunStatusService upgradeAvailable?',res);
-  //         if (res) {
-  //           var notificationTimeout = (1000 * 60 * 5); // 5 minutes
-  //           var prevUpNotification = localStorage.getItem('prevUpNotification');
-  //           var timeNow = Date.now();
-  //           if (prevUpNotification === null) {
-  //             prevUpNotification = 0;
-  //           }
-  //           if (parseInt(prevUpNotification) < (timeNow - notificationTimeout)){
-  //             var confirmPopup = $ionicPopup.confirm({
-  //               title: 'Upgrade available',
-  //               template: 'Would you like to upgrade now?',
-  //               cancelText: 'Not just now',
-  //               okText: 'Yes'
-  //             });
-  //             confirmPopup.then(function(res) {
-  //               if(res) {
-  //                 $ionicLoading.show({
-  //                   duration: 30000,
-  //                   delay : 400,
-  //                   maxWidth: 600,
-  //                   noBackdrop: true,
-  //                   template: '<h1>Upgrade app...</h1><p id="app-upgrade-msg" class="item-icon-left">Upgrading...<ion-spinner/></p>'
-  //                 });
-  //                 localStorage.removeItem('prevUpNotification');
-  //                 vsnUtils.upgradeIfAvailable().then(function(res){
-  //                   //console.log('upgradeIfAvailable', res);
-  //                 }).catch(function(e){
-  //                   console.error(e);
-  //                   $ionicLoading.hide();
-  //                 });
-  //               } else {
-  //                 localStorage.setItem('prevUpNotification', timeNow);
-  //               }
-  //             });
-  //           }
-  //         }
-  //       });
-  //     } else {
-  //       SyncService.syncTables(['Table_x__ap'], true);
-  //     }
-  //   });
-  //   return true;
-  // }
+  function resume() {
+    devUtils.dirtyTables().then(function(tables){
+      logger.log('on resume: dirtyTables check');
+      if (tables && tables.length === 0) {
+        logger.log('on resume: calling upgradeAvailable');
+        vsnUtils.upgradeAvailable().then(function(res){
+          logger.log('on resume: upgradeAvailable? ' + res);
+          if (res) {
+            var notificationTimeout = (1000 * 60 * 5); // 5 minutes
+            var prevUpNotification = localStorage.getItem('prevUpNotification');
+            var timeNow = Date.now();
+            if (prevUpNotification === null) {
+              prevUpNotification = 0;
+            }
+            if (parseInt(prevUpNotification) < (timeNow - notificationTimeout)){
+              var confirmPopup = $ionicPopup.confirm({
+                title: 'Upgrade available',
+                template: 'Would you like to upgrade now?',
+                cancelText: 'Not just now',
+                okText: 'Yes'
+              });
+              confirmPopup.then(function(res) {
+                if(res) {
+                  $ionicLoading.show({
+                    duration: 30000,
+                    delay : 400,
+                    maxWidth: 600,
+                    noBackdrop: true,
+                    template: '<h1>Upgrade app...</h1><p id="app-upgrade-msg" class="item-icon-left">Upgrading...<ion-spinner/></p>'
+                  });
+                  localStorage.removeItem('prevUpNotification');
+                  logger.log('on resume: calling upgradeIfAvailable');
+                  vsnUtils.upgradeIfAvailable().then(function(res){
+                    logger.log('on resume: upgradeIfAvailable res = ' + res);
+                    //console.log('upgradeIfAvailable', res);
+                    if (!res) {
+                      $ionicLoading.hide();
+                      $scope.data = {};
+                      $ionicPopup.show({
+                        title: 'Upgrade',
+                        subTitle: 'The upgrade could not take place due to sync in progress. Please try again later.',
+                        scope: $scope,
+                        buttons: [
+                          {
+                            text: 'OK',
+                            type: 'button-positive',
+                            onTap: function(e) {
+                              return true;
+                            }
+                          }
+                        ]
+                      });
+                    }
+                  }).catch(function(e){
+                    logger.error("resume " + JSON.stringify(e));
+                    $ionicLoading.hide();
+                  });
+                } else {
+                  localStorage.setItem('prevUpNotification', timeNow);
+                }
+              });
+            }
+          }
+        });
+      } else {
+        logger.log('on resume: dirtyTables found');
+      }
+    });
+    return true;
+  }
 
   return {
     statusEvent: function(status){
-      //console.log('AppRunStatusService statusEvent', status);
+      logger.log('AppRunStatusService status ' + status);
       if (status == "resume") {
         // resume();
       }
@@ -320,6 +341,56 @@ angular.module('starter.services', ['underscore', 'devUtils', 'vsnUtils', 'smart
     return deferred.promise;
   }
 
+  function getRecordForSoupEntryId(tableName, soupRecordId) {
+    return new Promise(function(resolve, reject) {
+      devUtils.readRecords(tableName, []).then(function(resObject) {
+        var record = _.findWhere(resObject.records, {'_soupEntryId': soupRecordId});
+        resolve(record);
+      }).catch(function(resObject){
+        reject(resObject);
+      });
+    });
+  }
+
+  function insertRecordUsingSmartStoreUtils(tableName, rec) {
+    return new Promise(function(resolve, reject) {
+      smartStoreUtils.insertRecords(tableName, [rec],
+        function(res) {
+          resolve(res);
+        },
+        function(err) {
+          reject(err);
+        }
+      );
+    });
+  }
+
+  function insertMobileLog(recs) {
+    return new Promise(function(resolve, reject) {
+      var remainingData = JSON.stringify(recs);
+      var dataToInsert = [];
+      // Push 'chunks' of data to array for processing further down
+      while (remainingData.length > 0) {
+        dataToInsert.push(remainingData.substring(0,32767));
+        remainingData = remainingData.substring(32767);
+      }
+      // Iterate over the data 'chunks', inserting each 'chunk' into the Mobile_Log_mc table
+      var sequence = Promise.resolve();
+      dataToInsert.forEach(function(data){
+        sequence = sequence.then(function() {
+          var mobileLog = {};
+          mobileLog.Name = "TMP-" + new Date().valueOf();
+          mobileLog.mc_package_002__Error_Text__c = data;
+          mobileLog.SystemModstamp = new Date().getTime();
+          return insertRecordUsingSmartStoreUtils('Mobile_Log__mc', mobileLog);
+        }).then(function(resObject) {
+          resolve(resObject);
+        }).catch(function(res){
+          reject(res);
+        });
+      });
+    });
+  }
 
   return {
     allTables: function() {
@@ -341,6 +412,12 @@ angular.module('starter.services', ['underscore', 'devUtils', 'vsnUtils', 'smart
           }
       }
       return tableRecs;
+    },
+    getRecordForSoupEntryId: function(tableName, soupRecordId) {
+      return getRecordForSoupEntryId(tableName, soupRecordId);
+    },
+    insertMobileLog: function(recs) {
+      return insertMobileLog(recs);
     }
   };
 
