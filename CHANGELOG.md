@@ -8,6 +8,12 @@
 #### Features
 
 * Dep bounce
+* ios9 Patch
+* logger calls added
+* Settings updates
+** sync tables option
+** MTI linking
+** Table content insert into log option
 
 #### Breaking Changes
 
