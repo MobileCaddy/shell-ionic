@@ -9,7 +9,6 @@ This is the basic shell application built with [Angular JS](https://angularjs.or
 * Get the code and the supporting node and packages. The following depencies are needed (For detailed instructions see the [Getting Started Guide](http://developer.mobilecaddy.net/docs));
  * npm
  * grunt-cli
- * bower
  * ruby
  * sass
 
@@ -25,7 +24,6 @@ cd shell-ionic
 
 ```
 ├── apex-templates		## Templates for the platform's startpage and cache manifest
-├── bower.json        ## Defines dependencies (MobileCaddy, Ionic, etc)
 ├── Gruntfile.js      ## Defines our task automation
 ├── mock              ## Platform mock responses can go in here
 ├── package.json      ## The node package file and core app configuration
@@ -45,7 +43,6 @@ cd shell-ionic
 
 ```
 npm install
-bower install
 grunt devsetup
 ```
 
@@ -54,7 +51,7 @@ grunt devsetup
 
 The Grunt config (out of the box) offers the following commands
 
-* **grunt devsetup** : This should be run once following _bower install_ command. It will copy dependency files over into the correct place in your app
+* **grunt devsetup** : This should be run once following _npm install_ command. It will copy dependency files over into the correct place in your app
 * **grunt serve** : This runs the **connect** and **watch** tasks below.
 * **grunt connect** : This will start a server up so you can run your app in the browser
 * **grunt watch** : This will watch your template files, JS and SCSS files for changes. And will run will depending on the type of file that changed, run JSHint, SASS compilation and will create a .zip file containing your app. You JS will be unminified in this archive to aid debugging. Any SCSS changes will prompt new CSS and cause live reload of these into your browser.

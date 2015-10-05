@@ -17,9 +17,9 @@ module.exports = function(config) {
     files: [
       '../www/lib/js/*.js',
       '../www/js/*.js',
-      '../bower_components/angular-mocks/angular-mocks.js',
+      '../node_modules/angular-mocks/angular-mocks.js',
       '**/*tests.js',
-      '../bower_components/mobilecaddy-codeflow/js/mcUtilsMock.js'
+      '../node_modules/mobilecaddy-codeflow/js/mcUtilsMock.js'
     ],
 
 
