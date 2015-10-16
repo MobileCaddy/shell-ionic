@@ -380,7 +380,7 @@ angular.module('starter.services', ['underscore', 'devUtils', 'vsnUtils', 'smart
         sequence = sequence.then(function() {
           var mobileLog = {};
           mobileLog.Name = "TMP-" + new Date().valueOf();
-          mobileLog.mc_package_002__Error_Text__c = data;
+          mobileLog.mobilecaddy1__Error_Text__c = data;
           mobileLog.SystemModstamp = new Date().getTime();
           return insertRecordUsingSmartStoreUtils('Mobile_Log__mc', mobileLog);
         }).then(function(resObject) {

@@ -6,6 +6,7 @@
 
 node_modules
 tmp
+codeflow
 dest
 www/js/*.log
 .sass-cache

@@ -1,7 +1,7 @@
 <apex:page applyHtmlTag="true" applyBodyTag="false" showHeader="false" docType="html-5.0" standardStylesheets="false"  manifest="/apex/MY_APP_CACHE_RESOURCE">
     <!--
     Need to add this controller to the apex tag
-    controller="mc_package_002.MobileCaddyStartPageController001_mc"
+    controller="mobilecaddy1.MobileCaddyStartPageController001_mc"
     -->
 
     <head>
