@@ -179,7 +179,7 @@ module.exports = function(grunt) {
             cwd: 'node_modules/mobilecaddy-codeflow/codeflow-app/',
             src: ['**'],
             dest: 'codeflow'
-          },
+          }
         ]
       }
     },
