@@ -146,42 +146,48 @@ module.exports = function(grunt) {
     },
 
     copy: {
-      devsetup: {
-        files: [
-          {
-            expand: true,
-            flatten: true,
-            src: ['node_modules/ionic-sdk/release/js/ionic.bundle.min.js',
-                  'node_modules/ng-cordova/dist/ng-cordova.min.js'],
-            dest: 'www/lib/js',
-            filter: 'isFile'
-          },
-          // Ionic scss
-          {
-            expand: true,
-            cwd: 'node_modules/ionic-sdk/scss/',
-            src: ['**'],
-            dest: 'scss/ionic'
-          },
-          // Ionic fonts
-          {
-            expand: true,
-            cwd: 'node_modules/ionic-sdk/release/fonts/',
-            src: ['**'],
-            dest: 'www/fonts'
-          },
-          {
-            src: ['node_modules/mobilecaddy-codeflow/node_modules/forcejs/oauthcallback.html'],
-            dest: 'oauthcallback.html'
-          },
-          {
-            expand: true,
-            cwd: 'node_modules/mobilecaddy-codeflow/codeflow-app/',
-            src: ['**'],
-            dest: 'codeflow'
-          }
-        ]
-      }
+      devsetup: (function(){
+        // node_modules structure is flat from v5.0.0 onwards
+        var forceJSPath = (process.version < "v5.0.0") ?
+          'node_modules/mobilecaddy-codeflow/node_modules/forcejs/oauthcallback.html' :
+          'node_modules/forcejs/oauthcallback.html'
+        return {
+          files: [
+            {
+              expand: true,
+              flatten: true,
+              src: ['node_modules/ionic-sdk/release/js/ionic.bundle.min.js',
+                    'node_modules/ng-cordova/dist/ng-cordova.min.js'],
+              dest: 'www/lib/js',
+              filter: 'isFile'
+            },
+            // Ionic scss
+            {
+              expand: true,
+              cwd: 'node_modules/ionic-sdk/scss/',
+              src: ['**'],
+              dest: 'scss/ionic'
+            },
+            // Ionic fonts
+            {
+              expand: true,
+              cwd: 'node_modules/ionic-sdk/release/fonts/',
+              src: ['**'],
+              dest: 'www/fonts'
+            },
+            {
+              src: [forceJSPath],
+              dest: 'oauthcallback.html'
+            },
+            {
+              expand: true,
+              cwd: 'node_modules/mobilecaddy-codeflow/codeflow-app/',
+              src: ['**'],
+              dest: 'codeflow'
+            }
+          ]
+        }
+      }())
     },
 
     replace: {
@@ -200,7 +206,24 @@ module.exports = function(grunt) {
           from: 'ngCordovaMocks',
           to: 'ngCordova'
         }]
-      }
+      },
+      node5: (function(){
+        // node_modules structure is flat from v5.0.0 onwards
+        if (process.version < "v5.0.0") {
+          return {};
+        } else {
+          return {
+            src: ['www/index.html', 'codeflow/index.html'],
+            overwrite: true,
+            replacements: [{
+              from: /node_modules\/.*\/node_modules\//g,
+              to: function (matchedWord, index, fullText, regexMatches) {
+                return 'node_modules/';
+              }
+            }]
+          }
+        }
+      }())
     },
 
     karma: {
