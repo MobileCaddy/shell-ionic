@@ -1,3 +1,19 @@
+### 1.0.1 (2015-10-30)
+
+
+#### Bug Fixes
+
+* NONE
+
+#### Features
+
+* node v5.0.0 support (flat node_modules structure)
+
+#### Breaking Changes
+
+* none
+
+
 ### 1.0.0  (2015-10-16)
 
 
