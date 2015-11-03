@@ -150,7 +150,7 @@ module.exports = function(grunt) {
         // node_modules structure is flat from v5.0.0 onwards
         var forceJSPath = (process.version < "v5.0.0") ?
           'node_modules/mobilecaddy-codeflow/node_modules/forcejs/oauthcallback.html' :
-          'node_modules/forcejs/oauthcallback.html'
+          'node_modules/forcejs/oauthcallback.html';
         return {
           files: [
             {
@@ -186,7 +186,7 @@ module.exports = function(grunt) {
               dest: 'codeflow'
             }
           ]
-        }
+        };
       }())
     },
 
@@ -221,7 +221,7 @@ module.exports = function(grunt) {
                 return 'node_modules/';
               }
             }]
-          }
+          };
         }
       }())
     },
