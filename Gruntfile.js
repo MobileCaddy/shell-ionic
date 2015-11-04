@@ -28,7 +28,8 @@ module.exports = function(grunt) {
 
     jshint: {
       myFiles: ['Gruntfile.js',
-                'www/js/*.js']
+                'www/js/app.js',
+                'www/js/**/*.js',]
     },
 
     compress: {
@@ -119,8 +120,9 @@ module.exports = function(grunt) {
 
     watch: {
       set1: {
-        files: ['*.js',
-                'www/js/*.js',
+        files: ['app.js',
+                'www/js/**/*.js',
+                '!www/js/services.js',
                 'package.json'],
         tasks: ['dev']
       },
@@ -143,6 +145,17 @@ module.exports = function(grunt) {
         files: ['cors/cors-server.js'],
         tasks:  [ 'express:dev' ]
       }
+    },
+
+    concat: {
+        options: {
+          separator: '\n',
+        },
+        dist: {
+          //src: ['www/js/services/theRest.service.js', 'www/js/services/deploy.service.js'],
+          src:  ['www/js/services/service.module.js', 'www/js/services/*.js'],
+          dest: 'www/js/services.js',
+        },
     },
 
     copy: {
@@ -236,7 +249,7 @@ module.exports = function(grunt) {
   // Each plugin must be loaded following this pattern
   grunt.registerTask('devsetup', ['copy:devsetup', 'sass', 'replace']);
   grunt.registerTask('serve', ['connect', 'express:dev', 'watch']);
-  grunt.registerTask('dev', ['jshint:myFiles', 'compress:dev']);
+  grunt.registerTask('dev', ['jshint:myFiles', 'concat', 'compress:dev']);
   grunt.registerTask('unit-test', ['karma']);
   grunt.registerTask('prod', ['jshint:myFiles', 'uglify', 'compress:prod']);
 };

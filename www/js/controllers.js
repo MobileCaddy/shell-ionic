@@ -54,7 +54,7 @@ angular.module('starter.controllers', ['ionic'])
 
   DevService.allRecords('recsToSync', false)
     .then(function(recsToSyncRecs) {
-    $scope.recsToSyncCount = tableRecs.length;
+    $scope.recsToSyncCount = recsToSyncRecs.length;
     if ($scope.recsToSyncCount === 0) {
       $scope.logoutAllowedClass = '';
     } else {

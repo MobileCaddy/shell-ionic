@@ -14,6 +14,8 @@ www/js/*.log
 # ignore app.css as this is created by the sass
 www/css/app.*
 
+# ignore automagically created JS files
+www/js/services.js
 
 # Mock and dep stuff
 www/lib/js/ionic.bundle.min.js
