@@ -40,6 +40,8 @@ module.exports = function(grunt) {
         src: ['www/**',
               // don't include  files that are needed only for local dev/test
               '!www/index.html',
+              '!www/index.tpl.html',
+              '!www/js/services/**',
               '!www/**/*.log'],
         expand: true
       },
@@ -53,6 +55,7 @@ module.exports = function(grunt) {
               '!www/js/*',
               // add any libs that you do want included here.
               '!www/index.html',
+              '!www/index.tpl.html',
               '!www/**/*.log'],
             expand: true
           },
@@ -77,6 +80,7 @@ module.exports = function(grunt) {
           expand: true,
           src:    [
             'www/js/**/*.js',
+            '!www/lib/js/services/*.js',
             // don't include lib files that are needed only for local dev/test
             '!www/lib/js/**.js'
             ],
@@ -152,7 +156,6 @@ module.exports = function(grunt) {
           separator: '\n',
         },
         dist: {
-          //src: ['www/js/services/theRest.service.js', 'www/js/services/deploy.service.js'],
           src:  ['www/js/services/service.module.js', 'www/js/services/*.js'],
           dest: 'www/js/services.js',
         },
@@ -239,6 +242,22 @@ module.exports = function(grunt) {
       }())
     },
 
+    includeSource: {
+      options: {
+        basePath: 'www',
+        templates: {
+          html: {
+            js: '<script src="{filePath}"></script>',
+          }
+        },
+      },
+      myTarget: {
+        files: {
+          'www/index.html': 'www/index.tpl.html'
+        }
+      }
+    },
+
     karma: {
       unit: {
         configFile: 'tests/my.conf.js'
@@ -249,7 +268,7 @@ module.exports = function(grunt) {
   // Each plugin must be loaded following this pattern
   grunt.registerTask('devsetup', ['copy:devsetup', 'sass', 'replace']);
   grunt.registerTask('serve', ['connect', 'express:dev', 'watch']);
-  grunt.registerTask('dev', ['jshint:myFiles', 'concat', 'compress:dev']);
+  grunt.registerTask('dev', ['jshint:myFiles', 'includeSource', 'concat', 'compress:dev']);
   grunt.registerTask('unit-test', ['karma']);
   grunt.registerTask('prod', ['jshint:myFiles', 'uglify', 'compress:prod']);
 };

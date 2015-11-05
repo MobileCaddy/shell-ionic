@@ -14,7 +14,8 @@ www/js/*.log
 # ignore app.css as this is created by the sass
 www/css/app.*
 
-# ignore automagically created JS files
+# ignore automagically created files
+www/index.html
 www/js/services.js
 
 # Mock and dep stuff
