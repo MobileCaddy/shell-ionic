@@ -105,6 +105,7 @@ module.exports = function(grunt) {
       },
       dev: {
         options: {
+          args: expressArgs,
           script: 'node_modules/mobilecaddy-codeflow/js/cors-server.js'
         }
       }
