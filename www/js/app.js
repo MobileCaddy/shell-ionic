@@ -49,6 +49,15 @@ angular.module('starter', ['ionic', 'ngIOS9UIWebViewPatch', 'starter.services', 
     })
 
 
+  .state('tab.home', {
+      url: '/home',
+      views: {
+        'home-tab': {
+          templateUrl: RESOURCE_ROOT +  'templates/home.html',
+        }
+      }
+    })
+
     /*****************************************************
      * S E T T I N G S    &    D E V    T O O L S
      ****************************************************/

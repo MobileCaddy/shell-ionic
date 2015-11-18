@@ -28,7 +28,8 @@ module.exports = function(grunt) {
 
     jshint: {
       myFiles: ['Gruntfile.js',
-                'www/js/*.js']
+                'www/js/app.js',
+                'www/js/**/*.js',]
     },
 
     compress: {
@@ -39,6 +40,8 @@ module.exports = function(grunt) {
         src: ['www/**',
               // don't include  files that are needed only for local dev/test
               '!www/index.html',
+              '!www/index.tpl.html',
+              '!www/js/services/**',
               '!www/**/*.log'],
         expand: true
       },
@@ -52,6 +55,7 @@ module.exports = function(grunt) {
               '!www/js/*',
               // add any libs that you do want included here.
               '!www/index.html',
+              '!www/index.tpl.html',
               '!www/**/*.log'],
             expand: true
           },
@@ -76,6 +80,7 @@ module.exports = function(grunt) {
           expand: true,
           src:    [
             'www/js/**/*.js',
+            '!www/lib/js/services/*.js',
             // don't include lib files that are needed only for local dev/test
             '!www/lib/js/**.js'
             ],
@@ -100,6 +105,7 @@ module.exports = function(grunt) {
       },
       dev: {
         options: {
+          args: expressArgs,
           script: 'node_modules/mobilecaddy-codeflow/js/cors-server.js'
         }
       }
@@ -119,8 +125,9 @@ module.exports = function(grunt) {
 
     watch: {
       set1: {
-        files: ['*.js',
-                'www/js/*.js',
+        files: ['app.js',
+                'www/js/**/*.js',
+                '!www/js/services.js',
                 'package.json'],
         tasks: ['dev']
       },
@@ -143,6 +150,16 @@ module.exports = function(grunt) {
         files: ['cors/cors-server.js'],
         tasks:  [ 'express:dev' ]
       }
+    },
+
+    concat: {
+        options: {
+          separator: '\n',
+        },
+        dist: {
+          src:  ['www/js/services/service.module.js', 'www/js/services/*.js'],
+          dest: 'www/js/services.js',
+        },
     },
 
     copy: {
@@ -213,7 +230,7 @@ module.exports = function(grunt) {
           return {};
         } else {
           return {
-            src: ['www/index.html', 'codeflow/index.html'],
+            src: ['www/index.html', 'codeflow/index.html', 'tests/my.conf.js'],
             overwrite: true,
             replacements: [{
               from: /node_modules\/.*\/node_modules\//g,
@@ -226,6 +243,22 @@ module.exports = function(grunt) {
       }())
     },
 
+    includeSource: {
+      options: {
+        basePath: 'www',
+        templates: {
+          html: {
+            js: '<script src="{filePath}"></script>',
+          }
+        },
+      },
+      myTarget: {
+        files: {
+          'www/index.html': 'www/index.tpl.html'
+        }
+      }
+    },
+
     karma: {
       unit: {
         configFile: 'tests/my.conf.js'
@@ -234,9 +267,9 @@ module.exports = function(grunt) {
 
   });
   // Each plugin must be loaded following this pattern
-  grunt.registerTask('devsetup', ['copy:devsetup', 'sass', 'replace']);
+  grunt.registerTask('devsetup', ['copy:devsetup', 'sass', 'includeSource', 'replace']);
   grunt.registerTask('serve', ['connect', 'express:dev', 'watch']);
-  grunt.registerTask('dev', ['jshint:myFiles', 'compress:dev']);
+  grunt.registerTask('dev', ['jshint:myFiles', 'includeSource', 'concat', 'compress:dev']);
   grunt.registerTask('unit-test', ['karma']);
   grunt.registerTask('prod', ['jshint:myFiles', 'uglify', 'compress:prod']);
 };

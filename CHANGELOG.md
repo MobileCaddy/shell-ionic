@@ -1,3 +1,20 @@
+### 1.0.2 (2015-11-17)
+
+
+#### Bug Fixes
+
+* Fixed broken karma test setup
+
+#### Features
+
+* Using Angular Style Guide for code structure etc.
+* Added e2e tests as an example
+* Added a home page - so the tabs are navigatable.
+
+#### Breaking Changes
+
+* none
+
 ### 1.0.1 (2015-10-30)
 
 
