@@ -16,8 +16,13 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       '../www/lib/js/*.js',
-      '../www/js/*.js',
+      '../www/js/app.js',
+      '../www/js/services/*module.js',
+      '../www/js/services/*.js',
+      '../www/js/controllers.js',
+      '../node_modules/mobilecaddy-utils/node_modules/es6-promise/dist/promise-1.0.0.js',
       '../node_modules/angular-mocks/angular-mocks.js',
+      '../node_modules/mobilecaddy-utils/node_modules/underscore/underscore-min.js',
       '**/*tests.js',
       '../node_modules/mobilecaddy-codeflow/js/mcUtilsMock.js'
     ],
@@ -25,7 +30,9 @@ module.exports = function(config) {
 
     // list of files to exclude
     exclude: [
+      '../www/js/services.js',
       '../www/lib/js/mobilecaddy-utils.min.js',
+      '../www/lib/js/angular-ios9-uiwebview.patch.js',
     ],
 
 

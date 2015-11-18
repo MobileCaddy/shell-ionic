@@ -230,7 +230,7 @@ module.exports = function(grunt) {
           return {};
         } else {
           return {
-            src: ['www/index.html', 'codeflow/index.html'],
+            src: ['www/index.html', 'codeflow/index.html', 'tests/my.conf.js'],
             overwrite: true,
             replacements: [{
               from: /node_modules\/.*\/node_modules\//g,
