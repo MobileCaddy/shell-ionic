@@ -29,7 +29,10 @@ module.exports = function(grunt) {
     jshint: {
       myFiles: ['Gruntfile.js',
                 'www/js/app.js',
-                'www/js/**/*.js',]
+                'www/js/**/*.js',],
+      test: [
+        'tests/**/*.js'
+        ]
     },
 
     compress: {
@@ -145,6 +148,10 @@ module.exports = function(grunt) {
         options: {
           livereload: true,
         }
+      },
+      set5: {
+        files: [ 'tests/**/*.js'],
+        tasks: ['jshint:test']
       },
       express: {
         files: ['cors/cors-server.js'],
