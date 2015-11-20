@@ -1,3 +1,19 @@
+### 1.1.0 (2015-11-20)
+
+
+#### Bug Fixes
+
+* none
+
+#### Features
+
+* Further work on Angular Style Guide implementation
+
+#### Breaking Changes
+
+* none
+
+
 ### 1.0.2 (2015-11-17)
 
 

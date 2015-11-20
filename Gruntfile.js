@@ -45,6 +45,7 @@ module.exports = function(grunt) {
               '!www/index.html',
               '!www/index.tpl.html',
               '!www/js/services/**',
+              '!www/js/controllers/**',
               '!www/**/*.log'],
         expand: true
       },
@@ -84,6 +85,7 @@ module.exports = function(grunt) {
           src:    [
             'www/js/**/*.js',
             '!www/lib/js/services/*.js',
+            '!www/lib/js/controllers/*.js',
             // don't include lib files that are needed only for local dev/test
             '!www/lib/js/**.js'
             ],
@@ -131,6 +133,7 @@ module.exports = function(grunt) {
         files: ['app.js',
                 'www/js/**/*.js',
                 '!www/js/services.js',
+                '!www/js/controllers.js',
                 'package.json'],
         tasks: ['dev']
       },
@@ -163,9 +166,13 @@ module.exports = function(grunt) {
         options: {
           separator: '\n',
         },
-        dist: {
+        services: {
           src:  ['www/js/services/service.module.js', 'www/js/services/*.js'],
           dest: 'www/js/services.js',
+        },
+        controllers: {
+          src:  ['www/js/controllers/controllers.module.js', 'www/js/controllers/*.js'],
+          dest: 'www/js/controllers.js',
         },
     },
 

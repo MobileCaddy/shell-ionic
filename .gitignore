@@ -17,6 +17,7 @@ www/css/app.*
 # ignore automagically created files
 www/index.html
 www/js/services.js
+www/js/controllers.js
 
 # Mock and dep stuff
 www/lib/js/ionic.bundle.min.js
