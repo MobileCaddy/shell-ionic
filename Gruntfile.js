@@ -244,7 +244,7 @@ module.exports = function(grunt) {
           return {};
         } else {
           return {
-            src: ['www/index.html', 'codeflow/index.html', 'tests/my.conf.js'],
+            src: ['www/index.html', 'www/index.tpl.html', 'codeflow/index.html', 'tests/my.conf.js'],
             overwrite: true,
             replacements: [{
               from: /node_modules\/.*\/node_modules\//g,
