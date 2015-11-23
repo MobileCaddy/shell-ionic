@@ -13,14 +13,14 @@ describe('NetworkService Unit Tests', function(){
 
   it('should set localStorage["networkStatus"] to offline', function(){
     NetworkService.networkEvent('offline');
-    expect(localStorage['networkStatus']).toBe("offline");
+    expect(localStorage.getItem('networkStatus')).toBe("offline");
   });
 
 
   it('should set localStorage["networkStatus"] to online and not sync', function(){
     localStorage.setItem('networkStatus', 'online');
     NetworkService.networkEvent('online');
-    expect(localStorage['networkStatus']).toBe("online");
+    expect(localStorage.getItem('networkStatus')).toBe("online");
   });
 
 });
