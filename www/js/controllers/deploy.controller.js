@@ -10,9 +10,9 @@
     .module('starter.controllers')
     .controller('DeployCtrl', DeployCtrl);
 
-  DeployCtrl.$inject = [];
+  DeployCtrl.$inject = ['$scope', 'DeployService'];
 
-  function DeployCtrl() {
+  function DeployCtrl($scope, DeployService) {
 
 
 	  function iconForErr(errType) {

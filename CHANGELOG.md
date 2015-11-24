@@ -1,3 +1,18 @@
+### 1.1.1 (2015-11-24)
+
+
+#### Bug Fixes
+
+* Fixed broken Deploy controller
+
+#### Features
+
+* NONE
+
+#### Breaking Changes
+
+* none
+
 ### 1.1.0 (2015-11-20)
 
 
