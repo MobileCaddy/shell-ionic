@@ -23,6 +23,7 @@ module.exports = function(config) {
       '../node_modules/es6-promise/dist/es6-promise.js',
       '../node_modules/angular-mocks/angular-mocks.js',
       '../node_modules/underscore/underscore-min.js',
+      // '**/syncService.tests.js',
       '**/*tests.js',
       '../node_modules/mobilecaddy-codeflow/js/mcUtilsMock.js'
     ],

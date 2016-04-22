@@ -36,7 +36,7 @@
     "load-grunt-tasks": ">=0.5.0",
     "mobilecaddy-codeflow": "^1.0.3",
     "mobilecaddy-utils": "^1.0.2",
-    "ng-cordova": "git+https://github.com/toddhalfpenny/ng-cordova.git#add-localNotification-mocks",
+    "ng-cordova": "^0.1.24-alpha",
     "protractor-ionic-locator": ">=0.0.1",
     "request": "^2.64.0"
   }

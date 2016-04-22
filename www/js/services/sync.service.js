@@ -15,38 +15,24 @@
 
 	function SyncService($rootScope, devUtils, LocalNotificationService, UserService) {
 
+		// Just a guess at the record age that is acceptable to be on the device
+		// Set as needed for your use case
 		var fourHours = 1000 * 60 * 60 * 4; // 4 hours in milliseconds
 
+		// This is where you put your list of tables that you want from the platform
 		var appTables = [
-			{'Name': 'Passenger__ap', 'syncWithoutLocalUpdates': true, 'maxTableAge' : fourHours},
-			{'Name': 'Tour_Instance__ap', 'syncWithoutLocalUpdates': true, 'maxTableAge' : fourHours},
-			{'Name': 'Passenger_Optional__ap', 'syncWithoutLocalUpdates': true, 'maxTableAge' : fourHours},
-			{'Name': 'Tour_Instance_Itinerary__ap', 'syncWithoutLocalUpdates': true, 'maxTableAge' : fourHours},
-			{'Name': 'Supplier__ap', 'syncWithoutLocalUpdates': true, 'maxTableAge' : fourHours},
-			{'Name': 'Tour_Optional__ap', 'syncWithoutLocalUpdates': true, 'maxTableAge' : fourHours},
-			{'Name': 'SupplierMenu__ap', 'syncWithoutLocalUpdates': true, 'maxTableAge' : fourHours},
-			{'Name': 'Email_Print_Request__ap', 'syncWithoutLocalUpdates': false, 'maxTableAge' : fourHours},
-			{'Name': 'Mobile_Feedback__ap', 'syncWithoutLocalUpdates': false, 'maxTableAge' : fourHours},
-			{'Name': 'TourDirector__ap', 'syncWithoutLocalUpdates': true, 'maxTableAge' : fourHours},
-			{'Name': 'Unavailable_Period__ap', 'syncWithoutLocalUpdates': true, 'maxTableAge' : fourHours}
+			{'Name': 'myDummyTable1__ap', 'syncWithoutLocalUpdates': true, 'maxTableAge' : fourHours},
+			{'Name': 'myDummyTable2__ap', 'syncWithoutLocalUpdates': true, 'maxTableAge' : fourHours}
 		];
 
 		var appTablesSyncNow = [
-			{'Name': 'Passenger__ap', 'syncWithoutLocalUpdates': true, 'maxTableAge' : 0},
-			{'Name': 'Tour_Instance__ap', 'syncWithoutLocalUpdates': true, 'maxTableAge' : 0},
-			{'Name': 'Passenger_Optional__ap', 'syncWithoutLocalUpdates': true, 'maxTableAge' : 0},
-			{'Name': 'Tour_Instance_Itinerary__ap', 'syncWithoutLocalUpdates': true, 'maxTableAge' : 0},
-			{'Name': 'Supplier__ap', 'syncWithoutLocalUpdates': true, 'maxTableAge' : 0},
-			{'Name': 'Tour_Optional__ap', 'syncWithoutLocalUpdates': true, 'maxTableAge' : 0},
-			{'Name': 'SupplierMenu__ap', 'syncWithoutLocalUpdates': true, 'maxTableAge' : 0},
-			{'Name': 'Email_Print_Request__ap', 'syncWithoutLocalUpdates': true, 'maxTableAge' : 0},
-			{'Name': 'Mobile_Feedback__ap', 'syncWithoutLocalUpdates': true, 'maxTableAge' : 0},
-			{'Name': 'TourDirector__ap', 'syncWithoutLocalUpdates': true, 'maxTableAge' : 0},
-			{'Name': 'Unavailable_Period__ap', 'syncWithoutLocalUpdates': true, 'maxTableAge' : 0}
+			{'Name': 'myDummyTable1__ap', 'syncWithoutLocalUpdates': true, 'maxTableAge' : 0}
 		];
 
 
 		return {
+			appTables: appTables,
+
 			getSyncLock: getSyncLock,
 
 			setSyncLock: setSyncLock,
@@ -232,11 +218,11 @@
 					$rootScope.$emit('syncTables', {result : "Complete"});
 					setSyncState("Complete");
 					// NOTE - Commented out for the time being - see TOPS-96
-					// if (!res || res.status == 100999) {
-					// 	LocalNotificationService.setLocalNotification();
-					// } else {
-					// 	LocalNotificationService.cancelNotification();
-					// }
+					if (!res || res.status == 100999) {
+						LocalNotificationService.setLocalNotification();
+					} else {
+						LocalNotificationService.cancelNotification();
+					}
 					resolve(res);
 				});
 				// IT ALWAYS RESOLVES
@@ -267,11 +253,11 @@
 					$rootScope.$emit('syncTables', {result : "Complete"});
 					setSyncState("Complete");
 					// NOTE - Commented out for the time being - see TOPS-96
-					// if (!res || res.status == 100999) {
-					//  LocalNotificationService.setLocalNotification();
-					// } else {
-					//  LocalNotificationService.cancelNotification();
-					// }
+					if (!res || res.status == 100999) {
+					 LocalNotificationService.setLocalNotification();
+					} else {
+					 LocalNotificationService.cancelNotification();
+					}
 					resolve(res);
 				});
 				// IT ALWAYS RESOLVES

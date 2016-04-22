@@ -145,7 +145,7 @@ describe('SyncService Unit Tests', function(){
 
       $rootScope.$on('syncTables', function(event, args) {
         if (args.result == "InitialLoadComplete") {
-          expect(tablesPassed.length).toBe(9); // not Mobile_Log__mc or any with syncWithoutLocalUpdates == false
+          expect(tablesPassed.length).toBe(SyncService.appTables.length); // not Mobile_Log__mc or any with syncWithoutLocalUpdates == false
           expect(tablesPassed.indexOf('Mobile_Log__mc')).toBe(-1);
           expect(utilsMock.initialSync.calls.count()).toBe(1);
           done();
@@ -278,8 +278,8 @@ describe('SyncService Unit Tests', function(){
         if (args.result == "StartSync") startSyncBroadcastFlag = true;
         if (args.result == "Complete") {
           expect(startSyncBroadcastFlag).toBe(true);
-          expect(lastTable).toBe('Unavailable_Period__ap');
-          expect(utilsMock.syncMobileTable.calls.count()).toBe(11);
+          expect(lastTable).toBe('myDummyTable2__ap');
+          expect(utilsMock.syncMobileTable.calls.count()).toBe(SyncService.appTables.length + 1);
         }
       });
 
@@ -294,12 +294,12 @@ describe('SyncService Unit Tests', function(){
     });
 
 
-    it('should attempt all tables in sequence even if 2nd is unknown', function(done){
+    it('should attempt all tables in sequence even if 1st is unknown', function(done){
 
       utilsMock.syncMobileTable.and.callFake(function(table, obj){
         return new Promise(function(resolve, reject) {
           callNum++;
-          if (callNum == 2) {
+          if (callNum == 1) {
             reject({'status': utilsMock.SYNC_UNKONWN_TABLE});
             //done();
           } else {
@@ -312,7 +312,7 @@ describe('SyncService Unit Tests', function(){
         if (args.result == "StartSync") startSyncBroadcastFlag = true;
         if (args.result == "Complete") {
           expect(startSyncBroadcastFlag).toBe(true);
-          expect(utilsMock.syncMobileTable.calls.count()).toBe(11);
+          expect(utilsMock.syncMobileTable.calls.count()).toBe(SyncService.appTables.length + 1);
         }
       });
 
@@ -327,12 +327,12 @@ describe('SyncService Unit Tests', function(){
     });
 
 
-    it('should attempt all tables in sequence even if 2nd has no updates', function(done){
+    it('should attempt all tables in sequence even if 1st has no updates', function(done){
 
       utilsMock.syncMobileTable.and.callFake(function(table, obj){
         return new Promise(function(resolve, reject) {
           callNum++;
-          if (callNum == 2) {
+          if (callNum == 1) {
             resolve({'status': 100402, mc_add_status :'no-sync-no-updates'});
             //done();
           } else {
@@ -345,7 +345,7 @@ describe('SyncService Unit Tests', function(){
         if (args.result == "StartSync") startSyncBroadcastFlag = true;
         if (args.result == "Complete") {
           expect(startSyncBroadcastFlag).toBe(true);
-          expect(utilsMock.syncMobileTable.calls.count()).toBe(11);
+          expect(utilsMock.syncMobileTable.calls.count()).toBe(SyncService.appTables.length + 1);
         }
       });
 
@@ -359,12 +359,12 @@ describe('SyncService Unit Tests', function(){
     });
 
 
-    it('should not attempt to sync 3rd table if 2nd was offline', function(done){
+    it('should not attempt to sync 2nd table if 1st was offline', function(done){
 
       utilsMock.syncMobileTable.and.callFake(function(table, obj){
         return new Promise(function(resolve, reject) {
           callNum++;
-          if (callNum == 2) {
+          if (callNum == 1) {
             resolve({'status': 100402, mc_add_status :HEARTBEAT_NO_CONNECTION});
           } else {
             resolve({'status': 100100});
@@ -376,7 +376,7 @@ describe('SyncService Unit Tests', function(){
         if (args.result == "StartSync") startSyncBroadcastFlag = true;
         if (args.result == "Complete") {
           expect(startSyncBroadcastFlag).toBe(true);
-          expect(utilsMock.syncMobileTable.calls.count()).toBe(2);
+          expect(utilsMock.syncMobileTable.calls.count()).toBe(1);
         }
       });
 
@@ -390,12 +390,12 @@ describe('SyncService Unit Tests', function(){
     });
 
 
-    it('should not attempt to sync 3rd table if 2nd was SYNC_ALREADY_IN_PROGRESS', function(done){
+    it('should not attempt to sync 2nd table if 1st was SYNC_ALREADY_IN_PROGRESS', function(done){
 
       utilsMock.syncMobileTable.and.callFake(function(table, obj){
         return new Promise(function(resolve, reject) {
           callNum++;
-          if (callNum == 2) {
+          if (callNum == 1) {
             resolve({'status': utilsMock.SYNC_ALREADY_IN_PROGRESS});
             //done();
           } else {
@@ -408,7 +408,7 @@ describe('SyncService Unit Tests', function(){
         if (args.result == "StartSync") startSyncBroadcastFlag = true;
         if (args.result == "Complete") {
           expect(startSyncBroadcastFlag).toBe(true);
-          expect(utilsMock.syncMobileTable.calls.count()).toBe(2);
+          expect(utilsMock.syncMobileTable.calls.count()).toBe(1);
         }
       });
 
@@ -421,12 +421,12 @@ describe('SyncService Unit Tests', function(){
         .then(testDone);
     });
 
-    it('should not attempt to sync 3rd table if 2nd rejected for unknown reason', function(done){
+    it('should not attempt to sync 2nd table if 1st rejected for unknown reason', function(done){
 
       utilsMock.syncMobileTable.and.callFake(function(table, obj){
         return new Promise(function(resolve, reject) {
           callNum++;
-          if (callNum == 2) {
+          if (callNum == 1) {
             reject({'status': 999});
             //done();
           } else {
@@ -439,7 +439,7 @@ describe('SyncService Unit Tests', function(){
         if (args.result == "StartSync") startSyncBroadcastFlag = true;
         if (args.result == "Complete") {
           expect(startSyncBroadcastFlag).toBe(true);
-          expect(utilsMock.syncMobileTable.calls.count()).toBe(2);
+          expect(utilsMock.syncMobileTable.calls.count()).toBe(1);
         }
       });
 
@@ -486,7 +486,7 @@ describe('SyncService Unit Tests', function(){
         if (args.result == "Complete") {
           expect(startSyncBroadcastFlag).toBe(true);
           expect(lastTable).toBe('Mobile_Log__mc');
-          expect(utilsMock.syncMobileTable.calls.count()).toBe(11);
+          expect(utilsMock.syncMobileTable.calls.count()).toBe(SyncService.appTables.length);
         }
       });
 
