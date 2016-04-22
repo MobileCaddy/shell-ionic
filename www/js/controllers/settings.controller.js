@@ -10,11 +10,31 @@
     .module('starter.controllers')
     .controller('SettingsCtrl', SettingsCtrl);
 
-  SettingsCtrl.$inject = ['$scope', '$rootScope', '$ionicPopup', '$ionicLoading', '$location', 'devUtils', 'vsnUtils', 'DevService', 'logger'];
+	SettingsCtrl.$inject = ['$scope', '$rootScope', '$ionicPopup', '$ionicLoading', '$location', 'devUtils', 'vsnUtils', 'DevService', 'logger', 'SyncService', 'NetworkService', '$timeout'];
 
-  function SettingsCtrl($scope, $rootScope, $ionicPopup, $ionicLoading, $location, devUtils, vsnUtils, DevService, logger) {
+	function SettingsCtrl($scope, $rootScope, $ionicPopup, $ionicLoading, $location, devUtils, vsnUtils, DevService, logger, SyncService, NetworkService, $timeout) {
 
+		/**
+		 * SyncNow Service To Sync Current Data
+		 */
 
+		var syncTimeout;
+		$scope.syncNow = function () {
+			if (NetworkService.getNetworkStatus() === "online") {
+				syncTimeout = $timeout(function() {
+					SyncService.syncAllTablesNow();
+				}, 0);
+			} else {
+				$ionicLoading.show({
+					template: 'Please go on-line before attempting to sync',
+					animation: 'fade-in',
+					showBackdrop: true,
+					duration: 2500
+				});
+			}
+		};
+		
+		
 	  /*
 	  ---------------------------------------------------------------------------
 	    Main settings page
