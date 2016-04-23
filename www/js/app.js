@@ -93,6 +93,18 @@ angular.module('starter', ['ionic', 'ngIOS9UIWebViewPatch', 'starter.services', 
       }
     })
 
+
+      .state('tab.outbox', {
+        url: '/outbox',
+        views: {
+          'settings-tab': {
+            templateUrl: RESOURCE_ROOT + 'templates/outbox.html',
+            controller: 'OutboxCtrl',
+            controllerAs: 'outboxControllerViewModel'
+          }
+        }
+      })
+
     /*****************************************************
      * S E T T I N G S    &    D E V    T O O L S
      ****************************************************/
