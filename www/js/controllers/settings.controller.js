@@ -10,9 +10,66 @@
     .module('starter.controllers')
     .controller('SettingsCtrl', SettingsCtrl);
 
-	SettingsCtrl.$inject = ['$scope', '$rootScope', '$ionicPopup', '$ionicLoading', '$location', 'devUtils', 'vsnUtils', 'DevService', 'logger', 'SyncService', 'NetworkService', '$timeout'];
+	SettingsCtrl.$inject = ['$scope', '$rootScope', '$ionicPopup', '$ionicLoading', '$location', 'devUtils', 'vsnUtils', 'DevService', 'logger', 'SyncService', 'NetworkService', '$timeout', 'OutboxService'];
 
-	function SettingsCtrl($scope, $rootScope, $ionicPopup, $ionicLoading, $location, devUtils, vsnUtils, DevService, logger, SyncService, NetworkService, $timeout) {
+	function SettingsCtrl($scope, $rootScope, $ionicPopup, $ionicLoading, $location, devUtils, vsnUtils, DevService, logger, SyncService, NetworkService, $timeout, OutboxService) {
+
+		/**
+		 * Sync Now Stuff For Sync Now Button On Settings Page
+		 *
+         */
+
+		$scope.outboxCount = '';
+		function syncNow() {
+			if (NetworkService.getNetworkStatus() === "online") {
+				var syncTimeout = $timeout(function () {
+					SyncService.syncAllTablesNow();
+				}, 0);
+			} else {
+				$ionicLoading.show({
+					template: 'Please go on-line before attempting to sync',
+					animation: 'fade-in',
+					showBackdrop: true,
+					duration: 2500
+				});
+			}
+		}
+
+		function updateOutboxCount() {
+			OutboxService.getDirtyRecordsCount().then(function(result) {
+				$scope.outboxCount = result > 0 ? " (" + result + ")" : "";
+			});
+		}
+
+		var deregisterHandleUpdateOutboxCount = $rootScope.$on('MenuCtrl:updateOutboxCount', function(event, args) {
+			updateOutboxCount();
+		});
+
+		var deregisterHandleSyncNow = $rootScope.$on('MenuCtrl:syncNow', function(event, args) {
+			syncNow();
+		});
+
+		/**
+		 * @event on syncTables
+		 * @description Handle events fired from the SyncService.
+		 */
+		var deregisterHandleSyncTables = $rootScope.$on('syncTables', function(event, args) {
+			// logger.log("MenuCtrl syncTables: " + JSON.stringify(args));
+			// console.log("tops MenuCtrl syncTables: " + JSON.stringify(args));
+			if (args && args.result) {
+				if (args.result.toString() == "Complete") {
+					updateOutboxCount();
+				}
+			}
+		});
+
+		$scope.$on('$destroy', function() {
+			$timeout.cancel(syncTimeout);
+			deregisterHandleSyncTables();
+			deregisterHandleUpdateOutboxCount();
+			deregisterHandleSyncNow();
+		});
+
 
 		/**
 		 * SyncNow Service To Sync Current Data
@@ -33,8 +90,8 @@
 				});
 			}
 		};
-		
-		
+
+
 	  /*
 	  ---------------------------------------------------------------------------
 	    Main settings page
