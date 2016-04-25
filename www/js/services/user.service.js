@@ -20,8 +20,6 @@
       setCurrentUserId: setCurrentUserId,
       hasDoneProcess: hasDoneProcess,
       setProcessDone: setProcessDone,
-      getMyBrandColor: getMyBrandColor,
-      setMyBrandColor: setMyBrandColor
     };
 
     function getCurrentUserId() {
@@ -76,34 +74,6 @@
       });
     }
 
-    function getMyBrandColor() {
-      return new Promise(function(resolve, reject) {
-        var myBrandColor = localStorage.getItem('myBrandColor');
-        if (myBrandColor !== null) {
-          resolve(myBrandColor);
-        } else {
-          devUtils.readRecords('TourDirector__ap', []).then(function (resObject) {
-            if (resObject.records.length > 0) {
-              var myBrandColor = resObject.records[0].Primary_Brand_Colour_1__c;
-              localStorage.setItem('myBrandColor', myBrandColor);
-              resolve(myBrandColor);
-            } else {
-              // Don't put anything in localstorage until we do have a TD record.
-              // Default color until TD record is loaded
-              resolve("#BD363B");
-            }
-          }).catch(function(resObject){
-            logger.log('getMyBrandColor',resObject);
-            reject(resObject);
-          });
-        }
-      });
-    }
-
-    function setMyBrandColor(myBrandColor) {
-      localStorage.setItem('myBrandColor', myBrandColor);
-    }
-    
   }
 
 })();

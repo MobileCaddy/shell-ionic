@@ -47,38 +47,11 @@
     }
 
     function clearFeedback() {
-      console.log("tops clearFeedback");
       feedbackControllerViewModel.feedback.mobilecaddy1__Type__c = null;
       feedbackControllerViewModel.feedback.mobilecaddy1__Comment__c = null;
     }
 
-    function changeHeaderBarColor(color) {
-      var element = angular.element(document.querySelectorAll('ion-header-bar'));
-      var wrappedElement;
-      for (var i = element.length - 1; i >= 0; --i) {
-        wrappedElement = angular.element(element[i]);
-        wrappedElement.css('background-color', color);
-        wrappedElement.css('border-color', color);
-        wrappedElement.css('background-image', 'linear-gradient(0deg, ' + color + ', ' + color + '50%, transparent 50%)');
-      }
-      element = wrappedElement = null;
-    }
 
-    function updateHeaderbarColor() {
-      UserService.getMyBrandColor().then(function(res) {
-        changeHeaderBarColor(res);
-      }).catch(function(resObject){
-        logger.error('updateHeaderbarColor ' + JSON.stringify(resObject));
-      });
-    }
-
-    var deregisterIonicViewBeforeEnter = $scope.$on('$ionicView.beforeEnter', function(scopes, states) {
-      updateHeaderbarColor();
-    });
-
-    $scope.$on('$destroy', function() {
-      deregisterIonicViewBeforeEnter();
-    });
 
 
   }

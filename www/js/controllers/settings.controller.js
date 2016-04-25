@@ -55,7 +55,6 @@
 		 */
 		var deregisterHandleSyncTables = $rootScope.$on('syncTables', function(event, args) {
 			// logger.log("MenuCtrl syncTables: " + JSON.stringify(args));
-			// console.log("tops MenuCtrl syncTables: " + JSON.stringify(args));
 			if (args && args.result) {
 				if (args.result.toString() == "Complete") {
 					updateOutboxCount();
