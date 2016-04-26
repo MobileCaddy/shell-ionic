@@ -55,9 +55,6 @@ mobilecaddy serve
 The Codeflow control panel for your application should be availble on [http://localhost:3030/codeflow/](http://localhost:3030/codeflow/).
 
 
-
-The Codeflow Control Panel
-
 ## Task automation
 
 The Grunt config (out of the box) offers the following commands
