@@ -105,17 +105,6 @@ angular.module('starter', ['ionic', 'ngIOS9UIWebViewPatch', 'starter.services', 
         }
       })
 
-      .state('tab.feedback', {
-        url: '/feedback',
-        views: {
-          'settings-tab': {
-            templateUrl: RESOURCE_ROOT + 'templates/feedback.html',
-            controller: 'FeedbackCtrl',
-            controllerAs: 'feedbackControllerViewModel'
-          }
-        }
-      })
-
     /*****************************************************
      * S E T T I N G S    &    D E V    T O O L S
      ****************************************************/
