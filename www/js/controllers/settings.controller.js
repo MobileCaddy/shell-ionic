@@ -113,9 +113,14 @@
 	  vsnUtils.upgradeAvailable().then(function(res){
 	    if (res)  return devUtils.dirtyTables();
 	  }).then(function(tables){
-	    if (tables && tables.length === 0) {
+	  	var tables2 = tables.filter(function(table){
+	  		return table != "Mobile_Log__mc";
+	  	});
+	    if (tables2 && tables2.length === 0) {
 	      $scope.upgradeAvailable = true;
-	      $scope.$apply();
+				$timeout(function() {
+          $scope.$apply();
+        }, 0);
 	    }
 	  });
 
