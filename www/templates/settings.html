@@ -1,5 +1,6 @@
 <ion-view cache-view="false" title="Settings">
-	<ion-content> <div class="card">
+	<ion-content>
+        <div class="card">
         <div class="item item-divider">
             <h4>Application Details</h4>
 
@@ -54,20 +55,21 @@
         </div>
 
     </div>
-	<div class="list card">
-		<a class="item item-icon-left" ng-click="showConfirmLogout()">
-    	<i class="icon ion-log-out"></i>
-	    	Logout
-		</a>
-    <a ng-if="upgradeAvailable" class="item item-icon-left" ng-click="upgradeIfAvailable()">
-      <i class="icon ion-android-download"></i>
-        Upgrade
-    </a>
-		<a class="item item-icon-left" ng-click="showAdminPasswordPopup()">
-    	<i class="icon ion-settings"></i>
-	    	Admin Functions
-		</a>
-    <form name="logLevelForm">
+
+        <div class="list card">
+            <a class="item item-icon-left" ng-click="showConfirmLogout()">
+                <i class="icon ion-log-out"></i>
+                    Logout
+            </a>
+            <a ng-if="upgradeAvailable" class="item item-icon-left" ng-click="upgradeIfAvailable()">
+          <i class="icon ion-android-download"></i>
+            Upgrade
+        </a>
+                <a class="item item-icon-left" ng-click="showAdminPasswordPopup()">
+                <i class="icon ion-settings"></i>
+                Admin Functions
+            </a>
+            <form name="logLevelForm">
       <div class="row" style="padding-left: 0px;">
         <div class="col" style="padding-left: 0px;">
           <label class="item item-input item-select">
@@ -87,6 +89,19 @@
          </div>
       </div>
     </form>
-	</div>
-  </ion-content>
+	    </div>
+
+    <div class="card">
+        <button class="button button-block button-positive icon-right ion-loop" ng-click="syncNow()">
+            <b>Sync Now</b>
+        </button>
+    </div>
+
+    <div class="card">
+        <button class="button button-block button-positive icon-right" ui-sref="tab.outbox">
+            <b>Outbox{{outboxCount}}</b>
+        </button>
+    </div>
+
+    </ion-content>
 </ion-view>

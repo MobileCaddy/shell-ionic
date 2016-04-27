@@ -1,0 +1,39 @@
+<ion-view cache-view="false">
+    <ion-nav-title>
+        Outbox{{outboxControllerViewModel.outboxCount}}
+    </ion-nav-title>
+    <ion-nav-buttons side="right">
+        <mc-sync-spinner></mc-sync-spinner>
+    </ion-nav-buttons>
+
+    <ion-content>
+        <div ng-show="!outboxControllerViewModel.dirtyRecordExist" class="card">
+            <div class="text-center">
+                <p class="padding-top tops-optional-detail-label">No records to sync.</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col text-center">
+                <div ng-show="outboxControllerViewModel.dirtyRecordExist">
+                    <button class="button button-positive" ng-click="outboxControllerViewModel.syncNow()" ng-disabled="outboxControllerViewModel.syncing">Sync Now</button>
+                </div>
+            </div>
+        </div>
+        <div ng-show="outboxControllerViewModel.dirtyRecordExist" class="card">
+            <ion-list>
+                <ion-item class="item item-divider">
+                    <div class="row row-no-padding">
+                        <div class="col">Table</div>
+                        <div class="col">Records to Sync</div>
+                    </div>
+                </ion-item>
+                <ion-item ng-repeat="record in outboxControllerViewModel.dirtyRecords track by $index">
+                    <div class="row row-no-padding">
+                        <div class="col">{{record.displayTableName}}</div>
+                        <div class="col">{{record.count}}</div>
+                    </div>
+                </ion-item>
+            </ion-list>
+        </div>
+    </ion-content>
+</ion-view>
