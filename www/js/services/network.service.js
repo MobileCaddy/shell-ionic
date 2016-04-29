@@ -10,23 +10,43 @@
     .module('starter.services')
     .factory('NetworkService', NetworkService);
 
-  NetworkService.$inject = ['SyncService', 'logger'];
+  NetworkService.$inject = ['$rootScope', 'SyncService', 'logger'];
 
-  function NetworkService(SyncService, logger) {
+  function NetworkService($rootScope, SyncService, logger) {
   	return {
-	    networkEvent: function(status){
-	      var pastStatus = localStorage.getItem('networkStatus');
-	      if (status == "online" && pastStatus != status) {
-	        // You could put some actions in here that you want to take place when
-	        // your app regains connectivity. For example see the Mobile Seed Apps
-	        // If you don't need this then you can ignore this. e.g.
-	        // SyncService.syncTables(['Table_x__ap', 'Table_y__ap'], true);
-	      }
-	      localStorage.setItem('networkStatus', status);
-	      logger.log("NetworkService " + status);
-	      return true;
-	    }
+	    networkEvent: networkEvent,
+
+      getNetworkStatus: getNetworkStatus,
+
+      setNetworkStatus: setNetworkStatus
 	  };
+
+	  function networkEvent(status){
+      var pastStatus = localStorage.getItem('networkStatus');
+      if (status == "online" && pastStatus != status) {
+        // You could put some actions in here that you want to take place when
+        // your app regains connectivity. For example see the Mobile Seed Apps
+        // If you don't need this then you can ignore this. e.g.
+        // SyncService.syncTables(['Table_x__ap', 'Table_y__ap'], true);
+        //
+        // TODO (TH) Are we doing this, I've not looked at the flows at the time of writing?
+      }
+      if (pastStatus != status) {
+        $rootScope.$emit('networkState', {state : status});
+      }
+      localStorage.setItem('networkStatus', status);
+      logger.log("NetworkService " + status);
+      return true;
+    }
+
+   	function getNetworkStatus() {
+      return localStorage.getItem('networkStatus');
+    }
+
+    function setNetworkStatus(status) {
+	      localStorage.setItem('networkStatus', status);
+     }
+
   }
 
 })();

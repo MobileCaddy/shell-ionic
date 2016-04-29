@@ -1,0 +1,8 @@
+<button id="mc-sync-state"
+     class="button buttons button-clear header-item disabled {{syncState}}">
+  <div ng-switch="syncState">
+  	<ion-spinner ng-switch-when="syncing" icon="dots"></ion-spinner>
+  	<i ng-switch-when="online" class='icon ion-android-cloud-done'></i>
+  	<i ng-switch-default class='icon ion-android-cloud-outline disabled'></i>
+  </div>
+</button>

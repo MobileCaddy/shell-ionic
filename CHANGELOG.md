@@ -1,3 +1,25 @@
+### 1.2.0 (2016-04-27)
+
+
+#### Bug Fixes
+
+* NONE
+
+#### Features
+
+* Min npm of v3
+* Updated sync service including icon in nav bar
+* Inclusion of localNotifications out of the box
+* Inclusion of Sync Now to Settings page
+* Added Outbox to Settings page
+* Ionic vsn bump
+* Added unit tests
+
+#### Breaking Changes
+
+* none
+
+
 ### 1.1.1 (2015-11-24)
 
 

@@ -7,11 +7,12 @@ This is the basic shell application built with [Angular JS](https://angularjs.or
 ## Getting Started
 
 * Get the code and the supporting node and packages. The following depencies are needed (For detailed instructions see the [Getting Started Guide](http://developer.mobilecaddy.net/docs));
- * npm
+ * npm (Version 3+ is supported by default  - See the [guides](http://developer.mobilecaddy.net/docs) for assitance with lower versions)
  * grunt-cli
  * ruby
  * sass
 
+The code inlcudes a couple of dummy tables in the sync.service. These help with unit testing passing (for us) and give the dev something to base their code on. Other chunks of potentially useful code have been included and commented out to help the dev get started.
 
 * Download the [zip](https://github.com/MobileCaddy/shell-ionic/archive/master.zip) and unzip
 
