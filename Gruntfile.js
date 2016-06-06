@@ -31,7 +31,7 @@ module.exports = function(grunt) {
                 'www/js/app.js',
                 'www/js/**/*.js',],
       test: [
-        'tests/**/*.js'
+        'tests/**/*.js',
         '!tests/coverage/**/*.*'
         ]
     },
