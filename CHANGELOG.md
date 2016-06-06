@@ -1,17 +1,20 @@
-### 1.1.1 (2015-11-24)
+### 1.1.1 (2016-06-06)
 
 
 #### Bug Fixes
 
 * Fixed broken Deploy controller
+* Corrected local resource ref for cordova lib used when deployed to the platform
 
 #### Features
 
-* NONE
+* Added commented line for `$compileProvider.debugInfoEnabled(false);` for production release
+* Updated `grunt prod` to meet current project setup and add comment banner to uglified output
+* Updated `grunt devsetup` command to include font/image name tweaking to get over Summer 16 issue where it appends a query string to filename in Visualforce pages - this broke iOS icons.
 
 #### Breaking Changes
 
-* none
+* NONE
 
 ### 1.1.0 (2015-11-20)
 

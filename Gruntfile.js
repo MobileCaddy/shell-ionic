@@ -32,6 +32,7 @@ module.exports = function(grunt) {
                 'www/js/**/*.js',],
       test: [
         'tests/**/*.js'
+        '!tests/coverage/**/*.*'
         ]
     },
 
@@ -60,6 +61,8 @@ module.exports = function(grunt) {
               // add any libs that you do want included here.
               '!www/index.html',
               '!www/index.tpl.html',
+              '!www/js/services/**',
+              '!www/js/controllers/**',
               '!www/**/*.log'],
             expand: true
           },
@@ -77,15 +80,16 @@ module.exports = function(grunt) {
       prod: {
         options: {
           mangle: false,
-          drop_console: true
+          drop_console: true,
+          banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
+            '<%= grunt.template.today("yyyy-mm-dd HH:MM:ss") %>*/\n' +
+            '/* Copyright <%= grunt.template.today("yyyy") %> MobileCaddy Ltd */\n',
         },
         files: [{
           flatten: true,
           expand: true,
           src:    [
-            'www/js/**/*.js',
-            '!www/lib/js/services/*.js',
-            '!www/lib/js/controllers/*.js',
+            'www/js/*.js',
             // don't include lib files that are needed only for local dev/test
             '!www/lib/js/**.js'
             ],
@@ -228,6 +232,18 @@ module.exports = function(grunt) {
         replacements: [{
           from: '?v=#{$ionicons-version}',
           to: ''
+        },{
+          from: '.svg',
+          to: '.SVG'
+        },{
+          from: '.ttf',
+          to: '.TTF'
+        },{
+          from: '.woff',
+          to: '.WOFF'
+        },{
+          from: '.eot',
+          to: '.EOT'
         }]
       },
       ngCordovaMocks: {
@@ -257,6 +273,25 @@ module.exports = function(grunt) {
       }())
     },
 
+    rename: {
+      ioniconeot: {
+        src: 'www/fonts/ionicons.eot',
+        dest: 'www/fonts/ionicons.EOT'
+      },
+      ioniconsvg: {
+        src: 'www/fonts/ionicons.svg',
+        dest: 'www/fonts/ionicons.SVG'
+      },
+      ioniconttf: {
+        src: 'www/fonts/ionicons.ttf',
+        dest: 'www/fonts/ionicons.TTF'
+      },
+      ioniconwoff: {
+        src: 'www/fonts/ionicons.woff',
+        dest: 'www/fonts/ionicons.WOFF'
+        }
+    },
+
     includeSource: {
       options: {
         basePath: 'www',
@@ -281,7 +316,7 @@ module.exports = function(grunt) {
 
   });
   // Each plugin must be loaded following this pattern
-  grunt.registerTask('devsetup', ['copy:devsetup', 'sass', 'includeSource', 'replace']);
+  grunt.registerTask('devsetup', ['copy:devsetup', 'sass', 'includeSource', 'rename', 'replace']);
   grunt.registerTask('serve', ['connect', 'express:dev', 'watch']);
   grunt.registerTask('dev', ['jshint:myFiles', 'includeSource', 'concat', 'compress:dev']);
   grunt.registerTask('unit-test', ['karma']);
