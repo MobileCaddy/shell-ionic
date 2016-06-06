@@ -36,7 +36,7 @@
         <!-- MobileCaddy Core App Resources -->
         <!-- ============================== -->
         <script src="https://localhost/cordova.js"></script>
-        <!--<script src="{!URLFOR($Resource[cordovaResource])}" type="text/javascript"></script>-->
+        <!--<script src="{!URLFOR($Resource[cordovaLocalResource])}" type="text/javascript"></script>-->
 
         <!-- ===================== -->
         <!-- MobileCaddy Libraries -->
