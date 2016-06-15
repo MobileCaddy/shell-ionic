@@ -1,3 +1,19 @@
+### 1.1.2 (2016-06-15)
+
+
+#### Bug Fixes
+
+* Corrected issue with startpage-template.apex referring to references. This caused the first "deploy to platform" to fail.
+
+#### Features
+
+* NONE
+
+#### Breaking Changes
+
+* NONE
+
+
 ### 1.1.1 (2016-06-06)
 
 
