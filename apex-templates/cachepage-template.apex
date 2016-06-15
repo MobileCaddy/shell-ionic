@@ -16,7 +16,7 @@ CACHE:
 {!vfremotepath}
 /static/111213/js/perf/stub.js
 {!URLFOR($Resource.MC_UTILS_RESOURCE, 'jquery.min.js')}
-{!URLFOR($Resource.mobilecaddy1__cordovaSF3v1)}
+{!URLFOR($Resource.cordovaSF3v1)}
 {!URLFOR($Resource.MC_UTILS_RESOURCE, 'mobilecaddy-utils.min.js')}
 {!URLFOR($Resource.MC_UTILS_RESOURCE, 'promise-1.0.0.min.js')}
 {!URLFOR($Resource.MC_UTILS_RESOURCE, 'underscore-min.js')}
