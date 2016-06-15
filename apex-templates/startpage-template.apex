@@ -1,6 +1,7 @@
-<apex:page applyHtmlTag="true" applyBodyTag="false" showHeader="false" docType="html-5.0" standardStylesheets="false"  manifest="{!cacheUrlPrefix}/apex/MY_APP_CACHE_RESOURCE">
+<apex:page applyHtmlTag="true" applyBodyTag="false" showHeader="false" docType="html-5.0" standardStylesheets="false" >
     <!--
-    Need to add this controller to the apex tag
+    Need to add this manifest and controller attributes to the apex tag above
+    manifest="{!cacheUrlPrefix}/apex/MY_APP_CACHE_RESOURCE"
     controller="mobilecaddy1.MobileCaddyStartPageController001_mc"
     -->
 
