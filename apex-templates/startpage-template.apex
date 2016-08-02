@@ -1,8 +1,4 @@
-<apex:page applyHtmlTag="true" applyBodyTag="false" showHeader="false" docType="html-5.0" standardStylesheets="false"  manifest="/apex/MY_APP_CACHE_RESOURCE">
-    <!--
-    Need to add this controller to the apex tag
-    controller="mobilecaddy1.MobileCaddyStartPageController001_mc"
-    -->
+<apex:page applyHtmlTag="true" applyBodyTag="false" showHeader="false" docType="html-5.0" standardStylesheets="false" manifest="{!cacheUrlPrefix}/apex/MY_APP_CACHE_RESOURCE" controller="mobilecaddy1.MobileCaddyStartPageController001_mc">
 
     <head>
         <meta charset="utf-8"/>
@@ -36,7 +32,7 @@
         <!-- MobileCaddy Core App Resources -->
         <!-- ============================== -->
         <script src="https://localhost/cordova.js"></script>
-        <!--<script src="{!URLFOR($Resource[cordovaResource])}" type="text/javascript"></script>-->
+        <script src="{!URLFOR($Resource[cordovaLocalResource])}" type="text/javascript"></script>
 
         <!-- ===================== -->
         <!-- MobileCaddy Libraries -->

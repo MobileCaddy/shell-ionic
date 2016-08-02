@@ -91,3 +91,9 @@ webdriver-manager start
 ```
 protractor tests/protractor.config.js
 ```
+
+## Deploying for Production
+
+* Uncomment the line `$compileProvider.debugInfoEnabled(false);` in the www/js/app.js file
+* Run `grunt prod` from the command prompt. This creates a minified version
+* Without saving anymore files run the "Deply to Salesforce" from within the app.

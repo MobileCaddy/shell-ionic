@@ -31,7 +31,8 @@ module.exports = function(grunt) {
                 'www/js/app.js',
                 'www/js/**/*.js',],
       test: [
-        'tests/**/*.js'
+        'tests/**/*.js',
+        '!tests/coverage/**/*.*'
         ]
     },
 
@@ -60,6 +61,8 @@ module.exports = function(grunt) {
               // add any libs that you do want included here.
               '!www/index.html',
               '!www/index.tpl.html',
+              '!www/js/services/**',
+              '!www/js/controllers/**',
               '!www/**/*.log'],
             expand: true
           },
@@ -77,15 +80,16 @@ module.exports = function(grunt) {
       prod: {
         options: {
           mangle: false,
-          drop_console: true
+          drop_console: true,
+          banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
+            '<%= grunt.template.today("yyyy-mm-dd HH:MM:ss") %>*/\n' +
+            '/* Copyright <%= grunt.template.today("yyyy") %> MobileCaddy Ltd */\n',
         },
         files: [{
           flatten: true,
           expand: true,
           src:    [
-            'www/js/**/*.js',
-            '!www/lib/js/services/*.js',
-            '!www/lib/js/controllers/*.js',
+            'www/js/*.js',
             // don't include lib files that are needed only for local dev/test
             '!www/lib/js/**.js'
             ],
@@ -143,11 +147,11 @@ module.exports = function(grunt) {
       },
       set3: {
         files: [ 'scss/*.scss'],
-        tasks: ['sass', 'compress:dev']
+        tasks: ['sass']
       },
       set4: {
         files: [ 'www/css/*.css'],
-        tasks: [],
+        tasks: ['compress:dev'],
         options: {
           livereload: true,
         }
@@ -228,6 +232,18 @@ module.exports = function(grunt) {
         replacements: [{
           from: '?v=#{$ionicons-version}',
           to: ''
+        },{
+          from: '.svg',
+          to: '.SVG'
+        },{
+          from: '.ttf',
+          to: '.TTF'
+        },{
+          from: '.woff',
+          to: '.WOFF'
+        },{
+          from: '.eot',
+          to: '.EOT'
         }]
       },
       ngCordovaMocks: {
@@ -238,28 +254,25 @@ module.exports = function(grunt) {
           to: 'ngCordova'
         }]
       }
-      // node5: (function(){
-      //   try {
-      //     // node_modules structure is flat from v5.0.0 onwards
-      //     if (process.version < "v5.0.0") {
-      //       grunt.fail.warn("Boo");
-      //       return {};
-      //     } else {
+    },
 
-      //       return {};
-      //       //   src: ['www/index.html', 'www/index.tpl.html', 'codeflow/index.html', 'tests/my.conf.js'],
-      //       //   overwrite: true,
-      //       //   replacements: [{
-      //       //     from: /node_modules\/.*\/node_modules\//g,
-      //       //     to: function (matchedWord, index, fullText, regexMatches) {
-      //       //       return 'node_modules/';
-      //       //     }
-      //       //   }]
-      //       // };
-      //     }
-      //   } catch(e) {
-      //   }
-      // }())
+    rename: {
+      ioniconeot: {
+        src: 'www/fonts/ionicons.eot',
+        dest: 'www/fonts/ionicons.EOT'
+      },
+      ioniconsvg: {
+        src: 'www/fonts/ionicons.svg',
+        dest: 'www/fonts/ionicons.SVG'
+      },
+      ioniconttf: {
+        src: 'www/fonts/ionicons.ttf',
+        dest: 'www/fonts/ionicons.TTF'
+      },
+      ioniconwoff: {
+        src: 'www/fonts/ionicons.woff',
+        dest: 'www/fonts/ionicons.WOFF'
+        }
     },
 
     includeSource: {
@@ -291,7 +304,7 @@ module.exports = function(grunt) {
   });
 
   // Each plugin must be loaded following this pattern
-  grunt.registerTask('devsetup', ['copy:devsetup', 'sass', 'includeSource', 'replace', 'npmVsnChk']);
+  grunt.registerTask('devsetup', ['copy:devsetup', 'includeSource', 'rename', 'replace', 'sass']);
   grunt.registerTask('serve', ['connect', 'express:dev', 'watch']);
   grunt.registerTask('dev', ['jshint:myFiles', 'includeSource', 'concat', 'compress:dev']);
   grunt.registerTask('unit-test', ['karma']);
