@@ -17,6 +17,7 @@
 * Added unit tests.
 * Improved Deploy process - removed the need for manual Visualforce page modification.
 * Added check for "minimum supported version" of MobileCaddy package on the platform.
+* Unit test code coverage
 
 #### Breaking Changes
 
