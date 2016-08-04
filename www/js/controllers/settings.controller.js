@@ -53,7 +53,7 @@
 		 * @event on syncTables
 		 * @description Handle events fired from the SyncService.
 		 */
-		var deregisterHandleSyncTables = $rootScope.$on('syncTables', function(event, args) {
+		var deregisterHandleSyncTables = $scope.$on('syncTables', function(event, args) {
 			// logger.log("MenuCtrl syncTables: " + JSON.stringify(args));
 			if (args && args.result) {
 				if (args.result.toString() == "Complete") {

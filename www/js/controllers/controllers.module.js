@@ -8,7 +8,7 @@
 
   angular.module('starter.controllers', ['ionic'])
 
-      .directive('mcSyncSpinner', function($rootScope, SyncService, NetworkService, $window) {
+      .directive('mcSyncSpinner', function(SyncService, NetworkService, $window) {
         return {
           restrict: 'E',
           scope: {},
@@ -21,7 +21,7 @@
               scope.syncState = "syncing";
             }
 
-            var deregisterHandleSyncTables = $rootScope.$on('syncTables', function(event, args) {
+            var deregisterHandleSyncTables = scope.$on('syncTables', function(event, args) {
               if (args && args.result) {
                 var syncInfo = args.result.toString();
                 console.log("syncInfo", syncInfo);
@@ -39,7 +39,7 @@
               }
             });
 
-            var deregisterHandleNetworkState = $rootScope.$on('networkState', function(event, args) {
+            var deregisterHandleNetworkState = scope.$on('networkState', function(event, args) {
               var networkState = args.state.toString();
               console.log("networkState", networkState);
               scope.syncState = networkState;

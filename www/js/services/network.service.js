@@ -32,7 +32,7 @@
         // TODO (TH) Are we doing this, I've not looked at the flows at the time of writing?
       }
       if (pastStatus != status) {
-        $rootScope.$emit('networkState', {state : status});
+        $rootScope.$broadcast('networkState', {state : status});
       }
       localStorage.setItem('networkStatus', status);
       logger.log("NetworkService " + status);

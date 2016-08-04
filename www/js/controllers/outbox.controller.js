@@ -100,7 +100,7 @@
     }
 
     // Process events fired from the SyncService
-    var deregisterHandleSyncTables = $rootScope.$on('syncTables', function(event, args) {
+    var deregisterHandleSyncTables = $scope.$on('syncTables', function(event, args) {
       logger.log("OutboxCtrl syncTables: " + JSON.stringify(args));
       if (args.result.toString() == "Complete") {
         // Refresh this view after sync is complete

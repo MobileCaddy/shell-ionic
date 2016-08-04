@@ -129,7 +129,7 @@
 				//console.log('initialSync', initialTabArr);
 				devUtils.initialSync(initialTabArr).then(function(res){
 					UserService.setProcessDone("initialDataLoaded");
-					$rootScope.$emit('syncTables', {result : "InitialLoadComplete"});
+					$rootScope.$broadcast('syncTables', {result : "InitialLoadComplete"});
 					setSyncState("Complete");
 					resolve();
 				}).catch(function(resObject){
@@ -215,7 +215,7 @@
 				// TODO - put some local notification stuff in here.
 				doSyncTables(tablesToSync).then(function(res){
 					// console.log("syncTables", res);
-					$rootScope.$emit('syncTables', {result : "Complete"});
+					$rootScope.$broadcast('syncTables', {result : "Complete"});
 					setSyncState("Complete");
 					// NOTE - Commented out for the time being - see TOPS-96
 					if (!res || res.status == 100999) {
@@ -228,7 +228,7 @@
 				// IT ALWAYS RESOLVES
 				// }).catch(function(e){
 				// 	logger.warn('syncTables', e);
-				// 	$rootScope.$emit('syncTables', {result : "Complete"});
+				// 	$rootScope.$broadcast('syncTables', {result : "Complete"});
 				//    setSyncState("Complete");
 				//    reject(e);
 				// });
@@ -250,7 +250,7 @@
 				// TODO - put some local notification stuff in here.
 				doSyncTables(tablesToSync).then(function(res){
 					// console.log("syncTables", res);
-					$rootScope.$emit('syncTables', {result : "Complete"});
+					$rootScope.$broadcast('syncTables', {result : "Complete"});
 					setSyncState("Complete");
 					// NOTE - Commented out for the time being - see TOPS-96
 					if (!res || res.status == 100999) {
@@ -263,7 +263,7 @@
 				// IT ALWAYS RESOLVES
 				// }).catch(function(e){
 				//  logger.warn('syncTables', e);
-				//  $rootScope.$emit('syncTables', {result : "Complete"});
+				//  $rootScope.$broadcast('syncTables', {result : "Complete"});
 				//    setSyncState("Complete");
 				//    reject(e);
 				// });
@@ -278,7 +278,7 @@
 				return Promise.resolve({status:100999});
 			} else {
 				setSyncState("syncing");
-				$rootScope.$emit('syncTables', {result : "StartSync"});
+				$rootScope.$broadcast('syncTables', {result : "StartSync"});
 
 				var stopSyncing = false;
 				var sequence = Promise.resolve();
@@ -289,7 +289,7 @@
 					}
 					return sequence.then(function(res) {
 						//console.log("doSyncTables inSequence", table, res, stopSyncing);
-						//$rootScope.$emit('syncTables', {result : "TableComplete " + table.Name});
+						//$rootScope.$broadcast('syncTables', {result : "TableComplete " + table.Name});
 						if (!stopSyncing) {
 							return devUtils.syncMobileTable(table.Name, table.syncWithoutLocalUpdates, table.maxTableAge);
 						} else {
@@ -305,13 +305,13 @@
 									setSyncState("Complete");
 								}
 						}
-						$rootScope.$emit('syncTables', {table: table.Name, result : resObject.status});
+						$rootScope.$broadcast('syncTables', {table: table.Name, result : resObject.status});
 						return resObject;
 					}).catch(function(e){
 						//console.error('doSyncTables', e);
 						if (e.status != devUtils.SYNC_UNKONWN_TABLE) {
 							stopSyncing = true;
-							$rootScope.$emit('syncTables', {table: table.Name, result : e.status});
+							$rootScope.$broadcast('syncTables', {table: table.Name, result : e.status});
 							setSyncState("Complete");
 						}
 						return e;

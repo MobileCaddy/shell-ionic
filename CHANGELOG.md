@@ -12,6 +12,7 @@
 * Inclusion of localNotifications out of the box.
 * Inclusion of Sync Now to Settings page.
 * Added Outbox to Settings page.
+* Use of $broadcast, not $emit for syncState - reduces use if $rootScope in controllers
 * Ionic vsn bump.
 * Added unit tests.
 * Improved Deploy process - removed the need for manual Visualforce page modification.
