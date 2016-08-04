@@ -11,6 +11,7 @@
         <script src="{!URLFOR($Resource.MY_APP_RESOURCE, 'www/lib/js/ionic.bundle.min.js')}" type="text/javascript"></script>
         <script src="{!URLFOR($Resource.MY_APP_RESOURCE, 'www/lib/js/angular-ios9-uiwebview.patch.js')}" type="text/javascript"></script>
 
+        <script src="{!URLFOR($Resource.MY_APP_RESOURCE, 'www/lib/js/ng-cordova.min.js')}" type="text/javascript"></script>
 
         <script src="{!URLFOR($Resource.MY_APP_RESOURCE, 'www/js/app.js')}" type="text/javascript"></script>
         <script src="{!URLFOR($Resource.MY_APP_RESOURCE, 'www/js/services.js')}" type="text/javascript"></script>

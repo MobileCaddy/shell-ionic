@@ -304,7 +304,7 @@ module.exports = function(grunt) {
   });
 
   // Each plugin must be loaded following this pattern
-  grunt.registerTask('devsetup', ['copy:devsetup', 'includeSource', 'rename', 'replace', 'sass']);
+  grunt.registerTask('devsetup', ['copy:devsetup', 'includeSource', 'rename', 'replace', 'sass', 'npmVsnChk']);
   grunt.registerTask('serve', ['connect', 'express:dev', 'watch']);
   grunt.registerTask('dev', ['jshint:myFiles', 'includeSource', 'concat', 'compress:dev']);
   grunt.registerTask('unit-test', ['karma']);

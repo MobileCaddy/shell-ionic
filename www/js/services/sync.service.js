@@ -21,12 +21,12 @@
 
 		// This is where you put your list of tables that you want from the platform
 		var appTables = [
-			// {'Name': 'myDummyTable1__ap', 'syncWithoutLocalUpdates': true, 'maxTableAge' : fourHours},
-			// {'Name': 'myDummyTable2__ap', 'syncWithoutLocalUpdates': true, 'maxTableAge' : fourHours}
+			{'Name': 'myDummyTable1__ap', 'syncWithoutLocalUpdates': true, 'maxTableAge' : fourHours},
+			{'Name': 'myDummyTable2__ap', 'syncWithoutLocalUpdates': true, 'maxTableAge' : fourHours}
 		];
 
 		var appTablesSyncNow = [
-			// {'Name': 'myDummyTable1__ap', 'syncWithoutLocalUpdates': true, 'maxTableAge' : 0}
+			{'Name': 'myDummyTable1__ap', 'syncWithoutLocalUpdates': true, 'maxTableAge' : 0}
 		];
 
 

@@ -15,6 +15,8 @@
 		var apiVersion = "v" + 32 + ".0";
 
 	  return {
+	  	checkVsn : checkVsn,
+
 	    getDetails : getDetails,
 
 	    deployBunlde : function(appConfig){
@@ -34,6 +36,53 @@
 	      });
 	    }
 	  };
+
+
+	  /**
+	   * checkVsn
+	   * @description Checks to see if the destination org has at least the min
+	   *              version on MobileCaddy installed
+	   * @param  {string} minMCPackVsn
+	   * @return {promise} Resolves if OK, rejects with object if fails
+	   */
+	  function checkVsn(minMCPackVsn) {
+	    return new Promise(function(resolve, reject) {
+	    	var options = JSON.stringify({ "function":"versionInfo"});
+		  	force.request(
+	        {
+	          method: 'POST',
+						path:"/services/apexrest/mobilecaddy1/PlatformDevUtilsR001",
+						contentType:"application/json",
+						data:{startPageControllerVersion:'001', jsonParams:options}
+	        },
+	        function(response) {
+	        	var respJson = JSON.parse(response);
+	        	if (respJson.errorMessage == "success") {
+	          	if ( respJson.packageVersion >= minMCPackVsn) {
+	          		resolve();
+	          	} else {
+	          		reject({message : "Version of MobileCaddy on SFDC needs to be min version " + minMCPackVsn + ".\nCurrently running " + respJson.packageVersion + ".\nPlease upgrade.", type : "error"});
+	          	}
+	          } else {
+	          	respJson.message = respJson.errorMessage;
+	          	respJson.type = "error";
+	          	console.error(respJson);
+	          	reject(respJson);
+	          }
+	        },
+	        function(error) {
+	          console.error(error);
+	          if (error[0].errorCode == "NOT_FOUND") {
+	          	// we're likely running against an old package
+          		reject({message : "Version of MobileCaddy on SFDC needs to be min version " + minMCPackVsn + ".\nPlease upgrade.", type : "error"});
+	          } else {
+	          	reject({message :'Deploy failed. See console for details.', type: 'error'});
+	        	}
+	        }
+	      );
+	  	});
+	  }
+
 
 	  function _arrayBufferToBase64( buffer ) {
 	    var binary = '';
