@@ -64,8 +64,14 @@
 	          		reject({message : "Version of MobileCaddy on SFDC needs to be min version " + minMCPackVsn + ".\nCurrently running " + respJson.packageVersion + ".\nPlease upgrade.", type : "error"});
 	          	}
 	          } else {
-	          	respJson.message = respJson.errorMessage;
-	          	respJson.type = "error";
+							if (respJson.errorNo == 48)
+							{
+		          	respJson.message = "Sorry, looks like you have not enabled a Remote Site on your destination org. Please see http://developer.mobilecaddy.net/docs/adding-remote-site/ for details";
+		          	respJson.type = "error";
+	          	} else {
+		          	respJson.message = respJson.errorMessage;
+		          	respJson.type = "error";
+	          	}
 	          	console.error(respJson);
 	          	reject(respJson);
 	          }
