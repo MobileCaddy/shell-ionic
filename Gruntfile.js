@@ -253,24 +253,7 @@ module.exports = function(grunt) {
           from: 'ngCordovaMocks',
           to: 'ngCordova'
         }]
-      },
-      node5: (function(){
-        // node_modules structure is flat from v5.0.0 onwards
-        if (process.version < "v5.0.0") {
-          return {};
-        } else {
-          return {
-            src: ['www/index.html', 'www/index.tpl.html', 'codeflow/index.html', 'tests/my.conf.js'],
-            overwrite: true,
-            replacements: [{
-              from: /node_modules\/.*\/node_modules\//g,
-              to: function (matchedWord, index, fullText, regexMatches) {
-                return 'node_modules/';
-              }
-            }]
-          };
-        }
-      }())
+      }
     },
 
     rename: {
@@ -315,8 +298,13 @@ module.exports = function(grunt) {
     }
 
   });
+
+  grunt.registerTask('npmVsnChk', 'Check NPM Versions', function(){
+    grunt.log.subhead('Note this setup requires npm v3+\nIf using an older version please refer to the guides on http://developer.mobilecaddy.net');
+  });
+
   // Each plugin must be loaded following this pattern
-  grunt.registerTask('devsetup', ['copy:devsetup', 'includeSource', 'rename', 'replace', 'sass']);
+  grunt.registerTask('devsetup', ['copy:devsetup', 'includeSource', 'rename', 'replace', 'sass', 'npmVsnChk']);
   grunt.registerTask('serve', ['connect', 'express:dev', 'watch']);
   grunt.registerTask('dev', ['jshint:myFiles', 'includeSource', 'concat', 'compress:dev']);
   grunt.registerTask('unit-test', ['karma']);

@@ -2,7 +2,8 @@
   "name": "mobilecaddy-shell-ionic",
   "version": "0.0.1",
   "sf_app_name": "ShellApp",
-  "mc_utils_resource": "MC_Resource_008",
+  "mc_utils_resource": "MC_Resource_v0_1_4",
+  "min_mobilecaddy_version": "1.0.38",
   "author": "MobileCaddy",
   "description": "MobileCaddy Shell app using Angular and Ionic",
   "preferGlobal": false,
@@ -36,9 +37,9 @@
     "karma-jasmine": "^0.3.5",
     "karma-phantomjs-launcher": "^0.1.4",
     "load-grunt-tasks": ">=0.5.0",
-    "mobilecaddy-codeflow": "^1.0.3",
-    "mobilecaddy-utils": "^1.0.2",
-    "ng-cordova": "git+https://github.com/toddhalfpenny/ng-cordova.git#add-localNotification-mocks",
+    "mobilecaddy-codeflow": "^2.0.0",
+    "mobilecaddy-utils": "^1.2.0",
+    "ng-cordova": "^0.1.24-alpha",
     "protractor-ionic-locator": ">=0.0.1",
     "request": "^2.64.0"
   }

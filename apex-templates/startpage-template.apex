@@ -1,9 +1,4 @@
-<apex:page applyHtmlTag="true" applyBodyTag="false" showHeader="false" docType="html-5.0" standardStylesheets="false" >
-    <!--
-    Need to add this manifest and controller attributes to the apex tag above
-    manifest="{!cacheUrlPrefix}/apex/MY_APP_CACHE_RESOURCE"
-    controller="mobilecaddy1.MobileCaddyStartPageController001_mc"
-    -->
+<apex:page applyHtmlTag="true" applyBodyTag="false" showHeader="false" docType="html-5.0" standardStylesheets="false" manifest="{!cacheUrlPrefix}/apex/MY_APP_CACHE_RESOURCE" controller="mobilecaddy1.MobileCaddyStartPageController001_mc">
 
     <head>
         <meta charset="utf-8"/>
@@ -16,6 +11,7 @@
         <script src="{!URLFOR($Resource.MY_APP_RESOURCE, 'www/lib/js/ionic.bundle.min.js')}" type="text/javascript"></script>
         <script src="{!URLFOR($Resource.MY_APP_RESOURCE, 'www/lib/js/angular-ios9-uiwebview.patch.js')}" type="text/javascript"></script>
 
+        <script src="{!URLFOR($Resource.MY_APP_RESOURCE, 'www/lib/js/ng-cordova.min.js')}" type="text/javascript"></script>
 
         <script src="{!URLFOR($Resource.MY_APP_RESOURCE, 'www/js/app.js')}" type="text/javascript"></script>
         <script src="{!URLFOR($Resource.MY_APP_RESOURCE, 'www/js/services.js')}" type="text/javascript"></script>
@@ -37,7 +33,7 @@
         <!-- MobileCaddy Core App Resources -->
         <!-- ============================== -->
         <script src="https://localhost/cordova.js"></script>
-        <!--<script src="{!URLFOR($Resource[cordovaLocalResource])}" type="text/javascript"></script>-->
+        <script src="{!URLFOR($Resource[cordovaLocalResource])}" type="text/javascript"></script>
 
         <!-- ===================== -->
         <!-- MobileCaddy Libraries -->

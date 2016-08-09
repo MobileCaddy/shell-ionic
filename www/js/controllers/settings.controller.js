@@ -10,9 +10,85 @@
     .module('starter.controllers')
     .controller('SettingsCtrl', SettingsCtrl);
 
-  SettingsCtrl.$inject = ['$scope', '$rootScope', '$ionicPopup', '$ionicLoading', '$location', 'devUtils', 'vsnUtils', 'DevService', 'logger'];
+	SettingsCtrl.$inject = ['$scope', '$rootScope', '$ionicPopup', '$ionicLoading', '$location', 'devUtils', 'vsnUtils', 'DevService', 'logger', 'SyncService', 'NetworkService', '$timeout', 'OutboxService'];
 
-  function SettingsCtrl($scope, $rootScope, $ionicPopup, $ionicLoading, $location, devUtils, vsnUtils, DevService, logger) {
+	function SettingsCtrl($scope, $rootScope, $ionicPopup, $ionicLoading, $location, devUtils, vsnUtils, DevService, logger, SyncService, NetworkService, $timeout, OutboxService) {
+
+		/**
+		 * Sync Now Stuff For Sync Now Button On Settings Page
+		 *
+         */
+
+		$scope.outboxCount = '';
+		function syncNow() {
+			if (NetworkService.getNetworkStatus() === "online") {
+				var syncTimeout = $timeout(function () {
+					SyncService.syncAllTablesNow();
+				}, 0);
+			} else {
+				$ionicLoading.show({
+					template: 'Please go on-line before attempting to sync',
+					animation: 'fade-in',
+					showBackdrop: true,
+					duration: 2500
+				});
+			}
+		}
+
+		function updateOutboxCount() {
+			OutboxService.getDirtyRecordsCount().then(function(result) {
+				$scope.outboxCount = result > 0 ? " (" + result + ")" : "";
+			});
+		}
+
+		var deregisterHandleUpdateOutboxCount = $rootScope.$on('MenuCtrl:updateOutboxCount', function(event, args) {
+			updateOutboxCount();
+		});
+
+		var deregisterHandleSyncNow = $rootScope.$on('MenuCtrl:syncNow', function(event, args) {
+			syncNow();
+		});
+
+		/**
+		 * @event on syncTables
+		 * @description Handle events fired from the SyncService.
+		 */
+		var deregisterHandleSyncTables = $scope.$on('syncTables', function(event, args) {
+			// logger.log("MenuCtrl syncTables: " + JSON.stringify(args));
+			if (args && args.result) {
+				if (args.result.toString() == "Complete") {
+					updateOutboxCount();
+				}
+			}
+		});
+
+		$scope.$on('$destroy', function() {
+			$timeout.cancel(syncTimeout);
+			deregisterHandleSyncTables();
+			deregisterHandleUpdateOutboxCount();
+			deregisterHandleSyncNow();
+		});
+
+
+		/**
+		 * SyncNow Service To Sync Current Data
+		 */
+
+		var syncTimeout;
+		$scope.syncNow = function () {
+			if (NetworkService.getNetworkStatus() === "online") {
+				syncTimeout = $timeout(function() {
+					SyncService.syncAllTablesNow();
+				}, 0);
+			} else {
+				$ionicLoading.show({
+					template: 'Please go on-line before attempting to sync',
+					animation: 'fade-in',
+					showBackdrop: true,
+					duration: 2500
+				});
+			}
+		};
 
 
 	  /*
@@ -37,9 +113,14 @@
 	  vsnUtils.upgradeAvailable().then(function(res){
 	    if (res)  return devUtils.dirtyTables();
 	  }).then(function(tables){
-	    if (tables && tables.length === 0) {
+	  	var tables2 = tables.filter(function(table){
+	  		return table != "Mobile_Log__mc";
+	  	});
+	    if (tables2 && tables2.length === 0) {
 	      $scope.upgradeAvailable = true;
-	      $scope.$apply();
+				$timeout(function() {
+          $scope.$apply();
+        }, 0);
 	    }
 	  });
 

@@ -11,10 +11,12 @@
   DeployService.$inject = ['$rootScope', '$q', '$timeout', '$http'];
 
   function DeployService($rootScope, $q, $timeout, $http) {
-		var apiVersion = "v32.0";
-
+		var apiVersionInt = 32;
+		var apiVersion = "v" + 32 + ".0";
 
 	  return {
+	  	checkVsn : checkVsn,
+
 	    getDetails : getDetails,
 
 	    deployBunlde : function(appConfig){
@@ -34,6 +36,59 @@
 	      });
 	    }
 	  };
+
+
+	  /**
+	   * checkVsn
+	   * @description Checks to see if the destination org has at least the min
+	   *              version on MobileCaddy installed
+	   * @param  {string} minMCPackVsn
+	   * @return {promise} Resolves if OK, rejects with object if fails
+	   */
+	  function checkVsn(minMCPackVsn) {
+	    return new Promise(function(resolve, reject) {
+	    	var options = JSON.stringify({ "function":"versionInfo"});
+		  	force.request(
+	        {
+	          method: 'POST',
+						path:"/services/apexrest/mobilecaddy1/PlatformDevUtilsR001",
+						contentType:"application/json",
+						data:{startPageControllerVersion:'001', jsonParams:options}
+	        },
+	        function(response) {
+	        	var respJson = JSON.parse(response);
+	        	if (respJson.errorMessage == "success") {
+	          	if ( respJson.packageVersion >= minMCPackVsn) {
+	          		resolve();
+	          	} else {
+	          		reject({message : "Version of MobileCaddy on SFDC needs to be min version " + minMCPackVsn + ".\nCurrently running " + respJson.packageVersion + ".\nPlease upgrade.", type : "error"});
+	          	}
+	          } else {
+							if (respJson.errorNo == 48)
+							{
+		          	respJson.message = "Sorry, looks like you have not enabled a Remote Site on your destination org. Please see http://developer.mobilecaddy.net/docs/adding-remote-site/ for details";
+		          	respJson.type = "error";
+	          	} else {
+		          	respJson.message = respJson.errorMessage;
+		          	respJson.type = "error";
+	          	}
+	          	console.error(respJson);
+	          	reject(respJson);
+	          }
+	        },
+	        function(error) {
+	          console.error(error);
+	          if (error[0].errorCode == "NOT_FOUND") {
+	          	// we're likely running against an old package
+          		reject({message : "Version of MobileCaddy on SFDC needs to be min version " + minMCPackVsn + ".\nPlease upgrade.", type : "error"});
+	          } else {
+	          	reject({message :'Deploy failed. See console for details.', type: 'error'});
+	        	}
+	        }
+	      );
+	  	});
+	  }
+
 
 	  function _arrayBufferToBase64( buffer ) {
 	    var binary = '';
@@ -184,52 +239,40 @@
 	          dataParsed = dataParsed.replace(/MY_APP_FILE_LIST/g, cacheEntriesStr);
 	          delete $rootScope.deployFiles;
 
-	          doesPageExist(dataName).then(function(response){
-	            if (response.records.length > 0) {
-	               // Update existing resource
-	              console.debug('page exists... patching existing');
-	              var existingPage = response.records[0];
-	              force.request(
-	                {
-	                  method: 'PATCH',
-	                  contentType: 'application/json',
-	                  path: '/services/data/' + apiVersion + '/tooling/sobjects/ApexPage/' + existingPage.Id + '/',
-	                  data: {
-	                    'Markup' : dataParsed
-	                  },
-	                },
-	                function(response) {
-	                  resolve('Existing Cache manifest updated');
-	                },
-	                function(error) {
-	                  console.error(error);
-	                  reject({message :'Cache manifest upload failed. See console for details.', type: 'error'});
-	                }
-	              );
-	            } else {
-	              force.request(
-	                {
-	                  method: 'POST',
-	                  contentType: 'application/json',
-	                  path: '/services/data/' + apiVersion + '/tooling/sobjects/ApexPage/',
-	                  data: {
-	                    'Name': dataName,
-	                    'MasterLabel': dataName,
-	                    'Markup' : dataParsed
-	                  }
-	                },
-	                function(response) {
-	                  resolve('Cache manifest uploaded');
-	                },
-	                function(error) {
-	                  console.error(error);
-	                  reject({message :'Cache manifest upload failed. See console for details.', type: 'error'});
-	                }
-	              );
+						var pageOptions = JSON.stringify({
+							"function":"createApexPage",
+							"pageApiName":dataName,
+							"pageLabel":dataName,
+							"pageContents":dataParsed,
+							"apiVersion":apiVersionInt,
+							"pageDescription":"MobileCaddy CachePage" });
+	          force.request(
+	            {
+	              method: 'POST',
+								path:"/services/apexrest/mobilecaddy1/PlatformDevUtilsR001",
+								contentType:"application/json",
+								data:{startPageControllerVersion:'001', jsonParams:pageOptions}
+	            },
+	            function(response) {
+	            	// we will get a response like this, is it fails
+	            	// "{\"errorMessage\":\"Create Apex Page exception: Error occured processing component ShellAppCache_001. That page name is already in use, please choose a different one. (DUPLICATE_DEVELOPER_NAME). Fields Name.\",\"errorNo\":49}"
+	            	var respJson = JSON.parse(response);
+	            	if (respJson.errorMessage == "success") {
+	              	resolve('Cache manifest uploaded');
+	              } else {
+		            	respJson.message = respJson.errorMessage;
+		            	respJson.type = "error";
+	              	console.error(respJson);
+	              	reject(respJson);
+	              }
+	            },
+	            function(error) {
+	              console.error(error);
+	              reject({message :'Start page upload failed. See console for details.', type: 'error'});
 	            }
-	        });
+	          );
+    			});
 	      }, 30);
-	    });
 	    });
 	  }
 
@@ -242,30 +285,36 @@
 	          var dataParsed = data.replace(/MC_UTILS_RESOURCE/g, appConfig.mc_utils_resource);
 	          dataParsed = dataParsed.replace(/MY_APP_RESOURCE/g, appConfig.sf_app_name + '_' + appConfig.sf_app_vsn);
 	          dataParsed = dataParsed.replace(/MY_APP_CACHE_RESOURCE/g, appConfig.sf_app_name + 'Cache_' + appConfig.sf_app_vsn);
+
+
+						var pageOptions = JSON.stringify({
+							"function":"createApexPage",
+							"pageApiName":dataName,
+							"pageLabel":dataName,
+							"pageContents":dataParsed,
+							"apiVersion":apiVersionInt,
+							"pageDescription":"MobileCaddy StartPage" });
 	          force.request(
 	            {
 	              method: 'POST',
-	              contentType: 'application/json',
-	              path: '/services/data/' + apiVersion + '/tooling/sobjects/ApexPage/',
-	              data: {
-	                'Name': dataName,
-	                'ControllerType' : '3',
-	                'MasterLabel': dataName,
-	                'Markup' : dataParsed
-	              }
+								path:"/services/apexrest/mobilecaddy1/PlatformDevUtilsR001",
+								contentType:"application/json",
+								data:{startPageControllerVersion:'001', jsonParams:pageOptions}
 	            },
 	            function(response) {
-	              resolve('Start page uploaded');
+	            	var respJson = JSON.parse(response);
+	            	if (respJson.errorMessage == "success") {
+	              	resolve('Start page uploaded');
+	              } else {
+		            	respJson.message = respJson.errorMessage;
+		            	respJson.type = "error";
+	              	console.error(respJson);
+	              	reject(respJson);
+	              }
 	            },
 	            function(error) {
 	              console.error(error);
-	              doesPageExist(dataName).then(function(response){
-	                if (response.records.length > 0) {
-	                  reject({message :'Start page already exists. Not updated.', type : 'info'});
-	                } else {
-	                  reject({message :'Start page upload failed. See console for details.', type: 'error'});
-	                }
-	              });
+	              reject({message :'Start page upload failed. See console for details.', type: 'error'});
 	            }
 	          );
 	        });

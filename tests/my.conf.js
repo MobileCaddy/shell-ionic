@@ -20,9 +20,10 @@ module.exports = function(config) {
       '../www/js/services/*module.js',
       '../www/js/services/*.js',
       '../www/js/controllers.js',
-      '../node_modules/mobilecaddy-utils/node_modules/es6-promise/dist/promise-1.0.0.js',
+      '../node_modules/es6-promise/dist/es6-promise.js',
       '../node_modules/angular-mocks/angular-mocks.js',
-      '../node_modules/mobilecaddy-utils/node_modules/underscore/underscore-min.js',
+      '../node_modules/underscore/underscore-min.js',
+      // '**/syncService.tests.js',
       '**/*tests.js',
       '../node_modules/mobilecaddy-codeflow/js/mcUtilsMock.js'
     ],
@@ -39,14 +40,19 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
+      '../www/js/services/*.js': ['coverage']
     },
+
 
 
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['progress'],
+    reporters: ['progress', 'coverage'],
 
+    coverageReporter: {
+      type: 'text'
+    },
 
     // web server port
     port: 9876,
@@ -73,6 +79,6 @@ module.exports = function(config) {
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
-    singleRun: false
+    singleRun: true
   });
 };
