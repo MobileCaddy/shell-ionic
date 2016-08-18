@@ -20,7 +20,12 @@ module.exports = function(grunt) {
     expressArgs.push('rec');
   }
 
-  require('load-grunt-tasks')(grunt);
+  // Set up static routes for tasks that don't match the folder names
+  require('jit-grunt')(grunt, {
+    express: 'grunt-express-server',
+    replace: 'grunt-text-replace'
+  });
+
   // Project configuration.
   grunt.initConfig({
     // This line makes your node configurations available for use
