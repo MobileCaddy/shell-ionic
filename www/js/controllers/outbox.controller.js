@@ -10,9 +10,9 @@
     .module('starter.controllers')
     .controller('OutboxCtrl', OutboxCtrl);
 
-  OutboxCtrl.$inject = ['$rootScope', '$scope', '$ionicLoading', '$timeout', 'logger', 'OutboxService', 'SyncService', 'NetworkService', 'UserService'];
+  OutboxCtrl.$inject = ['$rootScope', '$scope', '$ionicLoading', '$timeout', 'logger', 'OutboxService', 'SyncService', 'NetworkService'];
 
-  function OutboxCtrl($rootScope, $scope, $ionicLoading, $timeout, logger, OutboxService, SyncService, NetworkService, UserService)  {
+  function OutboxCtrl($rootScope, $scope, $ionicLoading, $timeout, logger, OutboxService, SyncService, NetworkService)  {
     logger.log("in OutboxCtrl");
 
     var outboxControllerViewModel = this;
@@ -47,10 +47,6 @@
           outboxControllerViewModel.dirtyRecordExist = true;
         }
         $ionicLoading.hide();
-        updateOutboxCountTimeout = $timeout(function() {
-          // Update the outbox count displayed in the side menu (updated in MenuCtrl)
-          $rootScope.$emit('MenuCtrl:updateOutboxCount');
-        },0);
       });
     }
 
@@ -86,7 +82,7 @@
     // Run the sync method in the MenuCtrl
     function syncNow() {
       if (NetworkService.getNetworkStatus() === "online") {
-        $rootScope.$emit('MenuCtrl:syncNow');
+        SyncService.syncAllTablesNow();
         outboxControllerViewModel.syncing = true;
       } else {
         outboxControllerViewModel.syncing = false;
