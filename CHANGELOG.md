@@ -1,3 +1,19 @@
+### 1.4.0 (2016-09-23)
+
+
+#### Bug Fixes
+
+* NONE
+
+#### Features
+
+* Visualforce Remoting Test in Settings
+
+#### Breaking Changes
+
+* NONE
+
+
 ### 1.3.0 (2016-09-06)
 
 
