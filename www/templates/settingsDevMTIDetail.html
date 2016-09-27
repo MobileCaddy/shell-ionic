@@ -24,10 +24,10 @@
         </div>
         <span ng-repeat="field in tableRec" type="item-text-wrap">
           <span ng-switch="field.ID_flag">
-            <ion-item ng-switch-when="true" href="#/tab/devtools/object/{{field.Value}}" title="Jump to object">
+            <ion-item  class="item-text-wrap" ng-switch-when="true" href="#/tab/devtools/object/{{field.Value}}" title="Jump to object">
               <strong>{{field.Name}}: </strong>{{field.Value}}
             </ion-item>
-            <ion-item ng-switch-when="false">
+            <ion-item  class="item-text-wrap"  ng-switch-when="false">
               <strong>{{field.Name}}: </strong>{{field.Value}}
               <button ng-click="showRecord(tableRec, field.Value);" class="button button-positive button-small" ng-show="field.Name==='SOUP_Record_Id'">
                 <i class="icon ion-ios-color-wand-outline"></i>
