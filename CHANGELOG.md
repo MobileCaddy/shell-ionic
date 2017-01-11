@@ -9,6 +9,7 @@
 
 * MobileCaddy Desktop Support
 * Using utils v1.0.0
+* Diagnostics and Recovery Functions added/updated
 
 #### Breaking Changes
 

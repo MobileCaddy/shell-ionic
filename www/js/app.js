@@ -153,6 +153,16 @@ angular.module('starter', ['ionic', 'ngIOS9UIWebViewPatch', 'starter.services', 
       }
     })
 
+    .state('tab.data-view', {
+      url: '/settings/data/:type',
+      views: {
+        'settings-tab': {
+          templateUrl: RESOURCE_ROOT + 'templates/settingsDevRawView.html',
+          controller: 'RawViewCtrl'
+        }
+      }
+    })
+
     .state('tab.settings-testing', {
       url: '/settings/testing',
       views: {

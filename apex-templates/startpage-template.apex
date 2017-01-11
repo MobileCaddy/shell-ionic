@@ -97,7 +97,7 @@
             var ipcRenderer = require('electron').ipcRenderer;
         }
 
-        // Get the mobileCaddy startup module
+        // Get the mobileCaddy startup modulecd ../
         var mobileCaddyStartup = mobileCaddy.require('mobileCaddy/startup');
         // Startup the app.  Parameter is custom callback function
         // or null if there is nothing custom to call on startup
