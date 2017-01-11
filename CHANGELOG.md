@@ -1,3 +1,20 @@
+### 1.5.0 (2017-01-11)
+
+
+#### Bug Fixes
+
+* NONE
+
+#### Features
+
+* MobileCaddy Desktop Support
+* Using utils v1.0.0
+
+#### Breaking Changes
+
+* Min utils v1.0.0
+* Min MobileCaddy Package 1.0.56
+
 ### 1.4.0 (2016-09-23)
 
 
