@@ -254,7 +254,7 @@
         function storeDumpedDataToRecoveryFolder(fileName, data) {
             logger.log('Attempting to dump: ' + fileName);
             if (navigator.appVersion.includes("mobilecaddy-desktop")) {
-                showAlert("Data is dumped to disk");
+                showAlert("Feature not supported on Desktop environment");
             } else {
                 if (device.platform === "Android") {
                     return storeDumpedDataToExternalAndroidRecoveryFolder(fileName, data);
