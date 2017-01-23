@@ -24,9 +24,14 @@ angular.module('smartStoreUtils', [])
     return mobileCaddy.require('mobileCaddy/smartStoreUtils');
 });
 
+angular.module('syncRefresh', [])
+  .factory('syncRefresh', function() {
+    return mobileCaddy.require('mobileCaddy/syncRefresh');
+});
+
 angular.module('logger', [])
   .factory('logger', function() {
     return mobileCaddy.require('mobileCaddy/logger');
 });
 
-angular.module('starter.services', ['underscore', 'devUtils', 'vsnUtils', 'smartStoreUtils', 'logger']);
+angular.module('starter.services', ['underscore', 'devUtils', 'vsnUtils', 'smartStoreUtils', 'syncRefresh', 'logger']);

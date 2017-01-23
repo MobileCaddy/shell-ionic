@@ -10,9 +10,9 @@
     .module('starter.controllers')
     .controller('SettingsCtrl', SettingsCtrl);
 
-	SettingsCtrl.$inject = ['$scope', '$rootScope', '$ionicPopup', '$ionicLoading', '$location', 'devUtils', 'vsnUtils', 'DevService', 'logger', 'SyncService', 'NetworkService', '$timeout', 'OutboxService'];
+	SettingsCtrl.$inject = ['$scope', '$rootScope', '$ionicPopup', '$ionicLoading', '$location', 'devUtils', 'vsnUtils', 'DevService', 'logger', 'RecoveryService', 'SyncService', 'NetworkService', '$timeout', 'OutboxService'];
 
-	function SettingsCtrl($scope, $rootScope, $ionicPopup, $ionicLoading, $location, devUtils, vsnUtils, DevService, logger, SyncService, NetworkService, $timeout, OutboxService) {
+	function SettingsCtrl($scope, $rootScope, $ionicPopup, $ionicLoading, $location, devUtils, vsnUtils, DevService, logger, RecoveryService, SyncService, NetworkService, $timeout, OutboxService) {
 
 		/**
 		 * Sync Now Stuff For Sync Now Button On Settings Page
@@ -137,6 +137,8 @@
 	  });
 
 
+	  $scope.networkStatusLS = NetworkService.getNetworkStatus();
+
 	  DevService.allRecords('appSoup', false)
 	    .then(function(appSoupRecs) {
 	    $scope.settingsRecs = extractSettingsValues(appSoupRecs);
@@ -239,6 +241,56 @@
 	    });
 	  };
 
+    /*
+	  ---------------------------------------------------------------------------
+	    Recovery
+	  ---------------------------------------------------------------------------
+	  */
+
+    $scope.forceSync = function() {
+      $ionicLoading.show({
+  	      duration: 60000,
+  	      noBackdrop: true,
+  	      template: '<p id="app-progress-msg" class="item-icon-left"><h3>Force Sync</h3><p>Please do not close the app until complete…</p><ion-spinner></ion-spinner></p>'
+  	    });
+
+      RecoveryService.forceSync().then(function() {
+        $ionicLoading.hide();
+        showAlert('Success', 'Force Sync completed.');
+      }).catch(function (error) {
+        $ionicLoading.hide();
+        showAlert('Error', 'Force Sync was unable to complete.');
+      });
+
+    };
+
+    $scope.recoverAllData = function() {
+      $ionicLoading.show({
+  	      duration: 60000,
+  	      noBackdrop: true,
+  	      template: '<p id="app-progress-msg" class="item-icon-left"><h3>Recovering Data</h3><p>Please do not close the app until complete…</p><ion-spinner></ion-spinner></p>'
+  	    });
+
+      RecoveryService.recoverAllData().then(function() {
+        $ionicLoading.hide();
+        showAlert('Success', 'Recovery Completed. Please transfer recovered data from device.');
+      }).catch(function (error) {
+        $ionicLoading.hide();
+        showAlert('Error', 'Error recovering data.');
+      });
+    };
+
+    function showAlert(title, message) {
+      var alert = $ionicPopup.alert({
+        title: title,
+        template: message,
+        cssClass: 'bio-popup'
+      });
+      alert.then(function() {
+
+      });
+    }
+
 	  /*
 	  ---------------------------------------------------------------------------
 	    Log in/out
@@ -282,7 +334,7 @@
 	   confirmPopup.then(function(res) {
 	     if(res) {
 	       $rootScope.adminLoggedIn = null;
-	       cordova.require("com.salesforce.plugin.sfaccountmanager").logout();
+	       devUtils.logout();
 	     }
 	   });
 	  };

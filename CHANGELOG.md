@@ -1,3 +1,37 @@
+### 1.5.0 (2017-01-11)
+
+
+#### Bug Fixes
+
+* NONE
+
+#### Features
+
+* MobileCaddy Desktop Support
+* Using utils v1.0.0 (v1.4.0)
+* Diagnostics and Recovery Functions added/updated
+
+#### Breaking Changes
+
+* Min utils v1.0.0
+* Min MobileCaddy Package 1.0.58
+
+### 1.4.0 (2016-09-23)
+
+
+#### Bug Fixes
+
+* NONE
+
+#### Features
+
+* Visualforce Remoting Test in Settings
+
+#### Breaking Changes
+
+* NONE
+
+
 ### 1.3.0 (2016-09-06)
 
 

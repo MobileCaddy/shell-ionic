@@ -8,6 +8,8 @@
         <!-- ===================== -->
         <!-- Your App's Resources  -->
         <!-- ===================== -->
+        <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+
         <script src="{!URLFOR($Resource.MY_APP_RESOURCE, 'www/lib/js/ionic.bundle.min.js')}" type="text/javascript"></script>
         <script src="{!URLFOR($Resource.MY_APP_RESOURCE, 'www/lib/js/angular-ios9-uiwebview.patch.js')}" type="text/javascript"></script>
 
@@ -91,7 +93,11 @@
         // Pass controller name into mobile caddy
         mobileCaddy.START_PAGE_CONTROLLER = 'MobileCaddyStartPageController001_mc';
 
-        // Get the mobileCaddy startup module
+        if (navigator.appVersion.includes("mobilecaddy-desktop")) {
+            var ipcRenderer = require('electron').ipcRenderer;
+        }
+
+        // Get the mobileCaddy startup modulecd ../
         var mobileCaddyStartup = mobileCaddy.require('mobileCaddy/startup');
         // Startup the app.  Parameter is custom callback function
         // or null if there is nothing custom to call on startup
@@ -100,5 +106,6 @@
         });
     </script>
     <!-- End MobileCaddy Startup Script -->
+    <script>if (window.module) module = window.module;</script>
   </body>
 </apex:page>

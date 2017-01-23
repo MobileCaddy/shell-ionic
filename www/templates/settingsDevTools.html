@@ -22,6 +22,33 @@
         </a>
       </div>
 
+      <div class="list card">
+        <div class="item item-divider">
+            <h4>Diagnostics &amp; Backup</h4>
+        </div>
+
+        <a class="item item-icon-left" ng-click="forceSync()">
+          <i class="icon ion-android-sync"></i>
+            Force Sync
+        </a>
+        <a class="item item-icon-left" href="#/tab/settings/data/tables">
+          <i class="icon ion-ios-list"></i>
+            View Tables
+        </a>
+        <a class="item item-icon-left" href="#/tab/settings/data/localStorage">
+          <i class="icon ion-social-buffer"></i>
+            View Local Storage
+        </a>
+        <a class="item item-icon-left" href="#/tab/settings/data/soups">
+          <i class="icon ion-soup-can"></i>
+            View Soups
+        </a>
+        <a class="item item-icon-left" ng-click="recoverAllData()">
+          <i class="icon ion-medkit"></i>
+            Recover All Data
+        </a>
+      </div>
+
       <div class="list card" ng-controller="SettingsHBCtrl">
           <div class="item item-divider" >
               Heartbeat Setting
@@ -136,6 +163,15 @@
               </div>
                <div class="col">
                <p>0</p>
+              </div>
+          </div>
+
+          <div class="row">
+              <div class="col col-75">
+              <p>Network Status (LS)</p>
+              </div>
+               <div class="col">
+               <p>{{ networkStatusLS }}</p>
               </div>
           </div>
 

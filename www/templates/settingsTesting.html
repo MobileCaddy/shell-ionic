@@ -6,10 +6,25 @@
     	<i class="icon ion-soup-can-outline"></i>
     	Mobile Table Inspector
 		</a>
+		<a class="item item-icon-left"  ng-click="testHeartbeat()">
+    	<i class="icon ion-heart"></i>
+    	Test Heartbeat
+		</a>
 		<a class="item item-icon-left" ng-click="resumeEvent()">
     	<i class="icon ion-erlenmeyer-flask"></i>
     	Test Resume Event
 		</a>
+	</div>
+	<div class="card test-results">
+	  <h3>{{testTitle}}</h3>
+	  <div class="item item-text-wrap">
+	  	<p><b>Result</b></p>
+	    {{testResults.result}}
+	    <p><b>Event</b></p>
+	    {{testResults.event}}
+	    <p><b>Error</b></p>
+	    {{testResults.error}}
+	  </div>
 	</div>
 	</ion-list>
   </ion-content>
