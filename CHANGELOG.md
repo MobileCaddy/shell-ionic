@@ -8,13 +8,13 @@
 #### Features
 
 * MobileCaddy Desktop Support
-* Using utils v1.0.0
+* Using utils v1.0.0 (v1.4.0)
 * Diagnostics and Recovery Functions added/updated
 
 #### Breaking Changes
 
 * Min utils v1.0.0
-* Min MobileCaddy Package 1.0.56
+* Min MobileCaddy Package 1.0.58
 
 ### 1.4.0 (2016-09-23)
 

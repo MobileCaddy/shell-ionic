@@ -49,6 +49,16 @@ angular.module('starter', ['ionic', 'ngIOS9UIWebViewPatch', 'starter.services', 
 
   });
 
+  // If running in Electron then add window.onX event listeners
+  if (navigator.appVersion.includes("mobilecaddy-desktop")) {
+    window.addEventListener("online", function() {
+      NetworkService.networkEvent('online');
+    }, false);
+    window.addEventListener("offline", function() {
+      NetworkService.networkEvent('offline');
+    }, false);
+  }
+
   // Check if the intialSync process has been run. This is the process that pulls
   // down the data on the first run up to ensure offline first capability
   //
