@@ -39,7 +39,7 @@
     "karma-jasmine": "^1.0.2",
     "karma-phantomjs-launcher": "^1.0.1",
     "mobilecaddy-codeflow": "^2.2.0",
-    "mobilecaddy-utils": "^1.4.0",
+    "mobilecaddy-utils": "^1.5.0",
     "ng-cordova": "^0.1.24-alpha",
     "protractor-ionic-locator": ">=0.0.1",
     "request": "^2.74.0"
