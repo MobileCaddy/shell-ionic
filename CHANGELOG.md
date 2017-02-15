@@ -1,3 +1,19 @@
+### 1.5.1 (2017-02-15)
+
+
+#### Bug Fixes
+
+* NONE
+
+#### Features
+
+* Using utils v1.1.1 (v1.5.1)
+
+#### Breaking Changes
+
+* NONE
+
+
 ### 1.5.0 (2017-01-11)
 
 

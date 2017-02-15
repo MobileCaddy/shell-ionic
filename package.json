@@ -2,7 +2,7 @@
   "name": "mobilecaddy-shell-ionic",
   "version": "0.0.1",
   "sf_app_name": "ShellApp",
-  "mc_utils_resource": "MC_Resource_v1_0_0",
+  "mc_utils_resource": "MC_Resource_v1_1_1",
   "min_mobilecaddy_version": "1.0.58",
   "author": "MobileCaddy",
   "description": "MobileCaddy Shell app using Angular and Ionic",

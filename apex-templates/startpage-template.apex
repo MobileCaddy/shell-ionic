@@ -93,7 +93,7 @@
         // Pass controller name into mobile caddy
         mobileCaddy.START_PAGE_CONTROLLER = 'MobileCaddyStartPageController001_mc';
 
-        if (navigator.appVersion.includes("mobilecaddy-desktop")) {
+        if (navigator.appVersion.includes("Electron")) {
             var ipcRenderer = require('electron').ipcRenderer;
         }
 

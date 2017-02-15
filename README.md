@@ -68,7 +68,22 @@ The Grunt config (out of the box) offers the following commands
 * **grunt dev** : This runs JSHint, SASS compilation and will create a .zip file containing your app. You JS will be unminified in this archive to aid debugging.
 * **grunt prod** : This will do the same as **grunt dev** but your JS will be minified in the output archive.
 
-## end2end Testing
+
+## Testing
+
+### Unit Tests
+
+Unit tests should be in *tests/<Controllers | Services>** and can be run with this
+
+```
+grunt karma
+```
+
+Test code coverage is handled by karma-coverage, results are in the `tests/coverage` directory.
+
+
+### End2End Tests
+
 
 e2e tests can be run with protractor. This may need to be installed if you haven't got it already;
 
