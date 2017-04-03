@@ -217,7 +217,7 @@ function myapp_callback(runUpInfo) {
     // Going to call a hardReset as an upgrade is available.
     console.debug('runUpInfo', runUpInfo);
     var vsnUtils= mobileCaddy.require('mobileCaddy/vsnUtils');
-    vsnUtils.hardReset();
+    vsnUtils.upgradeIfAvailable();
   } else {
     // carry on, nothing to see here
     angular.bootstrap(document, ['starter']);

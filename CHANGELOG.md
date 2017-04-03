@@ -1,3 +1,19 @@
+### 1.5.2 (2017-04-03)
+
+
+#### Bug Fixes
+
+* NONE
+
+#### Features
+
+* Changed hardReset in app.js to be upgrade
+
+#### Breaking Changes
+
+* NONE
+
+
 ### 1.5.1 (2017-02-15)
 
 
