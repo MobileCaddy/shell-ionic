@@ -2,7 +2,7 @@
   "name": "mobilecaddy-shell-ionic",
   "version": "0.0.1",
   "sf_app_name": "ShellApp",
-  "mc_utils_resource": "MC_Resource_v1_1_1",
+  "mc_utils_resource": "MC_Resource_v1_1_3",
   "min_mobilecaddy_version": "1.0.58",
   "author": "MobileCaddy",
   "description": "MobileCaddy Shell app using Angular and Ionic",
@@ -39,7 +39,7 @@
     "karma-jasmine": "^1.0.2",
     "karma-phantomjs-launcher": "^1.0.1",
     "mobilecaddy-codeflow": "^2.2.0",
-    "mobilecaddy-utils": "^1.5.0",
+    "mobilecaddy-utils": "^1.5.2",
     "ng-cordova": "^0.1.24-alpha",
     "protractor-ionic-locator": ">=0.0.1",
     "request": "^2.74.0"
