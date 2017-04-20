@@ -104,12 +104,18 @@ module.exports = function(grunt) {
     },
 
     connect: {
-      server: {
-        options: {
-          port: 3030,
-          livereload: true,
-          open: "http://localhost:3030/www" + qStr
-        }
+      std: {
+          options: {
+            port: 3030,
+            livereload: true,
+            open: "http://localhost:3030/www" + qStr
+          }
+      },
+      hub: {
+          options: {
+            port: 3030,
+            livereload: true
+          }
       }
     },
 
@@ -310,7 +316,8 @@ module.exports = function(grunt) {
 
   // Each plugin must be loaded following this pattern
   grunt.registerTask('devsetup', ['copy:devsetup', 'includeSource', 'rename', 'replace', 'sass', 'npmVsnChk']);
-  grunt.registerTask('serve', ['connect', 'express:dev', 'watch']);
+  grunt.registerTask('serve', ['connect:std', 'express:dev', 'watch']);
+  grunt.registerTask('hubserve', ['connect:hub', 'express:dev', 'watch']);
   grunt.registerTask('dev', ['jshint:myFiles', 'includeSource', 'concat', 'compress:dev']);
   grunt.registerTask('unit-test', ['karma']);
   grunt.registerTask('prod', ['jshint:myFiles', 'uglify', 'compress:prod']);
