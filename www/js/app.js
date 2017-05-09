@@ -50,7 +50,7 @@ angular.module('starter', ['ionic', 'ngIOS9UIWebViewPatch', 'starter.services', 
   });
 
   // If running in Electron then add window.onX event listeners
-  if (navigator.appVersion.includes("mobilecaddy-desktop")) {
+  if (navigator.appVersion.includes("Electron")) {
     window.addEventListener("online", function() {
       NetworkService.networkEvent('online');
     }, false);

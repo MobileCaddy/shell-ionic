@@ -253,7 +253,7 @@
 
         function storeDumpedDataToRecoveryFolder(fileName, data) {
             logger.log('Attempting to dump: ' + fileName);
-            if (navigator.appVersion.includes("mobilecaddy-desktop")) {
+            if (navigator.appVersion.includes("Electron")) {
                 showAlert("Feature not supported on Desktop environment");
             } else {
                 if (device.platform === "Android") {
