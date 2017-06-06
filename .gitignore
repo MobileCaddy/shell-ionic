@@ -14,6 +14,10 @@ www/js/*.log
 # ignore app.css as this is created by the sass
 www/css/app.*
 
+
+# test code coverage
+tests/coverage
+
 # ignore automagically created files
 www/index.html
 www/js/services.js

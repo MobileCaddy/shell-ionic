@@ -19,6 +19,9 @@
 
 	    getDetails : getDetails,
 
+	    // For test only
+	    _compareVersions: compareVersions,
+
 	    deployBunlde : function(appConfig){
 	      return encodeAppBundle(appConfig).then(function(myBody, bundleFiles){
 	        return uploadAppBundle(appConfig, myBody);
@@ -58,7 +61,7 @@
 	        function(response) {
 	        	var respJson = JSON.parse(response);
 	        	if (respJson.errorMessage == "success") {
-	          	if ( respJson.packageVersion >= minMCPackVsn) {
+	          	if ( compareVersions(respJson.packageVersion, minMCPackVsn) >= 0) {
 	          		resolve();
 	          	} else {
 	          		reject({message : "Version of MobileCaddy on SFDC needs to be min version " + minMCPackVsn + ".\nCurrently running " + respJson.packageVersion + ".\nPlease upgrade.", type : "error"});
@@ -89,6 +92,53 @@
 	  	});
 	  }
 
+
+	  function compareVersions(v1, v2, options) {
+	    var lexicographical = options && options.lexicographical,
+	        zeroExtend = options && options.zeroExtend,
+	        v1parts = v1.split('.'),
+	        v2parts = v2.split('.');
+
+	    function isValidPart(x) {
+	        return (lexicographical ? /^\d+[A-Za-z]*$/ : /^\d+$/).test(x);
+	    }
+
+	    if (!v1parts.every(isValidPart) || !v2parts.every(isValidPart)) {
+	        return NaN;
+	    }
+
+	    if (zeroExtend) {
+	        while (v1parts.length < v2parts.length) v1parts.push("0");
+	        while (v2parts.length < v1parts.length) v2parts.push("0");
+	    }
+
+	    if (!lexicographical) {
+	        v1parts = v1parts.map(Number);
+	        v2parts = v2parts.map(Number);
+	    }
+
+	    for (var i = 0; i < v1parts.length; ++i) {
+	        if (v2parts.length == i) {
+	            return 1;
+	        }
+
+	        if (v1parts[i] == v2parts[i]) {
+	            continue;
+	        }
+	        else if (v1parts[i] > v2parts[i]) {
+	            return 1;
+	        }
+	        else {
+	            return -1;
+	        }
+	    }
+
+	    if (v1parts.length != v2parts.length) {
+	        return -1;
+	    }
+
+	    return 0;
+	}
 
 	  function _arrayBufferToBase64( buffer ) {
 	    var binary = '';

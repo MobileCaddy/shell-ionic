@@ -1,3 +1,19 @@
+### 1.5.3 (2017-06-06)
+
+
+#### Bug Fixes
+
+* DeployService now handles semver comparrisons better.
+
+#### Features
+
+* NONE
+
+#### Breaking Changes
+
+* NONE
+
+
 ### 1.5.2 (2017-04-03)
 
 
