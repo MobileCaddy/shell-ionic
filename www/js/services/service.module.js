@@ -34,4 +34,9 @@ angular.module('logger', [])
     return mobileCaddy.require('mobileCaddy/logger');
 });
 
+angular.module('appDataUtils', [])
+  .factory('appDataUtils', function() {
+    return mobileCaddy.require('mobileCaddy/appDataUtils');
+});
+
 angular.module('starter.services', ['underscore', 'devUtils', 'vsnUtils', 'smartStoreUtils', 'syncRefresh', 'logger']);

@@ -1,3 +1,20 @@
+### 1.6.0 (2017-07-13)
+
+
+#### Bug Fixes
+
+* NONE
+
+#### Features
+
+* Addition of McRestService for Salesforce REST calls.
+
+#### Breaking Changes
+
+* NONE
+
+
+
 ### 1.5.3 (2017-06-06)
 
 

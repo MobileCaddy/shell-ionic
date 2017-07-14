@@ -1,5 +1,5 @@
 
-// N E T W O R K    S E R V I C E
+// D E P L O Y    S E R V I C E
 
 describe('NetworkService Unit Tests', function(){
   beforeEach(module('starter.services'));
