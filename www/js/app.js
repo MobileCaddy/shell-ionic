@@ -143,6 +143,17 @@ angular.module('starter', ['ionic', 'ngIOS9UIWebViewPatch', 'starter.services', 
       }
     })
 
+    .state('tab.settings-diagnostics', {
+      url: '/settings/diagnostics',
+      views: {
+        'settings-tab': {
+          templateUrl: RESOURCE_ROOT +  'templates/settingsDiagnostics.html',
+          controller: 'DiagnosticsCtrl',
+          controllerAs: 'vm'
+        }
+      }
+    })
+
     .state('tab.settings-mti', {
       url: '/settings/mti',
       views: {

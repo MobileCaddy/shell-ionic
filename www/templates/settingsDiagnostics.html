@@ -1,0 +1,67 @@
+<ion-view cache-view="false" title="Diagnostics">
+	<ion-content>
+	<div class="card">
+    <div class="item item-divider">
+        <h4>Application Info</h4>
+    </div>
+    <div class="row">
+      <div class="col">
+        <p>Cached Flag</p>
+      </div>
+      <div class="col">
+        <p>{{vm.cachedFlag}}</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <p>Network Status<br/>(NetworkService)</p>
+      </div>
+      <div class="col">
+        <p>{{vm.networkStatus}}</p>
+      </div>
+    </div>
+  </div>
+
+	<div class="card">
+    <div class="item item-divider">
+      <h4>Diagnostic Tools</h4>
+  	</div>
+		<ion-list>
+			<div class="list list-inset">
+				<a class="item item-icon-left"  ng-click="vm.testHeartbeat()">
+		    	<i class="icon ion-heart"></i>
+		    	Test Heartbeat
+				</a>
+			</div>
+			<div class="card test-results" ng-show="vm.testTitle">
+			  <h3>{{vm.testTitle}}</h3>
+			  <div class="item item-text-wrap">
+			  	<p><b>Result</b></p>
+			    {{vm.testResults.result}}
+			    <p><b>Event</b></p>
+			    {{vm.testResults.event}}
+			    <p><b>Error</b></p>
+			    {{vm.testResults.error}}
+			  </div>
+			</div>
+		</ion-list>
+	</div>
+
+	<div class="card">
+    <div class="item item-divider">
+        <h4>Latest Mobile Logs</h4>
+    </div>
+    <div class="item item-text-wrap" ng-repeat="log in vm.latestMobileLogs">
+			<p><strong>Timestamp: </strong>{{log.SystemModstamp || date}}</p>
+			<p><strong>Entry: </strong></p>
+			<div ng-switch="log.mobilecaddy1__Error_Text__c">
+				<div ng-switch-when="">
+					<p ng-repeat="logField in log.errorObj">{{$index}}: {{logField}}</p>
+				</div>
+				<p ng-switch-default="''">{{log.mobilecaddy1__Error_Text__c}}</p>
+    	</div>
+    </div>
+  </div>
+
+  </ion-content>
+</ion-view>
