@@ -10,9 +10,13 @@
     .module('starter.controllers')
     .controller('MTICtrl', MTICtrl);
 
-  MTICtrl.$inject = ['$scope', '$rootScope', '$location', '$ionicPopup', '$ionicLoading', 'DevService', 'devUtils', 'logger'];
+  MTICtrl.$inject = ['$stateParams', '$scope', '$rootScope', '$location', '$ionicPopup', '$ionicLoading', 'DevService', 'devUtils', 'logger', 'syncRefresh'];
 
-  function MTICtrl($scope, $rootScope, $location, $ionicPopup, $ionicLoading, DevService, devUtils, logger) {
+  function MTICtrl($stateParams, $scope, $rootScope, $location, $ionicPopup, $ionicLoading, DevService, devUtils, logger, syncRefresh) {
+
+  	if ($stateParams.recovery) {
+  		$scope.recovery = true;
+  	}
 
 	  var adminTimeout = (1000 * 60 *5 ); // 5 minutes
 	  if ( $rootScope.adminLoggedIn > Date.now() - adminTimeout) {
@@ -50,16 +54,30 @@
 	          duration: 10000,
 	          template: 'Syncing ' + tableName + " ..."
 	        });
-	        devUtils.syncMobileTable(tableName).then(function(resObject){
-	          $ionicLoading.hide();
-	        }).catch(function(e){
-	          logger.error('syncTable from settings ' + tableName + " " + JSON.stringify(e));
-	          $ionicLoading.hide();
-	          var alertPopup = $ionicPopup.alert({
-	            title: 'Operation failed!',
-	            template: '<p>Sorry, something went wrong.</p><p class="error_details">Error: ' + e.status + ' - ' + e.mc_add_status + '</p>'
-	          });
-	        });
+	        if ($scope.recovery) {
+						syncRefresh.m2pRecoveryUpdateMobileTable(tableName).then(function(resObject){
+							showAlert('Error', 'Force Sync completed OK.');
+		          $ionicLoading.hide();
+		        }).catch(function(e){
+		          logger.error('syncRefresh.m2pRecoveryUpdateMobileTable from settings ' + tableName + " " + JSON.stringify(e));
+		          $ionicLoading.hide();
+		          var alertPopup = $ionicPopup.alert({
+		            title: 'Operation failed!',
+		            template: '<p>Sorry, something went wrong.</p><p class="error_details">Error: ' + e.status + ' - ' + e.mc_add_status + '</p>'
+		          });
+		        });
+	        } else {
+		        devUtils.syncMobileTable(tableName).then(function(resObject){
+		          $ionicLoading.hide();
+		        }).catch(function(e){
+		          logger.error('syncTable from settings ' + tableName + " " + JSON.stringify(e));
+		          $ionicLoading.hide();
+		          var alertPopup = $ionicPopup.alert({
+		            title: 'Operation failed!',
+		            template: '<p>Sorry, something went wrong.</p><p class="error_details">Error: ' + e.status + ' - ' + e.mc_add_status + '</p>'
+		          });
+		        });
+		      }
 	      }
 	    });
 	  };

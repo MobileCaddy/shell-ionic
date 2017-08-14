@@ -3,10 +3,13 @@
 		<ion-list>
 		  <ion-item class="item item-button-right" ng-click="showTable(table.Name);" ng-repeat="table in tables">
 		  	<span>{{table.Name}}</span>
-		    <button ng-click="syncTable(table.Name); $event.stopPropagation();" class="button button-positive" ng-show="(table.Name.indexOf('__ap') >= 0 || table.Name.indexOf('__mc') >= 0) && table.Name.indexOf('SnapShot') < 0" style="right:160px !important;">
+		    <button ng-click="syncTable(table.Name); $event.stopPropagation();" class="button button-positive" ng-show="(table.Name.indexOf('__ap') >= 0 || table.Name.indexOf('__mc') >= 0) && table.Name.indexOf('SnapShot') < 0 && recovery">
+		    	Force Sync
+		    </button>
+		    <button ng-click="syncTable(table.Name); $event.stopPropagation();" class="button button-positive" ng-show="(table.Name.indexOf('__ap') >= 0 || table.Name.indexOf('__mc') >= 0) && table.Name.indexOf('SnapShot') < 0 && ! recovery" style="right:160px !important;">
 		    	Sync
 		    </button>
-		    <button ng-click="saveTableToML(table.Name); $event.stopPropagation();" class="button button-energized" ng-show="table.Name.indexOf('SnapShot') < 0 && table.Name.indexOf('syncLib') < 0">
+		    <button ng-click="saveTableToML(table.Name); $event.stopPropagation();" class="button button-energized" ng-show="table.Name.indexOf('SnapShot') < 0 && table.Name.indexOf('syncLib') < 0 && ! recovery">
 		    	Save to ML
 		    </button>
 		  </ion-item>
