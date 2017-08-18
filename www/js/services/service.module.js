@@ -39,4 +39,4 @@ angular.module('appDataUtils', [])
     return mobileCaddy.require('mobileCaddy/appDataUtils');
 });
 
-angular.module('starter.services', ['underscore', 'devUtils', 'vsnUtils', 'smartStoreUtils', 'syncRefresh', 'logger']);
+angular.module('starter.services', ['underscore', 'devUtils', 'vsnUtils', 'smartStoreUtils', 'syncRefresh', 'appDataUtils', 'logger']);

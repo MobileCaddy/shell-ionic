@@ -1,3 +1,22 @@
+### 1.7.0 (2017-08-18)
+
+
+#### Bug Fixes
+
+* NONE
+
+#### Features
+
+* Enhanced diagnostics
+* Enhanced in-app recovery section
+* Use of 2fa for Admin Section access
+
+#### Breaking Changes
+
+* NONE
+
+
+
 ### 1.6.0 (2017-07-13)
 
 

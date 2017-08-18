@@ -287,7 +287,8 @@
 	  		$location.path('tab/settings/devtools');
 	  		$rootScope.adminLoggedIn  = Date.now();
 	  	} else {
-	  		var adminTimeout = (1000 * 60 * 5); // 5 minutes
+	  		var supportPin = DevService.generateSupportPin();
+	  		var adminTimeout = (1000 * 60 * 30); // 30 minutes
 		    if ( $rootScope.adminLoggedIn > Date.now() - adminTimeout) {
 		      $location.path('tab/settings/devtools');
 		      $rootScope.adminLoggedIn = Date.now();
@@ -295,20 +296,25 @@
 		    } else {
 		      $scope.data = {};
 		      var myPopup = $ionicPopup.show({
-		        template: '<input type="password" ng-model="data.admin">',
-		        title: 'Enter Admin Password',
+		        template: '<p>Pass this support PIN to your admin: <em>' + supportPin +'</em></p><p>They will provide you with an access PIN, to enter here:</p><input type="password" ng-model="data.admin">',
+		        title: 'Enter Access PIN',
 		        scope: $scope,
 		        buttons: [
 		          { text: 'Cancel' },
 		          { text: '<b>Continue</b>',
 		            type: 'button-positive',
 		            onTap: function(e) {
-		            if (validateAdminPassword($scope.data.admin)) {
-		                $location.path('tab/settings/devtools');
-		                $rootScope.adminLoggedIn = Date.now();
-		              } else {
-		                console.log("Password incorrect");
-		              }
+			            DevService.authenticate(supportPin, $scope.data.admin).then(function(result){
+			            	if ( result ) {
+			            		$location.path('tab/settings/devtools');
+			                $rootScope.adminLoggedIn = Date.now();
+			                $scope.$apply();
+			              } else {
+			                console.log("Password incorrect");
+			              }
+			            }).catch(function(e){
+			            	logger.error(e);
+			            });
 		            }
 		          },
 		        ]
