@@ -143,6 +143,27 @@ angular.module('starter', ['ionic', 'ngIOS9UIWebViewPatch', 'starter.services', 
       }
     })
 
+    .state('tab.settings-diagnostics', {
+      url: '/settings/diagnostics',
+      views: {
+        'settings-tab': {
+          templateUrl: RESOURCE_ROOT +  'templates/settingsDiagnostics.html',
+          controller: 'DiagnosticsCtrl',
+          controllerAs: 'vm'
+        }
+      }
+    })
+    .state('tab.settings-mti-reovery', {
+      url: '/settings/mti-recovery',
+      views: {
+        'settings-tab': {
+          templateUrl: RESOURCE_ROOT +  'templates/settingsDevMTI.html',
+          controller: 'MTICtrl'
+        }
+      },
+      params: { 'recovery': true },
+    })
+
     .state('tab.settings-mti', {
       url: '/settings/mti',
       views: {

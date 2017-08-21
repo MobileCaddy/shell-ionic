@@ -113,9 +113,12 @@
 	  vsnUtils.upgradeAvailable().then(function(res){
 	    if (res)  return devUtils.dirtyTables();
 	  }).then(function(tables){
-	  	var tables2 = tables.filter(function(table){
-	  		return table != "Mobile_Log__mc";
-	  	});
+	  	var tables2;
+	  	if (tables) {
+	  		tables2 = tables.filter(function(table){
+		  		return table != "Mobile_Log__mc";
+		  	});
+	  	}
 	    if (tables2 && tables2.length === 0) {
 	      $scope.upgradeAvailable = true;
 				$timeout(function() {
@@ -247,23 +250,6 @@
 	  ---------------------------------------------------------------------------
 	  */
 
-    $scope.forceSync = function() {
-      $ionicLoading.show({
-  	      duration: 60000,
-  	      noBackdrop: true,
-  	      template: '<p id="app-progress-msg" class="item-icon-left"><h3>Force Sync</h3><p>Please do not close the app until complete…</p><ion-spinner></ion-spinner></p>'
-  	    });
-
-      RecoveryService.forceSync().then(function() {
-        $ionicLoading.hide();
-        showAlert('Success', 'Force Sync completed.');
-      }).catch(function (error) {
-        $ionicLoading.hide();
-        showAlert('Error', 'Force Sync was unable to complete.');
-      });
-
-    };
-
     $scope.recoverAllData = function() {
       $ionicLoading.show({
   	      duration: 60000,
@@ -297,33 +283,44 @@
 	  ---------------------------------------------------------------------------
 	  */
 	  $scope.showAdminPasswordPopup = function() {
-	    var adminTimeout = (1000 * 60 * 5); // 5 minutes
-	    if ( $rootScope.adminLoggedIn > Date.now() - adminTimeout) {
-	      $location.path('tab/settings/devtools');
-	      $rootScope.adminLoggedIn = Date.now();
-	      $scope.$apply();
-	    } else {
-	      $scope.data = {};
-	      var myPopup = $ionicPopup.show({
-	        template: '<input type="password" ng-model="data.admin">',
-	        title: 'Enter Admin Password',
-	        scope: $scope,
-	        buttons: [
-	          { text: 'Cancel' },
-	          { text: '<b>Continue</b>',
-	            type: 'button-positive',
-	            onTap: function(e) {
-	            if (validateAdminPassword($scope.data.admin)) {
-	                $location.path('tab/settings/devtools');
-	                $rootScope.adminLoggedIn = Date.now();
-	              } else {
-	                console.log("Password incorrect");
-	              }
-	            }
-	          },
-	        ]
-	      });
-	    }
+	  	if (LOCAL_DEV) {
+	  		$location.path('tab/settings/devtools');
+	  		$rootScope.adminLoggedIn  = Date.now();
+	  	} else {
+	  		var supportPin = DevService.generateSupportPin();
+	  		var adminTimeout = (1000 * 60 * 30); // 30 minutes
+		    if ( $rootScope.adminLoggedIn > Date.now() - adminTimeout) {
+		      $location.path('tab/settings/devtools');
+		      $rootScope.adminLoggedIn = Date.now();
+		      $scope.$apply();
+		    } else {
+		      $scope.data = {};
+		      var myPopup = $ionicPopup.show({
+		        template: '<p>Pass this support PIN to your admin: <em>' + supportPin +'</em></p><p>They will provide you with an access PIN, to enter here:</p><input type="password" ng-model="data.admin">',
+		        title: 'Enter Access PIN',
+		        scope: $scope,
+		        buttons: [
+		          { text: 'Cancel' },
+		          { text: '<b>Continue</b>',
+		            type: 'button-positive',
+		            onTap: function(e) {
+			            DevService.authenticate(supportPin, $scope.data.admin).then(function(result){
+			            	if ( result ) {
+			            		$location.path('tab/settings/devtools');
+			                $rootScope.adminLoggedIn = Date.now();
+			                $scope.$apply();
+			              } else {
+			                console.log("Password incorrect");
+			              }
+			            }).catch(function(e){
+			            	logger.error(e);
+			            });
+		            }
+		          },
+		        ]
+		      });
+		    }
+	  	}
 	  };
 
 	  $scope.showConfirmLogout = function() {

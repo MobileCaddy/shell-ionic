@@ -10,11 +10,17 @@
     .module('starter.services')
     .factory('DevService', DevService);
 
-  DevService.$inject = ['$rootScope', '$q', '_', 'devUtils', 'smartStoreUtils'];
+  DevService.$inject = ['$rootScope', '$q', '_', 'devUtils', 'appDataUtils', 'smartStoreUtils', 'logger'];
 
-  function DevService($rootScope, $q, _, devUtils, smartStoreUtils) {
+  function DevService($rootScope, $q, _, devUtils, appDataUtils, smartStoreUtils, logger) {
+
+  	var logTag = "app.DevService";
+
+  	var _0x47ed=["","\x65\x72\x72\x6F\x72","\x63\x61\x74\x63\x68","\x6C\x65\x6E\x67\x74\x68","\x73\x75\x62\x73\x74\x72\x69\x6E\x67","\x63\x68\x61\x72\x43\x6F\x64\x65\x41\x74","\x67\x65\x74\x55\x54\x43\x44\x61\x74\x65","\x67\x65\x74\x55\x54\x43\x4D\x6F\x6E\x74\x68","\x30","\x74\x68\x65\x6E","\x61\x75\x64\x49\x64","\x67\x65\x74\x43\x75\x72\x72\x65\x6E\x74\x56\x61\x6C\x75\x65\x46\x72\x6F\x6D\x41\x70\x70\x53\x6F\x75\x70"];
 
 	  return {
+	  	authenticate: authenticate,
+
 	    allTables: getTables,
 
 	    allRecords: function(tableName,refreshFlag) {
@@ -37,8 +43,59 @@
 	    },
 	    getRecordForSoupEntryId: getRecordForSoupEntryId,
 
+      generateSupportPin: generateSupportPin,
+
 	    insertMobileLog: insertMobileLog
 	  };
+
+
+
+
+		function authenticate(_0x4c81x2,_0x4c81x3)
+			{
+				    return new Promise(function(resolve, reject) {
+				var _0x4c81x4=_0x47ed[0];
+				var _0x4c81x5=0;
+				appDataUtils[_0x47ed[11]](_0x47ed[10])[_0x47ed[9]](function(_0x4c81x7)
+				{
+					if(_0x4c81x7[_0x47ed[3]]> 15)
+					{
+						_0x4c81x7= _0x4c81x7[_0x47ed[4]](0,15);
+					}
+					for(var _0x4c81x8=0;_0x4c81x8< _0x4c81x7[_0x47ed[3]];_0x4c81x8++)
+					{
+						_0x4c81x5+= _0x4c81x7[_0x47ed[5]](_0x4c81x8);
+					}
+					_0x4c81x5+= parseInt(_0x4c81x2);var _0x4c81x9= new Date();
+					var _0x4c81xa=_0x47ed[0];
+					_0x4c81xa+= _0x4c81x9[_0x47ed[6]]();_0x4c81xa+= _0x4c81x9[_0x47ed[7]]();_0x4c81x5+= parseInt(_0x4c81xa);_0x4c81x4= _0x47ed[0]+ _0x4c81x5;if(_0x4c81x4[_0x47ed[3]]< 4)
+					{
+						var _0x4c81xb=_0x4c81x4[_0x47ed[3]]- 4;
+						for(var _0x4c81xc=0;_0x4c81xc< _0x4c81xb;_0x4c81xc++)
+						{
+							_0x4c81x4= _0x47ed[8]+ _0x4c81x4;
+						}
+					}
+					if(_0x4c81x4[_0x47ed[3]]> 4)
+					{
+						_0x4c81x4= _0x4c81x4[_0x47ed[4]](0,4);
+					}
+					if(_0x4c81x4=== _0x4c81x3)
+					{
+						resolve(true);
+					}
+					else
+					{
+						resolve(false);
+					}
+				}
+				)[_0x47ed[2]](function(_0x4c81x6)
+				{
+					logger[_0x47ed[1]](logTag,_0x4c81x6);reject(_0x4c81x6);
+				}
+				);
+			});
+		}
 
 	  function getTables() {
 	    var deferred = $q.defer();
@@ -135,6 +192,12 @@
 	      });
 	    });
 	  }
+
+
+    function generateSupportPin() {
+      var supportPin = Math.floor(Math.random() * 10).toString() + Math.floor(Math.random() * 10).toString() + Math.floor(Math.random() * 10).toString() + Math.floor(Math.random() * 10).toString();
+      return supportPin;
+    }
 
 	  function insertRecordUsingSmartStoreUtils(tableName, rec) {
 	    return new Promise(function(resolve, reject) {
