@@ -56,7 +56,31 @@
 	        });
 	        if ($scope.recovery) {
 						syncRefresh.m2pRecoveryUpdateMobileTable(tableName).then(function(resObject){
-							showAlert('Error', 'Force Sync completed OK.');
+							var resJson = JSON.parse(resObject.result);
+							var resMsg = '';
+							console.log("resJson.is", resJson.is);
+							if (resJson.is) {
+								resMsg += '<p>Insert Success: ' + resJson.is.length + '</p>';
+							}
+							if (resObject.us) {
+								resMsg += '<p>Update Success: ' + resJson.us.length + '</p>';
+							}
+							var alertPopup = $ionicPopup.alert({
+		            title: 'ForceSync Success!',
+		            template: resMsg,
+		            buttons: [
+			            { text: 'Done' }, {
+			               text: '<b>Show Full Resp</b>',
+			               type: 'button-positive',
+			               onTap: function(e) {
+			                  var alertPopup2 = $ionicPopup.alert({
+			                  	title: "Full Response",
+			                  	template: '<p>Returned with:</p><p><pre>' + JSON.stringify(resObject) + '</pre></p>'
+			                  });
+			               }
+			            }
+			         ]
+		          });
 		          $ionicLoading.hide();
 		        }).catch(function(e){
 		          logger.error('syncRefresh.m2pRecoveryUpdateMobileTable from settings ' + tableName + " " + JSON.stringify(e));
