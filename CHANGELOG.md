@@ -1,3 +1,20 @@
+### 1.8.0 (2017-09-05)
+
+
+#### Bug Fixes
+
+* NONE
+
+#### Features
+
+* Further values passed to platform when deploying, to aid version alignment
+
+#### Breaking Changes
+
+* NONE
+
+
+
 ### 1.7.0 (2017-08-18)
 
 

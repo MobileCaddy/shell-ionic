@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "sf_app_name": "ShellApp",
   "mc_utils_resource": "MC_Resource_v1_1_5",
+  "sf_mobile_application": "123",
   "min_mobilecaddy_version": "1.0.80",
   "author": "MobileCaddy",
   "description": "MobileCaddy Shell app using Angular and Ionic",
