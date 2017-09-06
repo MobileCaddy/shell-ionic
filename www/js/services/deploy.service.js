@@ -64,7 +64,7 @@
 	    	getDetails().then(function(res){
 	    		appConfig = res;
 	    		if (! appConfig.sf_mobile_application || appConfig.sf_mobile_application === '') {
-	    			return Promise.reject({message: "No sf_mobile_application specified in package.json. This needs to match the value as specified on SFDC"});
+	    			return Promise.reject("No sf_mobile_application specified in package.json. This needs to match the value as specified on SFDC");
 	    		} else {
 	    			return getDeviceAppName();
 	    		}
@@ -124,7 +124,7 @@
 
 	    	}).catch(function(e){
 	    		console.error(e);
-	    		reject({message: JSON.stringify(e)});
+	    		reject({message: JSON.stringify(e), type: 'error'});
 	    	});
 	  	});
 	  }
