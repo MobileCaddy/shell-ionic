@@ -47,6 +47,8 @@ npm install
 grunt devsetup
 ```
 
+* Set the "sf_mobile_application" value in packag.json to match that as per the Mobile Application value for the app defined on Salesforce.com. This will be a value such as "MAP-0000002"
+
 The app can be started using this command (that uses the Mobilecaddy CLI) and should be accessible on [http://localhost:3030/www/](http://localhost:3030/www/), though a browser tab should be opened automagically for you.
 
 ```

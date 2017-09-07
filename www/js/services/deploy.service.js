@@ -1,5 +1,11 @@
 /**
  * Deploy Factory
+ *
+ * = = = = = = = = = = = = = = = = = = = = =
+ * DO NOT CHANGE THE FOLLOWING VERSION LINE
+ * deploy_service_vsn:1.0.0
+ * = = = = = = = = = = = = = = = = = = = = =
+ *
  */
 (function() {
   'use strict';
@@ -50,45 +56,84 @@
 	   */
 	  function checkVsn(minMCPackVsn) {
 	    return new Promise(function(resolve, reject) {
-	    	var options = JSON.stringify({ "function":"versionInfo"});
-		  	force.request(
-	        {
-	          method: 'POST',
-						path:"/services/apexrest/mobilecaddy1/PlatformDevUtilsR001",
-						contentType:"application/json",
-						data:{startPageControllerVersion:'001', jsonParams:options}
-	        },
-	        function(response) {
-	        	var respJson = JSON.parse(response);
-	        	if (respJson.errorMessage == "success") {
-	          	if ( compareVersions(respJson.packageVersion, minMCPackVsn) >= 0) {
-	          		resolve();
-	          	} else {
-	          		reject({message : "Version of MobileCaddy on SFDC needs to be min version " + minMCPackVsn + ".\nCurrently running " + respJson.packageVersion + ".\nPlease upgrade.", type : "error"});
-	          	}
-	          } else {
-							if (respJson.errorNo == 48)
-							{
-		          	respJson.message = "Sorry, looks like you have not enabled a Remote Site on your destination org. Please see http://developer.mobilecaddy.net/docs/adding-remote-site/ for details";
-		          	respJson.type = "error";
-	          	} else {
-		          	respJson.message = respJson.errorMessage;
-		          	respJson.type = "error";
-	          	}
-	          	console.error(respJson);
-	          	reject(respJson);
-	          }
-	        },
-	        function(error) {
-	          console.error(error);
-	          if (error[0].errorCode == "NOT_FOUND") {
-	          	// we're likely running against an old package
-          		reject({message : "Version of MobileCaddy on SFDC needs to be min version " + minMCPackVsn + ".\nPlease upgrade.", type : "error"});
-	          } else {
-	          	reject({message :'Deploy failed. See console for details.', type: 'error'});
-	        	}
-	        }
-	      );
+	    	var appConfig,
+	    			deviceAppName,
+	    			deployServiceVsn,
+	    			codeFlowVersion,
+	    			codeFlowUtilsVersion;
+
+	    	getDetails().then(function(res){
+	    		appConfig = res;
+	    		if (! appConfig.sf_mobile_application || appConfig.sf_mobile_application === '') {
+	    			return Promise.reject("No sf_mobile_application specified in package.json. This needs to match the value as specified on SFDC");
+	    		} else {
+	    			return getDeviceAppName();
+	    		}
+	    	}).then(function(res) {
+		    	deviceAppName = res;
+		    	return getDeployServiceVersion();
+	    	}).then(function(res) {
+		    	deployServiceVsn = res;
+	    		return getCodeFlowVersion();
+	    	}).then(function(res) {
+		    	codeFlowVersion = res;
+		    	return getCodeFlowUtilsVersion();
+	    	}).then(function(res) {
+		    	codeFlowUtilsVersion = res;
+		    	var options = JSON.stringify({
+	    			function:"versionInfo",
+  			    mc_utils_resource: appConfig.mc_utils_resource,
+				    sf_mobile_application: appConfig.sf_mobile_application,
+				    targetted_dv: appConfig.sf_app_vsn,
+				    mobilecaddy_codeflow_vsn: codeFlowVersion,
+				    mobilecaddy_codeflow_utils_vsn: codeFlowUtilsVersion,
+				    // mobilecaddy_cli_vsn: '1.2',
+				    deploy_service_vsn: deployServiceVsn,
+				    device_app_name: deviceAppName
+	    		});
+			  	force.request(
+		        {
+		          method: 'POST',
+							path:"/services/apexrest/mobilecaddy1/PlatformDevUtilsR001",
+							contentType:"application/json",
+							data:{startPageControllerVersion:'001', jsonParams:options}
+		        },
+		        function(response) {
+		        	var respJson = JSON.parse(response);
+		        	if (respJson.errorMessage == "success") {
+		          	if ( compareVersions(respJson.packageVersion, minMCPackVsn) >= 0) {
+		          		resolve();
+		          	} else {
+		          		reject({message : "Version of MobileCaddy on SFDC needs to be min version " + minMCPackVsn + ".\nCurrently running " + respJson.packageVersion + ".\nPlease upgrade.", type : "error"});
+		          	}
+		          } else {
+								if (respJson.errorNo == 48)
+								{
+			          	respJson.message = "Sorry, looks like you have not enabled a Remote Site on your destination org. Please see http://developer.mobilecaddy.net/docs/adding-remote-site/ for details";
+			          	respJson.type = "error";
+		          	} else {
+			          	respJson.message = respJson.errorMessage;
+			          	respJson.type = "error";
+		          	}
+		          	console.error(respJson);
+		          	reject(respJson);
+		          }
+		        },
+		        function(error) {
+		          console.error(error);
+		          if (error[0].errorCode == "NOT_FOUND") {
+		          	// we're likely running against an old package
+	          		reject({message : "Version of MobileCaddy on SFDC needs to be min version " + minMCPackVsn + ".\nPlease upgrade.", type : "error"});
+		          } else {
+		          	reject({message :'Deploy failed. See console for details.', type: 'error'});
+		        	}
+		        }
+		      );
+
+	    	}).catch(function(e){
+	    		console.error(e);
+	    		reject({message: JSON.stringify(e), type: 'error'});
+	    	});
 	  	});
 	  }
 
@@ -206,6 +251,69 @@
 	    }, 30);
 	    });
 	  }
+
+	  function getDeviceAppName () {
+	    return new Promise(function(resolve, reject) {
+	    var details = {};
+	    $timeout(function() {
+	        $http.get('index.tpl.html').success(function(indexBody) {
+	        	var lines = indexBody.split('\n');
+	        	var buildName = "";
+						lines.forEach(function (line, i) {
+					    if (line.includes("mobileCaddy.buildName")) {
+					    	buildName = line.split("=")[1].replace(/\W/g, '');
+					    }
+						});
+	          resolve(buildName);
+	        }).catch(function(err){
+	          console.error(err);
+	        });
+	    }, 30);
+	    });
+	  }
+
+	  function getDeployServiceVersion () {
+	    return new Promise(function(resolve, reject) {
+	    var details = {};
+	    $timeout(function() {
+	        $http.get('js/services/deploy.service.js').success(function(indexBody) {
+	        	var lines = indexBody.split('\n');
+	        	var deployServiceVersion = "";
+						lines.forEach(function (line, i) {
+					    if (line.includes("* " + "deploy_service_vsn" + ":")) {
+					    	var deployServiceVersion = line.split(":")[1];
+	          		resolve(deployServiceVersion);
+					    }
+						});
+	        }).catch(function(err){
+	          console.error(err);
+	        });
+	    }, 30);
+	    });
+	  }
+
+
+	  function getCodeFlowVersion() {
+	    return getVersionFromPackageJson('../node_modules/mobilecaddy-codeflow/package.json');
+	  }
+
+	  function getCodeFlowUtilsVersion() {
+	    return getVersionFromPackageJson('../node_modules/mobilecaddy-utils/package.json');
+	  }
+
+	  function getVersionFromPackageJson (path) {
+	    return new Promise(function(resolve, reject) {
+	    var details = {};
+	    $timeout(function() {
+	        $http.get(path).success(function(packageJson) {
+	          resolve(packageJson.version);
+	        }).catch(function(err){
+	          console.error(err);
+	        });
+	    }, 30);
+	    });
+	  }
+
 
 	  function encodeAppBundle(appConfig){
 	    return new Promise(function(resolve, reject) {
