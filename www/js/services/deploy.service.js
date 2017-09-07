@@ -27,7 +27,6 @@
 
 	    // For test only
 	    _compareVersions: compareVersions,
-	    _getDeviceAppName: getDeviceAppName,
 
 	    deployBunlde : function(appConfig){
 	      return encodeAppBundle(appConfig).then(function(myBody, bundleFiles){
@@ -59,7 +58,9 @@
 	    return new Promise(function(resolve, reject) {
 	    	var appConfig,
 	    			deviceAppName,
-	    			deployServiceVsn;
+	    			deployServiceVsn,
+	    			codeFlowVersion,
+	    			codeFlowUtilsVersion;
 
 	    	getDetails().then(function(res){
 	    		appConfig = res;
@@ -73,12 +74,19 @@
 		    	return getDeployServiceVersion();
 	    	}).then(function(res) {
 		    	deployServiceVsn = res;
+	    		return getCodeFlowVersion();
+	    	}).then(function(res) {
+		    	codeFlowVersion = res;
+		    	return getCodeFlowUtilsVersion();
+	    	}).then(function(res) {
+		    	codeFlowUtilsVersion = res;
 		    	var options = JSON.stringify({
 	    			function:"versionInfo",
   			    mc_utils_resource: appConfig.mc_utils_resource,
 				    sf_mobile_application: appConfig.sf_mobile_application,
 				    targetted_dv: appConfig.sf_app_vsn,
-				    // mobilecaddy_codeflow_vsn: '1.2.3',
+				    mobilecaddy_codeflow_vsn: codeFlowVersion,
+				    mobilecaddy_codeflow_utils_vsn: codeFlowUtilsVersion,
 				    // mobilecaddy_cli_vsn: '1.2',
 				    deploy_service_vsn: deployServiceVsn,
 				    device_app_name: deviceAppName
@@ -283,6 +291,29 @@
 	    }, 30);
 	    });
 	  }
+
+
+	  function getCodeFlowVersion() {
+	    return getVersionFromPackageJson('../node_modules/mobilecaddy-codeflow/package.json');
+	  }
+
+	  function getCodeFlowUtilsVersion() {
+	    return getVersionFromPackageJson('../node_modules/mobilecaddy-utils/package.json');
+	  }
+
+	  function getVersionFromPackageJson (path) {
+	    return new Promise(function(resolve, reject) {
+	    var details = {};
+	    $timeout(function() {
+	        $http.get(path).success(function(packageJson) {
+	          resolve(packageJson.version);
+	        }).catch(function(err){
+	          console.error(err);
+	        });
+	    }, 30);
+	    });
+	  }
+
 
 	  function encodeAppBundle(appConfig){
 	    return new Promise(function(resolve, reject) {
