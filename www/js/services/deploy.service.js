@@ -84,7 +84,7 @@
 	    			function:"versionInfo",
   			    mc_utils_resource: appConfig.mc_utils_resource,
 				    sf_mobile_application: appConfig.sf_mobile_application,
-				    targetted_dv: appConfig.sf_app_vsn,
+				    targeted_dv: appConfig.sf_app_vsn,
 				    mobilecaddy_codeflow_vsn: codeFlowVersion,
 				    mobilecaddy_codeflow_utils_vsn: codeFlowUtilsVersion,
 				    // mobilecaddy_cli_vsn: '1.2',
