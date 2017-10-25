@@ -56,7 +56,10 @@
   					.reverse()
   					.first(count)
   					.value();
-  				latestLogs.forEach(function(logObj){
+  				var ll2 = latestLogs.filter(function(logObj){
+						return ( logObj.mobilecaddy1__Log_Type__c != "analytic" );
+  				});
+  				ll2.map(function(logObj){
   					logObj.errorObj = [];
   					// Check if we have a JSON string
   					try {
@@ -68,8 +71,9 @@
   					} catch  (e) {
   						// OK, carry on
   					}
+  					return logObj;
   				});
-	    		resolve(latestLogs);
+	    		resolve(ll2);
 		    }).catch(function(e){
 	    		logger.error(e);
 	    		reject(e);
