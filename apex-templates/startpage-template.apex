@@ -50,6 +50,30 @@
         <script>window.LOCAL_DEV = false;</script>
         <script>window.USE_FORCETK = false;</script>
 
+
+        <!-- Script to update on progress cache events -->
+        <script>
+
+          window.applicationCache.addEventListener('progress', function(event) {
+            cache(event);
+          }, false);
+
+
+          function cache (e) {
+            var message = 'Downloading offline resources.. ';
+
+            if (e.lengthComputable) {
+              updateCacheStatus(message + Math.round(e.loaded / e.total * 100) + '%');
+            } else {
+              updateCacheStatus(message);
+            };
+          };
+
+          function updateCacheStatus(msg) {
+            document.getElementById("msg").innerHTML = msg;
+          }
+        </script>
+
     </head>
     <body animation="slide-left-right-ios7">
 
@@ -68,7 +92,7 @@
         </div>
         <div class="card">
           <div class="item item-text-wrap">
-            <p id='app-progress-msg' class="item-icon-left"><i class="icon spin ion-load-c"></i>The application is just being built... this may take a few moments.</p>
+            <p id='app-progress-msg' class="item-icon-left"><i class="icon spin ion-load-c"></i><span id="msg">The application is just being built... this may take a few moments.</span></p>
           </div>
         </div>
       </div>
