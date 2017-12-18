@@ -17,7 +17,7 @@
 		/**
 		 * Sync Now Stuff For Sync Now Button On Settings Page
 		 *
-         */
+     */
 
 		$scope.outboxCount = '';
 		function syncNow() {
