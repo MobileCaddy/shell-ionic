@@ -32,6 +32,9 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
 
     jshint: {
+      options : {
+        esversion: 6
+      },
       myFiles: ['Gruntfile.js',
                 'www/js/app.js',
                 'www/js/**/*.js',],
